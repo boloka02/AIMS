@@ -1,0 +1,53 @@
+/* General Styles */
+body {
+    font-family: sans-serif;
+    background-color: #f4f4f4; /* Light background */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Card Styles */
+.info-cards .card-item {
+    margin-bottom: 20px;
+}
+
+.info-cards .card {
+    border-radius: 10px; /* Rounded corners */
+    border: none;
+}
+
+.info-cards .card i {
+    color: #333; /* Icon color */
+    margin-bottom: 10px;
+}
+
+.info-cards .card h5 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.info-cards .card p {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Chart Styles */
+.chart-section .chart-item {
+    margin-bottom: 20px;
+}
+
+.chart-section .card {
+    border-radius: 10px;
+    border: none;
+}
+
+.chart-section .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+/* Chart.js Customization */
+/* You will add these options to your Chart.js configurations in the JavaScript */

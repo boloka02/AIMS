@@ -1,0 +1,149 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.sidebar {
+    background-color: #1a202c;
+    color: #e2e8f0;
+    width: 260px;
+    padding-top: 20px;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 3px 0 12px rgba(0, 0, 0, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: width 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar a {
+    padding: 16px 20px;
+    text-decoration: none;
+    font-size: 15px;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #2d3748;
+    border-left-color: #4299e1;
+    padding-left: 24px;
+}
+
+.sidebar a.active {
+    font-weight: 600;
+}
+
+.sidebar a i {
+    margin-right: 16px;
+    font-size: 1.1em;
+}
+
+.content {
+    flex-grow: 1;
+    padding: 30px;
+}
+
+.sidebar-header {
+    padding: 24px 20px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.2em;
+    color: #4299e1;
+    border-bottom: 1px solid #2d3748;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 20px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #a0aec0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 240px;
+    }
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        height: 100vh;
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .content {
+        padding-top: 0;
+    }
+
+    .sidebar-header {
+        padding-top: 20px;
+    }
+
+    .hamburger-button {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1001;
+        background-color: #4299e1;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar-header {
+        font-size: 1.1em;
+    }
+}
+
+.hamburger-button {
+    display: none;
+}
+
+.bottom-section {
+    padding: 10px 0;
+    text-align: center;
+    font-size: 0.9em;
+    color: #a0aec0;
+    margin-top: auto;
+}
+
+.bottom-section .user {
+    padding: 5px;
+    border-bottom: 1px solid #2d3748;
+}
+
+.bottom-section .attribution {
+    padding: 5px;
+}

@@ -1,0 +1,301 @@
+/* General Styling */
+body {
+    background: #FFFFFF; /* White Background */
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+.user-info {
+    background-color: black;
+    color: white;
+    padding: 15px;
+    border-top: 1px solid #444; /* Subtle separator */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #ffffff; /* White Background */
+    padding: 20px;
+    box-shadow: 4px 0 10px rgba(214, 214, 214, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease-in-out;
+    border-right: 1px solid #e6e6e6; /* Subtle Border */
+}
+
+/* Sidebar Title */
+.sidebar h4 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #020202;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 1px;
+}
+
+/* Sidebar Navigation Links */
+.nav-links {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual Navigation Links */
+.nav-link {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+    color: #000000;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    position: relative;
+}
+
+/* Hover Effect */
+.nav-link:hover {
+    background: #000000;
+    transform: translateX(5px);
+    color: #f5f5f5;
+}
+
+/* Active Link */
+.nav-link.active {
+    background: #ea0101;
+    border-left: 4px solid #008deb;
+}
+
+/* Sidebar Footer */
+/* Sidebar Footer */
+.sidebar-footer {
+    text-align: center;
+    color: #000000; /* Change text color to black */
+    font-size: 14px;
+    padding: 15px 0;
+}
+
+
+/* Responsive Sidebar */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        width: 220px;
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+}
+
+/* Cards */
+.card {
+    background: #ffffff;
+    color: #1A1A40;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #c9c8c8;
+    transition: 0.3s ease-in-out;
+    font-weight: 300;
+}
+
+/* Hover Effect */
+.card:hover {
+    transform: translateY(-3px);
+}
+
+/* Progress Bar */
+.progress-bar {
+    font-weight: 600;
+    background-color: #2E86C1;
+    transition: width 0.6s ease-in-out;
+}
+
+/* Charts Styling */
+.chart-container {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #E0E0E0;
+}
+
+/* Box Content */
+.box {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    color: #1A1A40;
+    border: 1px solid #E0E0E0;
+}
+
+/* Main Content Area */
+.container-fluid {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+/* Table Header Section */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Search Bar Styling */
+.search-bar {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #E0E0E0;
+    font-size: 14px;
+    width: 200px;
+    transition: 0.3s;
+    background: #ffffff;
+}
+
+.search-bar:focus {
+    border-color: #2E86C1;
+    outline: none;
+}
+
+/* Employee Table */
+.all-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgb(255, 255, 255);
+    border: 1px solid #E0E0E0;
+}
+
+/* Table Headers */
+.all-table thead {
+    background: #ffffff;
+    color: #acabab;
+    font-size: 12px;
+}
+
+/* Table Header Cells */
+.all-table thead th {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #d41818;
+}
+
+/* Table Rows */
+.all-table tbody tr {
+    transition: 0.3s ease-in-out;
+}
+
+/* Alternate Row Background */
+.all-table tbody tr:nth-child(even) {
+    background: #ffffff;
+}
+
+/* Table Cells */
+.all-table tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+    
+}
+
+/* Hover Effect */
+.all-table tbody tr:hover {
+    background: rgba(184, 184, 184, 0.15);
+    
+}
+
+/* Action Buttons */
+.table-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-edit {
+    background: #01c83a;
+    color: rgb(0, 0, 0);
+    border: 1px solid #04ffff;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-edit:hover {
+    background: #0d1fde;
+}
+
+.btn-delete {
+    background: #8d0202;
+    color: white;
+    border: 1px solid #d6820a;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: #dc4d3d;
+}
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 1px;
+}
+
+/* Pagination Buttons */
+.page-btn {
+    background: #ffffff;
+    color: white;
+    border: 1px solid #ffffff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.page-btn:hover {
+    background: #ffffff;
+}
+
+.page-btn:disabled {
+    background: #019223;
+    cursor: not-allowed;
+    font-size: 10px;
+}
+
+/* Page Number Display */
+#pageNumber {
+    font-weight: bold;
+    color: #000000;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+
+
+
+

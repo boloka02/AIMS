@@ -323,7 +323,7 @@ function showCancelPopup(ticketId) {
         <!-- Right Section: Assigned Units -->
         <div class="col-md-3">
             <div class="card">
-                <div class="card-header bg-dark text-white">Unit Assigned</div>
+                <div class="card-header bg-dark text-white">Assigned Unit</div>
                 <div class="card-body">
                     <table class="table table-bordered small-table">
                         <tbody>

@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["ticket_id"])) {
     $onHoldBy = $_SESSION["name"]; // Get the logged-in user's name
 
     // Update the ticket table: mark process as "On Hold" and status as "Waiting"
-    $query = "UPDATE ticket SET accept = ?, process = 'On Hold', status = 'Waiting' WHERE id = ?";
+    $query = "UPDATE ticket SET accept = ?, process = 'Waiting', status = 'On Hold' WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("si", $onHoldBy, $ticketId);
 

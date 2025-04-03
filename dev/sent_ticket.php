@@ -59,8 +59,8 @@ $conn->close();
         <table class="table table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th>Ticket Number122132132121</th>
-                    <th>Subject1312332</th>
+                    <th>Ticket Number</th>
+                    <th>Subject</th>
                     <th>Status</th>
                     <th>Date Created</th>
                 </tr>

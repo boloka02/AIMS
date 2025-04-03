@@ -18,8 +18,8 @@ if (!isset($_SESSION['user_id'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <title>Inventory</title>
+    <link rel="icon" type="image/jpeg" href="https://adongroup.com.au/wp-content/uploads/2020/12/aog-favicon-192px.svg">
+    <title>ADON PH</title>
     <style>
         .search-box {
             max-width: 200px;
@@ -52,6 +52,7 @@ if (!isset($_SESSION['user_id'])) {
                 <tr>
                     <th scope="col">Ticket No.</th>
                     <th scope="col">Subject</th>
+                    <th scope="col">Assign To</th>
                     <th scope="col">Category</th>
                     <th scope="col">Activity</th>
                     <th scope="col">Status</th>
@@ -66,67 +67,199 @@ if (!isset($_SESSION['user_id'])) {
     <?php 
         include '../db_connection.php';
 
-        $query = "SELECT id, ticket_number, subject, category, process, status, date_created, created_by, priority, image 
+        // SQL Query: Fetch the tickets ordered by date_created and time_created
+        $query = "
+        SELECT id, ticket_number, subject, assign_to, category, process, status, 
+               date_created, time_created, created_by, priority, image 
         FROM ticket 
-        ORDER BY date_created DESC"; // Ordering by newest first
+        ORDER BY 
+            CASE 
+                WHEN status = 'Pending' THEN 1
+                WHEN status = 'In Progress' THEN 2
+                WHEN status = 'Resolved' THEN 3
+                 WHEN status = 'Close' THEN 4
+                ELSE 5
+            END,
+            date_created DESC, 
+            time_created DESC";
+    
+        
         $result = mysqli_query($conn, $query);
         $rows = [];
 
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
-                // Determine image display
+                // Handle the image display
                 if (!empty($row['image'])) {
                     $imagePath = "../ui_employee/" . $row['image'];
                     $imageTag = "<img src='$imagePath' class='img-thumbnail' 
                     style='width: 50px; cursor: pointer;' 
                     onerror=\"this.src='../ui_employee/uploads/placeholder.jpg'\" 
-                    onclick='showImageModal(\"$imagePath\")'>";
+                    onclick='showImageModal(\"$imagePath\")'>"; 
                 } else {
-                    $imageTag = "<span class='text-muted'>No Image</span>"; // Display text if no image
+                    $imageTag = "<span class='text-muted'>No Image</span>"; 
                 }
 
-                // Assign text color based on priority
+                // Determine priority color
                 switch (strtolower($row['priority'])) {
-                    case 'high':      $priorityColor = "text-danger"; break; // Red
-                    case 'medium':    $priorityColor = "text-warning"; break; // Yellow
-                    case 'low':       $priorityColor = "text-dark"; break; // Black
-                    case 'critical':  $priorityColor = "text-purple"; break; // Purple
-                    default:          $priorityColor = "text-secondary"; break; // Gray
+                    case 'high':      $priorityColor = "text-danger"; break; 
+                    case 'medium':    $priorityColor = "text-warning"; break; 
+                    case 'low':       $priorityColor = "text-dark"; break; 
+                    case 'critical':  $priorityColor = "text-purple"; break; 
+                    default:          $priorityColor = "text-secondary"; break; 
                 }
 
-                $rows[] = "<tr class='inventory-row'>
+              
+                            // Action buttons
+                $actionButtons = "<div class='dropdown'>
+                <button class='btn btn-light btn-sm' type='button' id='dropdownMenu{$row['id']}' data-bs-toggle='dropdown' aria-expanded='false'>
+                    <i class='bi bi-three-dots-vertical'></i>
+                </button>
+                <ul class='dropdown-menu' aria-labelledby='dropdownMenu{$row['id']}' >
+                    <li><h6 class='dropdown-header'>Actions</h6></li>";
+
+                // Show Accept button only if not assigned, not accepted, and not resolved
+                if (empty($row['assign_to']) && strtolower($row['process']) !== 'accepted' && strtolower($row['status']) !== 'resolved') {
+                $actionButtons .= "<li><a class='dropdown-item text-success accept-btn' data-id='{$row['id']}' href='#'><i class='bi bi-check-circle'></i> Accept</a></li>";
+                }
+
+                // Action buttons for other operations
+                $actionButtons .= "<li><a class='dropdown-item text-primary onhold-btn' data-id='{$row['id']}' href='#'><i class='bi bi-pause-circle'></i> On Hold</a></li>
+                <li><a class='dropdown-item text-warning assign-btn' href='#' data-bs-toggle='modal' data-bs-target='#assignModal'><i class='bi bi-person'></i> Assign to</a></li>";
+
+                // Only show Close button if the status is Resolved
+                if (strtolower($row['status']) === 'resolved') {
+                $actionButtons .= "<li><a class='dropdown-item text-danger decline-btn' data-id='{$row['id']}' href='#'><i class='bi bi-x-circle'></i> Close</a></li>";
+                }
+
+                $actionButtons .= "</ul>
+                </div>";
+
+               
+
+                // If ticket is closed, show 'Closed' text and disable actions
+                if (strtolower($row['status']) === 'close') {
+                    $actionButtons = "<span class='text-muted'>Closed</span>";
+                }
+
+                // Prepare the row for rendering
+                $rows[] = "<tr class='inventory-row' data-id='{$row['id']}'>
                     <td>{$row['ticket_number']}</td>
                     <td>{$row['subject']}</td>
+                    <td>{$row['assign_to']}</td>
                     <td>{$row['category']}</td>
                     <td>{$row['process']}</td>
-                    <td>{$row['status']}</td>
+                    <td class='status-cell'>{$row['status']}</td>
                     <td>{$row['date_created']}</td>
                     <td>{$row['created_by']}</td>
-                    <td class='$priorityColor fw-bold'>{$row['priority']}</td> <!-- Colored priority text -->
+                    <td class='$priorityColor fw-bold'>{$row['priority']}</td> 
                     <td>$imageTag</td>
-                    <td>
-                        <div class='dropdown'>
-                            <button class='btn btn-light btn-sm' type='button' id='dropdownMenu{$row['id']}' data-bs-toggle='dropdown' aria-expanded='false'>
-                                <i class='bi bi-three-dots-vertical'></i>
-                            </button>
-                            <ul class='dropdown-menu' aria-labelledby='dropdownMenu{$row['id']}'>
-                                <li><h6 class='dropdown-header'>Actions</h6></li>
-                                <li><a class='dropdown-item text-success accept-btn' data-id='{$row['id']}' href='#'><i class='bi bi-check-circle'></i> Accept</a></li>
-                               <li><a class='dropdown-item text-primary onhold-btn' data-id='{$row['id']}' href='#'><i class='bi bi-pause-circle'></i> On Hold</a></li>
-                                <li><a class='dropdown-item text-danger decline-btn'  href='#'><i class='bi bi-x-circle'></i> Close</a></li>
-                            </ul>
-                        </div>
-                    </td>
+                    <td class='actions-cell'>$actionButtons</td>
                 </tr>";
             }
         } else {
-            $rows[] = "<tr><td colspan='9' class='text-center'>No Assets Found</td></tr>";
+            $rows[] = "<tr><td colspan='11' class='text-center'>No Assets Found</td></tr>";
         }
 
         mysqli_close($conn);
-        echo implode("", $rows);
+        echo implode("", $rows); // Output the rows
     ?>
 </tbody>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".decline-btn").forEach(button => {
+        button.addEventListener("click", function (event) {
+            event.preventDefault();
+            let ticketId = this.getAttribute("data-id");
+            let row = this.closest("tr");
+
+            if (confirm("Are you sure you want to close this ticket?")) {
+                fetch("close_ticket.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `id=${ticketId}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update status
+                        row.querySelector(".status-cell").textContent = "Close";
+
+                        // Remove action buttons and replace with "Closed"
+                        row.querySelector(".actions-cell").innerHTML = "<span class='text-muted'>Closed</span>";
+
+                        // Move the closed ticket to the bottom of the table
+                        document.getElementById("inventoryTable").appendChild(row);
+                    } else {
+                        alert("Error closing ticket: " + data.error);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            }
+        });
+    });
+});
+</script>
+
+<!-- Assign Modal -->
+<div class="modal fade" id="assignModal" tabindex="-1" aria-labelledby="assignModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="assignModalLabel">Assign to a Dev-Support</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form id="assignForm" action="assign_dev.php" method="POST">
+    <div class="mb-3">
+        <label for="Dev-Support" class="form-label">Dev-Support</label>
+        <select class="form-control" id="Dev-Support" name="dev_support" required>
+            <option value="">Select Dev-Support</option>
+            <?php
+            include '../db_connection.php';
+
+            // Fetch all users from the 'user' table with role 'Dev-Support'
+            $result = mysqli_query($conn, "SELECT name FROM user WHERE role = 'Dev-Support'");
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<option value='{$row['name']}'>{$row['name']}</option>";
+            }
+            ?>
+        </select>
+    </div>
+
+    <input type="hidden" id="ticketNumber" name="ticket_number"> <!-- Hidden field for Ticket Number -->
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Assign</button>
+    </div>
+</form>
+
+<script>
+    // Ensure the correct ticket number is set when clicking "Assign"
+    document.querySelectorAll('.assign-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            let ticketNumber = this.closest('tr').querySelector('td:first-child').textContent;
+            document.getElementById('ticketNumber').value = ticketNumber;
+        });
+    });
+</script>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 
 
 
@@ -168,7 +301,7 @@ if (!isset($_SESSION['user_id'])) {
     <script>
         // Pagination logic
         let currentPage = 1;
-        const rowsPerPage = 10;
+        const rowsPerPage = 8;
         const tableRows = document.querySelectorAll('#inventoryTable tr');
         const totalRows = tableRows.length;
         const totalPages = Math.ceil(totalRows / rowsPerPage);

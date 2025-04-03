@@ -1,5 +1,5 @@
 <?php
-$host = "localhost";
+$host = "192.168.7.242";
 $username = "root";  // Default for XAMPP
 $password = "";      // Default for XAMPP
 $database = "db_ams";

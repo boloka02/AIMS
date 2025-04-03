@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subject = mysqli_real_escape_string($conn, $_POST['subject']);
     $priority = mysqli_real_escape_string($conn, $_POST['priority']);
-    $category = mysqli_real_escape_string($conn, $_POST['category']);
+    $category = mysqli_real_escape_string($conn, $_POST['category']); // Capture category
     $date_created = date("Y-m-d");
 
     // Handle File Upload
@@ -44,36 +44,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $stmt->close();
 
+    // Redirect to avoid form resubmission
     header("Location: " . $_SERVER['PHP_SELF']);
     exit();
 }
 
-// Fetch Tickets
-$query = "SELECT * FROM ticket WHERE created_by = ? ORDER BY FIELD(status, 'Pending', 'In Progress', 'Waiting', 'Resolved', 'Close')";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("s", $userName);
+
+
+// Pagination Setup
+$limit = 5;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $limit;
+
+$ticketsQuery = "SELECT * FROM ticket WHERE created_by = ? ORDER BY date_created DESC LIMIT ? OFFSET ?";
+$stmt = $conn->prepare($ticketsQuery);
+$stmt->bind_param("sii", $userName, $limit, $offset);
 $stmt->execute();
 $result = $stmt->get_result();
+$stmt->close();
 
+// Get total tickets count for pagination
+$countQuery = "SELECT COUNT(*) AS total FROM ticket WHERE created_by = ?";
+$stmt = $conn->prepare($countQuery);
+$stmt->bind_param("s", $userName);
+$stmt->execute();
+$countResult = $stmt->get_result();
+$totalTickets = $countResult->fetch_assoc()['total'];
+$totalPages = ceil($totalTickets / $limit);
+$stmt->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdonPH Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css.css">
-    <link rel="icon" type="image/jpeg" href="https://adongroup.com.au/wp-content/uploads/2020/12/aog-favicon-192px.svg">
-    <title>ADON PH</title>
 </head>
-
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-    <a class="navbar-brand fw-bold" href="#"><img src="https://adongroup.com.au/wp-content/uploads/2019/12/AdOn-Logo-v4.gif" alt="AdonPH Logo" style="height: 40px;"></a>
-
+        <a class="navbar-brand fw-bold" href="#">AdonPH</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -95,7 +108,6 @@ $result = $stmt->get_result();
     </div>
 </nav>
 
- 
 <div class="container mt-4">
     <div class="row">
         <!-- Left Section: Ticket Submission & Table -->
@@ -109,9 +121,8 @@ $result = $stmt->get_result();
                         <!-- Search Bar -->
                         <input type="text" id="searchInput" class="form-control" placeholder="Search tickets...">
                     </div>
-        
-
-                    <table class="table mt-3">
+                 
+                    <table class="table table-bordered small-table">
     <thead class="table-dark">
         <tr>
             <th>Ticket No.</th>
@@ -125,14 +136,14 @@ $result = $stmt->get_result();
             <th>Action</th>
         </tr>
     </thead>
-    <tbody id="inventoryTable">
+    <tbody>
     <?php while ($ticket = $result->fetch_assoc()) { 
         $statusClass = match ($ticket['status']) {
             "Pending" => "bg-primary text-white",
             "In Progress" => "bg-warning text-dark",
             "Close" => "bg-light text-dark",
-            "Resolved" => "bg-success text-white",
-            "On Hold" => "bg-purple text-white",
+            "Done" => "bg-success text-white",
+            "Waiting" => "bg-purple text-white",
             default => "",
         };
 
@@ -146,40 +157,43 @@ $result = $stmt->get_result();
         $processClass = match ($ticket['process']) {
             "Accepted" => "bg-primary text-white",
             "Fixed" => "bg-success text-white",
-            "Waiting" => "bg-purple text-white",
+            "On Hold" => "bg-purple text-white",
             default => "",
         };
     ?>
-    <tr>
-        <td><?= htmlspecialchars($ticket['ticket_number']) ?></td>
-        <td><?= htmlspecialchars($ticket['subject']) ?></td>
-        <td><?= htmlspecialchars($ticket['category']) ?></td>
-        <td><span class="badge <?= $processClass ?>"><?= htmlspecialchars($ticket['process']) ?></span></td>
-        <td><span class="badge <?= $statusClass ?>"><?= htmlspecialchars($ticket['status']) ?></span></td>
-        <td><span class="badge <?= $priorityClass ?>"><?= htmlspecialchars($ticket['priority']) ?></span></td>
-        <td><?= htmlspecialchars($ticket['date_created']) ?></td>
-        <td><?= htmlspecialchars($ticket['accept']) ?></td>
-        <td>
-            <?php if ($ticket['status'] != "Resolved" && $ticket['status'] != "Close") { ?>
-                <div class="dropdown">
-                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-three-dots"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <?php if (!empty($ticket['accept'])) { ?>
-                            <li><button class="dropdown-item text-success" onclick="showFixedPopup('<?= $ticket['ticket_number'] ?>')">✅ Fixed</button></li>
-                        <?php } ?>
-                        <li><button class="dropdown-item text-danger" onclick="showCancelPopup('<?= $ticket['ticket_number'] ?>')">❌ Cancel</button></li>
-                    </ul>
-                </div>
-            <?php } ?>
-        </td>
-    </tr>
+        <tr>
+            <td><?= htmlspecialchars($ticket['ticket_number']) ?></td>
+            <td><?= htmlspecialchars($ticket['subject']) ?></td>
+            <td><?= htmlspecialchars($ticket['category']) ?></td>
+            <td><span class="badge <?= $processClass ?>"><?= htmlspecialchars($ticket['process']) ?></span></td>
+            <td><span class="badge <?= $statusClass ?>"><?= htmlspecialchars($ticket['status']) ?></span></td>
+            <td><span class="badge <?= $priorityClass ?>"><?= htmlspecialchars($ticket['priority']) ?></span></td>
+            <td><?= htmlspecialchars($ticket['date_created']) ?></td>
+            <td><?= htmlspecialchars($ticket['accept']) ?></td>
+            <td>
+                <?php if ($ticket['status'] != "Done" && $ticket['status'] != "Close") { ?>
+                    <div class="dropdown">
+                        <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="actionMenu<?= $ticket['ticket_number'] ?>" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="actionMenu<?= $ticket['ticket_number'] ?>">
+                            <li>
+                                <button class="dropdown-item text-success" onclick="showFixedPopup('<?= $ticket['ticket_number'] ?>')">
+                                    ✅ Fixed
+                                </button>
+                            </li>
+                            <li>
+                                <button class="dropdown-item text-danger" onclick="showCancelPopup('<?= $ticket['ticket_number'] ?>')">
+                                    ❌ Cancel
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                <?php } ?>
+            </td>
+        </tr>
     <?php } ?>
-    </tbody>
-</table>
-
-
+</tbody>
 
 <!-- Fixed Confirmation Popup (Auto-Submits) -->
 <div class="modal fade" id="fixedPopup" tabindex="-1" aria-hidden="true">
@@ -242,78 +256,71 @@ function showCancelPopup(ticketId) {
 }
 </script>
 
+<style>
+/* Custom Popup Box Styling */
+.custom-popup {
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Success and Danger Icons */
+.icon {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+.icon.success { color: #28a745; }
+.icon.danger { color: #dc3545; }
+
+/* Modern Popup Buttons */
+.popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+.popup-buttons .btn {
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Modal Body Text */
+.modal-body h5 {
+    font-size: 20px;
+    font-weight: bold;
+}
+.modal-body p {
+    font-size: 14px;
+    color: #555;
+}
+</style>
+
+
 </table>
 
-        <!-- Pagination Controls -->
-        <ul class="pagination" id="paginationControls">
-            <li class="page-item disabled"><a class="page-link" href="#" id="prevPage">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#" id="nextPage">Next</a></li>
-        </ul>
+                    <nav>
+                        <ul class="pagination justify-content-center">
+                            <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
+                                <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-            </div>
-            </div>
-   
-    <script>
-      // Fixed Confirmation Popup with Auto-Submit
-function showFixedPopup(ticketId) {
-    document.getElementById('fixedTicketId').value = ticketId;
-    var fixedPopup = new bootstrap.Modal(document.getElementById('fixedPopup'));
-    fixedPopup.show();
+        </div>
 
-    setTimeout(() => {
-        fixedPopup.hide();
-        document.getElementById('fixedForm').submit();
-    }, 1000);
-}
-
-// Cancel Confirmation Popup
-function showCancelPopup(ticketId) {
-    document.getElementById('cancelTicketId').value = ticketId;
-    var cancelPopup = new bootstrap.Modal(document.getElementById('cancelPopup'));
-    cancelPopup.show();
-}
-
-// Pagination & Search
-let currentPage = 1;
-const rowsPerPage = 5;
-const tableRows = document.querySelectorAll('#inventoryTable tr');
-
-function showPage(page) {
-    let start = (page - 1) * rowsPerPage;
-    let end = start + rowsPerPage;
-    tableRows.forEach((row, index) => row.style.display = (index >= start && index < end) ? '' : 'none');
-    document.getElementById('prevPage').parentElement.classList.toggle('disabled', page === 1);
-    document.getElementById('nextPage').parentElement.classList.toggle('disabled', page === Math.ceil(tableRows.length / rowsPerPage));
-}
-
-document.getElementById('prevPage').addEventListener('click', function(event) {
-    event.preventDefault();
-    if (currentPage > 1) {
-        currentPage--;
-        showPage(currentPage);
-    }
-});
-
-document.getElementById('nextPage').addEventListener('click', function(event) {
-    event.preventDefault();
-    if (currentPage < Math.ceil(tableRows.length / rowsPerPage)) {
-        currentPage++;
-        showPage(currentPage);
-    }
-});
-
-// Search functionality
-document.getElementById('searchInput').addEventListener('input', function() {
-    let filter = this.value.toLowerCase();
-    tableRows.forEach(row => row.style.display = row.innerText.toLowerCase().includes(filter) ? '' : 'none');
-});
-
-// Initialize
-showPage(currentPage);
-
-</script>
-
-      <!-- Right Section: Assigned Units -->
+  <!-- Right Section: Assigned Units -->
 <div class="col-md-3">
     <div class="card">
         <div class="card-header bg-white text-dark font-weight-bold">Assigned Unit</div>
@@ -428,7 +435,7 @@ function showSuccessMessage(event) {
     // Wait for 3 seconds, then submit the form
     setTimeout(function() {
         document.getElementById("ticketForm").submit();
-    }, 1000);
+    }, 3000);
 }
 </script>
 
@@ -477,6 +484,7 @@ function showSuccessMessage(event) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../ui_employee/script.js"></script>
+
 
 </body>
 </html>

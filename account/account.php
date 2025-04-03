@@ -44,12 +44,8 @@ if (!isset($_SESSION['user_id'])) {
                 <tr>
                     <th scope="col">ID No.</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Position</th>
-                    <th scope="col">Department</th>
-                    <th scope="col">Assign Unit</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Date Hired</th>
-                    <th scope="col">Total Asset Value</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -57,22 +53,23 @@ if (!isset($_SESSION['user_id'])) {
                 <?php 
                     include '../db_connection.php';
 
-                    $query = "SELECT id, idnumber, name, position, department, adonwork_no, status,
-                            date_hired, total_asset_value FROM employee";
+                    $query = "SELECT id, idnumber, name, email, role FROM user";
                     $result = mysqli_query($conn, $query);
                     $rows = [];
 
                     if (mysqli_num_rows($result) > 0) {
                         while ($row = mysqli_fetch_assoc($result)) {
-                            $rows[] = "<tr class='inventory-row'>
+                            $rows[] = "<tr class='inventory-row' data-id='{$row['id']}'>
                                 <td>{$row['idnumber']}</td>
                                 <td>{$row['name']}</td>
-                                <td>{$row['position']}</td>
-                                <td>{$row['department']}</td>
-                                <td>{$row['adonwork_no']}</td>
-                                <td>{$row['status']}</td>
-                                <td>{$row['date_hired']}</td>
-                                <td>{$row['total_asset_value']}</td>
+                                <td>{$row['email']}</td>
+                                <td>
+                                    <select class='role-dropdown form-select form-select-sm' data-id='{$row['id']}'>
+                                        <option value='Admin' " . ($row['role'] == 'Admin' ? 'selected' : '') . ">Admin</option>
+                                        <option value='Employee' " . ($row['role'] == 'Employee' ? 'selected' : '') . ">Employee</option>
+                                         <option value='Dev-Support' " . ($row['role'] == 'Dev-Support' ? 'selected' : '') . ">Dev-Support</option>
+                                    </select>
+                                </td>
                                 <td>
                                     <div class='dropdown'>
                                         <button class='btn btn-light btn-sm' type='button' id='dropdownMenu{$row['id']}' data-bs-toggle='dropdown' aria-expanded='false'>
@@ -87,7 +84,7 @@ if (!isset($_SESSION['user_id'])) {
                             </tr>";
                         }
                     } else {
-                        $rows[] = "<tr><td colspan='9'>No Assets Found</td></tr>";
+                        $rows[] = "<tr><td colspan='5'>No Employees Found</td></tr>";
                     }
 
                     mysqli_close($conn);
@@ -107,9 +104,8 @@ if (!isset($_SESSION['user_id'])) {
         // Pagination logic
         let currentPage = 1;
         const rowsPerPage = 10;
-        const tableRows = document.querySelectorAll('#inventoryTable tr');
-        const totalRows = tableRows.length;
-        const totalPages = Math.ceil(totalRows / rowsPerPage);
+        let tableRows = document.querySelectorAll('#inventoryTable tr');
+        let totalRows = tableRows.length;
 
         function showPage(page) {
             let start = (page - 1) * rowsPerPage;
@@ -120,7 +116,7 @@ if (!isset($_SESSION['user_id'])) {
             });
 
             document.getElementById('prevPage').parentElement.classList.toggle('disabled', page === 1);
-            document.getElementById('nextPage').parentElement.classList.toggle('disabled', page === totalPages);
+            document.getElementById('nextPage').parentElement.classList.toggle('disabled', page === Math.ceil(totalRows / rowsPerPage));
         }
 
         document.getElementById('prevPage').addEventListener('click', function(event) {
@@ -133,7 +129,7 @@ if (!isset($_SESSION['user_id'])) {
 
         document.getElementById('nextPage').addEventListener('click', function(event) {
             event.preventDefault();
-            if (currentPage < totalPages) {
+            if (currentPage < Math.ceil(totalRows / rowsPerPage)) {
                 currentPage++;
                 showPage(currentPage);
             }
@@ -142,49 +138,63 @@ if (!isset($_SESSION['user_id'])) {
         // Search logic
         document.getElementById('searchInput').addEventListener('input', function() {
             let filter = this.value.toLowerCase();
-            tableRows.forEach(row => {
-                let text = row.innerText.toLowerCase();
-                row.style.display = text.includes(filter) ? '' : 'none';
-            });
+            let filteredRows = Array.from(tableRows).filter(row => row.innerText.toLowerCase().includes(filter));
+            
+            // Update the table rows and reset pagination
+            totalRows = filteredRows.length;
+            document.getElementById('inventoryTable').innerHTML = filteredRows.length > 0 ? filteredRows.map(row => row.outerHTML).join('') : '<tr><td colspan="5">No results found</td></tr>';
 
-            // Recalculate pagination after search
-            totalRows = document.querySelectorAll('#inventoryTable tr:visible').length;
-            const totalPagesAfterSearch = Math.ceil(totalRows / rowsPerPage);
-            showPage(1); // Show the first page after search filter
+            showPage(1); // Show the first page after filter
         });
 
         // Initial setup
         showPage(currentPage);
-    </script>
-<script>
-    // Delete functionality
-document.querySelectorAll('.delete-btn').forEach(button => {
-    button.addEventListener('click', function(event) {
-        event.preventDefault();
-        
-        // Get employee ID from data-id attribute
-        const employeeId = this.getAttribute('data-id');
-        
-        // Confirm deletion
-        if (confirm('Are you sure you want to delete this employee?')) {
-            // Send AJAX request to delete employee
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `delete_employee.php?id=${employeeId}`, true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    alert('Employee deleted successfully!');
-                    // Remove the row from the table
-                    const row = button.closest('tr');
-                    row.remove();
-                } else {
-                    alert('Error deleting employee');
-                }
-            };
-            xhr.send();
-        }
-    });
-});
 
-</script>
+        // Handle role change via AJAX
+        document.getElementById('inventoryTable').addEventListener('change', function(event) {
+            if (event.target && event.target.classList.contains('role-dropdown')) {
+                const newRole = event.target.value;
+                const employeeId = event.target.getAttribute('data-id');
+
+                // AJAX request to update the role
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'update_role.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        alert('Role updated successfully!');
+                    } else {
+                        alert('Error updating role');
+                    }
+                };
+                xhr.send(`id=${employeeId}&role=${newRole}`);
+            }
+        });
+
+        // Delete functionality with event delegation
+        document.getElementById('inventoryTable').addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('delete-btn')) {
+                event.preventDefault();
+                
+                const employeeId = event.target.getAttribute('data-id');
+                
+                if (confirm('Are you sure you want to delete this employee?')) {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', `delete_employee.php?id=${employeeId}`, true);
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            alert('Employee deleted successfully!');
+                            const row = event.target.closest('tr');
+                            row.remove();
+                        } else {
+                            alert('Error deleting employee');
+                        }
+                    };
+                    xhr.send();
+                }
+            }
+        });
+    </script>
 </body>
+
 </html>

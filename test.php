@@ -1,79 +1,95 @@
-<div class="row mt-4">
-    <!-- Task Chart -->
-    <div class="col-lg-6">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Ticket Categories</h5>
-                <div class="chart-container">
-                    <canvas id="myBarChart"></canvas>
-                </div>
+<?php
+// Include the database connection file
+include 'db_connection.php';
+
+// Define the queries to fetch the status of monitors and keyboards
+$queryMonitors = "SELECT status FROM monitor";
+$queryKeyboards = "SELECT status FROM keyboard";
+
+// Execute the queries for monitors and keyboards
+$resultMonitors = $conn->query($queryMonitors);
+$resultKeyboards = $conn->query($queryKeyboards);
+
+if ($resultMonitors === false || $resultKeyboards === false) {
+    die("Error fetching data: " . $conn->error);
+}
+
+// Initialize counters for total and assigned monitors
+$totalMonitors = 0;
+$assignedMonitors = 0;
+
+// Loop through the results for monitors
+while ($row = $resultMonitors->fetch_assoc()) {
+    $totalMonitors++;
+    if ($row['status'] === 'Assigned') {
+        $assignedMonitors++;
+    }
+}
+
+// Calculate the percentage of assigned monitors
+$assignedPercentageMonitors = ($totalMonitors === 0) ? 0 : ($assignedMonitors / $totalMonitors) * 100;
+
+// Initialize counters for total and assigned keyboards
+$totalKeyboards = 0;
+$assignedKeyboards = 0;
+
+// Loop through the results for keyboards
+while ($row = $resultKeyboards->fetch_assoc()) {
+    $totalKeyboards++;
+    if ($row['status'] === 'Assigned') {
+        $assignedKeyboards++;
+    }
+}
+
+// Calculate the percentage of assigned keyboards
+$assignedPercentageKeyboards = ($totalKeyboards === 0) ? 0 : ($assignedKeyboards / $totalKeyboards) * 100;
+
+// Close the database connection
+$conn->close();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor and Keyboard Assignment Progress</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .progress {
+            height: 6px;
+        }
+        .small {
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Monitor Progress -->
+    <div id="monitor-progress" class="mb-2 container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <span class="small">Assigned Monitors</span>
             </div>
+            <span id="progress-text" class="small"><?= number_format($assignedPercentageMonitors, 2) ?>%</span>
+        </div>
+        <div class="progress">
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: <?= $assignedPercentageMonitors ?>%; background-color: #3498db;" aria-valuenow="<?= $assignedPercentageMonitors ?>" aria-valuemin="0" aria-valuemax="100"><?= number_format($assignedPercentageMonitors, 2) ?>%</div>
         </div>
     </div>
-</div>
 
-<!-- Load Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Keyboard Progress -->
+    <div id="keyboard-progress" class="mb-2 container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <span class="small">Assigned Keyboards</span>
+            </div>
+            <span id="progress-text" class="small"><?= number_format($assignedPercentageKeyboards, 2) ?>%</span>
+        </div>
+        <div class="progress">
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: <?= $assignedPercentageKeyboards ?>%; background-color: #3498db;" aria-valuenow="<?= $assignedPercentageKeyboards ?>" aria-valuemin="0" aria-valuemax="100"><?= number_format($assignedPercentageKeyboards, 2) ?>%</div>
+        </div>
+    </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    fetch('get_ticket_data.php') // Ensure this matches your PHP file
-    .then(response => response.json())
-    .then(data => {
-        const ctx = document.getElementById('myBarChart').getContext('2d');
-
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(data), // X-axis (e.g., Ticket Categories)
-                datasets: [{
-                    label: 'Number of Tickets',
-                    data: Object.values(data), // Y-axis (Ticket counts)
-                    backgroundColor: ['darkred', '#B8860B', 'darkblue', 'darkviolet'],
-                    borderColor: '#fff',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, // Ensures it scales properly
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Ticket Categories',
-                            font: { size: 14, weight: 'bold' }
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Number of Tickets',
-                            font: { size: 14, weight: 'bold' }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    }
-                }
-            }
-        });
-    })
-    .catch(error => console.error("Error fetching data:", error));
-});
-</script>
-
-<style>
-/* Ensures the chart scales properly */
-.chart-container {
-    position: relative;
-    width: 100%;
-    max-width: 600px; /* Adjust for larger or smaller size */
-    height: 300px;
-    margin: auto;
-}
-</style>
+</body>
+</html>

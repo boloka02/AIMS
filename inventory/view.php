@@ -7,7 +7,9 @@ if (!isset($_SESSION['user_id'])) {
 ?>
 
 <?php
+include '../sidebar/sidebar.php';
 include '../db_connection.php';
+
 
 if (isset($_GET['type'])) {
     $type = strtolower(trim($_GET['type']));
@@ -39,7 +41,7 @@ if (isset($_GET['type'])) {
     <style>.search-box { max-width: 200px; }</style>
 </head>
 <body>
-<?php include "../sidebar/sidebar.php"; ?>
+
 
 <div class="container mt-3">
     <h2><?php echo ucfirst(htmlspecialchars($type)); ?> Details</h2>

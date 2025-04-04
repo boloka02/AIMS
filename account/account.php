@@ -151,25 +151,45 @@ if (!isset($_SESSION['user_id'])) {
         showPage(currentPage);
 
         // Handle role change via AJAX
-        document.getElementById('inventoryTable').addEventListener('change', function(event) {
-            if (event.target && event.target.classList.contains('role-dropdown')) {
-                const newRole = event.target.value;
-                const employeeId = event.target.getAttribute('data-id');
+           // Handle role change via AJAX
+document.getElementById('inventoryTable').addEventListener('change', function(event) {
+    if (event.target && event.target.classList.contains('role-dropdown')) {
+        const newRole = event.target.value;
+        const employeeId = event.target.getAttribute('data-id');
 
-                // AJAX request to update the role
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'update_role.php', true);
-                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        alert('Role updated successfully!');
-                    } else {
-                        alert('Error updating role');
-                    }
-                };
-                xhr.send(`id=${employeeId}&role=${newRole}`);
+        // AJAX request to update the role
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'update_role.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Show success modal
+                showModal('Role updated successfully KUPAL!');
+            } else {
+                // Show error modal
+                showModal('Error updating role');
             }
-        });
+        };
+        xhr.send(`id=${employeeId}&role=${newRole}`);
+    }
+});
+
+// Show modal function
+function showModal(message) {
+    const modalMessage = document.getElementById('modalMessage');
+    modalMessage.innerHTML = message;
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('messageModal'));
+    modal.show();
+
+    // Auto-close the modal after 1 second
+    setTimeout(function() {
+        modal.hide();
+    }, 1000); // 1000 milliseconds = 1 second
+}
+
+
 
         // Delete functionality with event delegation
         document.getElementById('inventoryTable').addEventListener('click', function(event) {
@@ -195,6 +215,32 @@ if (!isset($_SESSION['user_id'])) {
             }
         });
     </script>
+
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"> <div class="modal-content" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <div class="modal-body text-center py-4"> <div id="modalMessage" style="font-size: 1.1rem; color: #333;">
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Optional: Add custom styles for a more polished look */
+.modal-content {
+    border: none; /* Remove default border */
+}
+
+.modal-body {
+    padding: 2rem; /* Increase padding for better spacing */
+}
+
+#modalMessage {
+    line-height: 1.6; /* Improve line spacing for readability */
+}
+</style>
+
+
 </body>
 
 </html>

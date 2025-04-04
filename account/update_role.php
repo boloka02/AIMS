@@ -13,15 +13,15 @@ if (isset($_POST['id']) && isset($_POST['role'])) {
     $query = "UPDATE user SET role = '$role' WHERE id = '$id'";
 
     if (mysqli_query($conn, $query)) {
-        echo "Role updated successfully";
+        // Role update is successful, no need to echo anything.
     } else {
         // Log the error to the error log
         error_log("Error updating role: " . mysqli_error($conn));
-        echo "Error updating role: " . mysqli_error($conn); // Display error message for debugging
+        echo "Error updating role: " . mysqli_error($conn); // Optional: You can still send an error message if needed
     }
 
     mysqli_close($conn);
 } else {
-    echo "Invalid request";
+    echo "Invalid request"; // Optional: You can send an error message if the request is invalid
 }
 ?>

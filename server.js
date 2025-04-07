@@ -11,12 +11,13 @@ app.use(cors());
 
 // Database connection
 const db = mysql.createConnection({
-    host: '34.101.76.100',  // Ensure this IP is correct and accessible
-    user: 'root',           // Your MySQL username
-    password: 'T0pSecret@2025!',  // Your MySQL password
-    database: 'db_ams',  // Your database name
-    port: 3306
+  host: '10.184.0.2',  // Ensure this IP matches the server IP
+  user: 'root',
+  password: 'T0pSecret@2025!',  // Replace with your MySQL password
+  database: 'db_ams',  // Replace with the correct database name
+  port: 3306
 });
+
 
 // Connect to the database
 db.connect((err) => {

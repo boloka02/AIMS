@@ -2,6 +2,11 @@
 include '../db_connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Ensure all POST variables are being received correctly
+    // You can uncomment this to debug
+    // var_dump($_POST);
+
+    // Validate and sanitize POST inputs
     $type = $_POST['type'];
     $category = $_POST['category'];
     $quantity = intval($_POST['quantity']);
@@ -52,6 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Fetch last inserted asset ID
         $queryLast = "SELECT name FROM $tableName WHERE name LIKE '$prefix-%' ORDER BY name DESC LIMIT 1";
         $resultLast = mysqli_query($conn, $queryLast);
+        if (!$resultLast) {
+            echo "Error fetching last record: " . mysqli_error($conn);
+            exit;
+        }
+
         $lastNumber = 0;
 
         if ($row = mysqli_fetch_assoc($resultLast)) {
@@ -65,24 +75,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         for ($i = 1; $i <= $quantity; $i++) {
             $generated_name = sprintf("$prefix-%05d", $lastNumber + $i);
 
+            // Prepare the query based on item type
             if ($type === "Monitor" || $type === "2nd Monitor") {
                 $queryInsert = "INSERT INTO $tableName (name, size, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                if (!$stmtInsert) {
+                    echo "Error preparing query: " . mysqli_error($conn);
+                    exit;
+                }
                 mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $size, $price, $supplier, $purchasedate, $warranty);
             } elseif ($type === "Laptop" || $type === "Processor") {
                 $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                if (!$stmtInsert) {
+                    echo "Error preparing query: " . mysqli_error($conn);
+                    exit;
+                }
                 mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $model, $price, $supplier, $purchasedate, $warranty);
             } elseif ($type === "RAM") {
                 $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                if (!$stmtInsert) {
+                    echo "Error preparing query: " . mysqli_error($conn);
+                    exit;
+                }
                 mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $capacity, $price, $supplier, $purchasedate, $warranty);
             } else {
                 $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                if (!$stmtInsert) {
+                    echo "Error preparing query: " . mysqli_error($conn);
+                    exit;
+                }
                 mysqli_stmt_bind_param($stmtInsert, "sdsss", $generated_name, $price, $supplier, $purchasedate, $warranty);
             }
-            mysqli_stmt_execute($stmtInsert);
+            if (!mysqli_stmt_execute($stmtInsert)) {
+                echo "Error executing query: " . mysqli_error($conn);
+                exit;
+            }
             mysqli_stmt_close($stmtInsert);
         }
 
@@ -101,21 +131,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $queryUpdate = "UPDATE inventory SET quantity = ?, total_value = ?, available_stock = ?, stock = ?, status = ? WHERE id = ?";
             $stmtUpdate = mysqli_prepare($conn, $queryUpdate);
             mysqli_stmt_bind_param($stmtUpdate, "iidssi", $new_quantity, $new_total_value, $new_available_stock, $stock, $status, $row['id']);
-            mysqli_stmt_execute($stmtUpdate);
+            if (!mysqli_stmt_execute($stmtUpdate)) {
+                echo "Error executing inventory update: " . mysqli_error($conn);
+                exit;
+            }
             mysqli_stmt_close($stmtUpdate);
         } else {
             // Insert new inventory record
             $queryInventory = "INSERT INTO inventory (type, category, quantity, total_value, stock, available_stock, status, purchasedate, warranty, location) 
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtInventory = mysqli_prepare($conn, $queryInventory);
+            if (!$stmtInventory) {
+                echo "Error preparing inventory query: " . mysqli_error($conn);
+                exit;
+            }
             mysqli_stmt_bind_param($stmtInventory, "ssidsissss", $type, $category, $quantity, $total_value, $stock, $available_stock, $status, $purchasedate, $warranty, $location);
-            mysqli_stmt_execute($stmtInventory);
+            if (!mysqli_stmt_execute($stmtInventory)) {
+                echo "Error executing inventory insert: " . mysqli_error($conn);
+                exit;
+            }
             mysqli_stmt_close($stmtInventory);
         }
 
         mysqli_stmt_close($stmtCheck);
     }
-    
+
     mysqli_close($conn);
     echo "<script>alert('Asset added successfully!'); window.location.href = '/mis-v6.1/inventory/inventory.php';</script>";
 }

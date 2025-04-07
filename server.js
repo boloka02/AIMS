@@ -1,47 +1,36 @@
-// **SERVER-SIDE (Node.js with Express)**
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 
+// Initialize the app
 const app = express();
+
+// Enable CORS
 app.use(cors());
-app.use(express.json()); // To parse JSON request bodies
 
-// **IMPORTANT: Replace with your actual database credentials**
+// Database connection
 const db = mysql.createConnection({
-    host: '192.168.7.242',
-    user: 'root',
-    password: '',
-    database: 'db_ams'
+  host: '34.101.76.100',  // The IP address of your MySQL server
+  user: 'root',
+  password: 'T0pSecret@2025!',  // Update this with your actual password
+  database: 'db_ams'
 });
 
-db.connect((err) => {
-    if (err) {
-        console.error('Database connection failed:', err);
-        return;
-    }
-    console.log('Connected to db_ams database!');
+// Connect to MySQL
+db.connect(err => {
+  if (err) {
+    console.error('Database connection failed:', err.stack);
+    return;
+  }
+  console.log('Connected to MySQL');
 });
 
-// Get monitor progress
-app.get('/api/monitor-progress', (req, res) => {
-    const query = 'SELECT status FROM monitor';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error querying database:', err);
-            res.status(500).json({ error: 'Failed to fetch monitor data' });
-            return;
-        }
-
-        const totalMonitors = results.length;
-        const assignedMonitors = results.filter(monitor => monitor.status === 'Assigned').length;
-        const assignedPercentage = (totalMonitors === 0) ? 0 : (assignedMonitors / totalMonitors) * 100;
-
-        res.json({ assignedPercentage: assignedPercentage });
-    });
+// Set up a basic route
+app.get('/', (req, res) => {
+  res.send('AIMS Application is running');
 });
 
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
+// Start the server on port 3000
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
 });

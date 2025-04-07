@@ -14,10 +14,10 @@ const connection = mysql.createConnection({
     user: 'root',
     password: 'T0pSecret@2025!',
     database: 'db_ams'  // Name of your MySQL database
-  });
+});
   
 // Connect to MySQL
-db.connect(err => {
+connection.connect(err => {
   if (err) {
     console.error('Database connection failed:', err.stack);
     return;

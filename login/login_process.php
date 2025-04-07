@@ -13,6 +13,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Use prepared statements to prevent SQL injection
     $query = "SELECT * FROM user WHERE email = ?";
     $stmt = mysqli_prepare($conn, $query);
+
+    if ($stmt === false) {
+        die("Database query failed.");
+    }
+
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);

@@ -7,6 +7,8 @@ if (!isset($_SESSION['name'])) {
 
 include 'db_connection.php';
 
+$userName = $_SESSION['name'];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subject = mysqli_real_escape_string($conn, $_POST['subject']);
     $priority = mysqli_real_escape_string($conn, $_POST['priority']);
@@ -68,8 +70,7 @@ $result = $stmt->get_result();
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-    <a class="navbar-brand fw-bold" href="#"><img src="https://adongroup.com.au/wp-content/uploads/2019/12/AdOn-Logo-v4.gif" alt="AdonPH Logo" style="height: 40px;"></a>
-
+        <a class="navbar-brand fw-bold" href="#"><img src="https://adongroup.com.au/wp-content/uploads/2019/12/AdOn-Logo-v4.gif" alt="AdonPH Logo" style="height: 40px;"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -83,7 +84,6 @@ $result = $stmt->get_result();
                         <li><a class="dropdown-item" href="#"><?php echo htmlspecialchars($_SESSION['name']); ?></a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="../login/logout.php">Logout</a></li>
-                        
                     </ul>
                 </li>
             </ul>
@@ -91,275 +91,126 @@ $result = $stmt->get_result();
     </div>
 </nav>
 
- 
 <div class="container mt-4">
     <div class="row">
-        <!-- Left Section: Ticket Submission & Table -->
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header bg-primary text-white">Tickets Overview</div>
                 <div class="card-body">
                     <div class="d-flex mb-3">
-                        <!-- Modal Button -->
                         <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#addTicketModal">+ Add Ticket</button>
-                        <!-- Search Bar -->
                         <input type="text" id="searchInput" class="form-control" placeholder="Search tickets...">
                     </div>
-        
 
                     <table class="table mt-3">
-    <thead class="table-dark">
-        <tr>
-            <th>Ticket No.</th>
-            <th>Subject</th>
-            <th>Category</th>
-            <th>Activity</th>
-            <th>Status</th>
-            <th>Priority</th>
-            <th>Date</th>
-            <th>Assign</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="inventoryTable">
-    <?php
-// Updated logic for $statusClass, $priorityClass, and $processClass
-$statusClass = '';
-if ($ticket['status'] == "Pending") {
-    $statusClass = "bg-primary text-white";
-} elseif ($ticket['status'] == "In Progress") {
-    $statusClass = "bg-warning text-dark";
-} elseif ($ticket['status'] == "Close") {
-    $statusClass = "bg-light text-dark";
-} elseif ($ticket['status'] == "Resolved") {
-    $statusClass = "bg-success text-white";
-} elseif ($ticket['status'] == "On Hold") {
-    $statusClass = "bg-purple text-white";
-}
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Ticket No.</th>
+                                <th>Subject</th>
+                                <th>Category</th>
+                                <th>Activity</th>
+                                <th>Status</th>
+                                <th>Priority</th>
+                                <th>Date</th>
+                                <th>Assign</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTable">
+                        <?php
+                        while ($ticket = $result->fetch_assoc()) {
+                            $statusClass = '';
+                            switch ($ticket['status']) {
+                                case "Pending": $statusClass = "bg-primary text-white"; break;
+                                case "In Progress": $statusClass = "bg-warning text-dark"; break;
+                                case "Resolved": $statusClass = "bg-success text-white"; break;
+                                case "Close": $statusClass = "bg-light text-dark"; break;
+                                case "On Hold": $statusClass = "bg-purple text-white"; break;
+                            }
 
-$priorityClass = '';
-if ($ticket['priority'] == "High") {
-    $priorityClass = "bg-danger text-white";
-} elseif ($ticket['priority'] == "Medium") {
-    $priorityClass = "bg-warning text-dark";
-} elseif ($ticket['priority'] == "Low") {
-    $priorityClass = "bg-light text-dark";
-}
-
-$processClass = '';
-if ($ticket['process'] == "Accepted") {
-    $processClass = "bg-primary text-white";
-} elseif ($ticket['process'] == "Fixed") {
-    $processClass = "bg-success text-white";
-} elseif ($ticket['process'] == "Waiting") {
-    $processClass = "bg-purple text-white";
-}
-?>
-
-    <tr>
-        <td><?= htmlspecialchars($ticket['ticket_number']) ?></td>
-        <td><?= htmlspecialchars($ticket['subject']) ?></td>
-        <td><?= htmlspecialchars($ticket['category']) ?></td>
-        <td><span class="badge <?= $processClass ?>"><?= htmlspecialchars($ticket['process']) ?></span></td>
-        <td><span class="badge <?= $statusClass ?>"><?= htmlspecialchars($ticket['status']) ?></span></td>
-        <td><span class="badge <?= $priorityClass ?>"><?= htmlspecialchars($ticket['priority']) ?></span></td>
-        <td><?= htmlspecialchars($ticket['date_created']) ?></td>
-        <td><?= htmlspecialchars($ticket['accept']) ?></td>
-        <td>
-            <?php if ($ticket['status'] != "Resolved" && $ticket['status'] != "Close") { ?>
-                <div class="dropdown">
-                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-three-dots"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <?php if (!empty($ticket['accept'])) { ?>
-                            <li><button class="dropdown-item text-success" onclick="showFixedPopup('<?= $ticket['ticket_number'] ?>')">✅ Fixed</button></li>
+                            $priorityClass = '';
+                            switch ($ticket['priority']) {
+                                case "High": $priorityClass = "bg-danger text-white"; break;
+                                case "Medium": $priorityClass = "bg-warning text-dark"; break;
+                                case "Low": $priorityClass = "bg-light text-dark"; break;
+                            }
+                        ?>
+                            <tr>
+                                <td><?= htmlspecialchars($ticket['ticket_number']) ?></td>
+                                <td><?= htmlspecialchars($ticket['subject']) ?></td>
+                                <td><?= htmlspecialchars($ticket['category']) ?></td>
+                                <td><span class="badge"><?= htmlspecialchars($ticket['activity']) ?></span></td>
+                                <td><span class="badge <?= $statusClass ?>"><?= htmlspecialchars($ticket['status']) ?></span></td>
+                                <td><span class="badge <?= $priorityClass ?>"><?= htmlspecialchars($ticket['priority']) ?></span></td>
+                                <td><?= htmlspecialchars($ticket['date_created']) ?></td>
+                                <td><?= htmlspecialchars($ticket['assign_to']) ?></td>
+                                <td>
+                                    <?php if ($ticket['status'] != "Resolved" && $ticket['status'] != "Close") { ?>
+                                        <div class="dropdown">
+                                            <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="bi bi-three-dots"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><button class="dropdown-item text-success" onclick="showFixedPopup('<?= $ticket['ticket_number'] ?>')">✅ Fixed</button></li>
+                                                <li><button class="dropdown-item text-danger" onclick="showCancelPopup('<?= $ticket['ticket_number'] ?>')">❌ Cancel</button></li>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
+                                </td>
+                            </tr>
                         <?php } ?>
-                        <li><button class="dropdown-item text-danger" onclick="showCancelPopup('<?= $ticket['ticket_number'] ?>')">❌ Cancel</button></li>
+                        </tbody>
+                    </table>
+
+                    <ul class="pagination" id="paginationControls">
+                        <li class="page-item disabled"><a class="page-link" href="#" id="prevPage">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="#" id="nextPage">Next</a></li>
                     </ul>
                 </div>
-            <?php } ?>
-        </td>
-    </tr>
-    <?php } ?>
-    </tbody>
-</table>
+            </div>
+        </div>
 
+        <!-- Assigned Units Section -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header bg-white text-dark font-weight-bold">Assigned Units</div>
+                <div class="card-body">
+                    <table class="table table-bordered small-table">
+                        <tbody>
+                            <?php
+                            $tables = [
+                                "Motherboard" => "mboard",
+                                "Keyboard" => "keyboard",
+                                "Mouse" => "mouse",
+                                "Monitor" => "monitor",
+                                "Webcam" => "webcam",
+                                "Headset" => "headset",
+                                "Processor" => "processor",
+                                "RAM" => "ram",
+                                "Laptop" => "laptop"
+                            ];
 
-
-<!-- Fixed Confirmation Popup (Auto-Submits) -->
-<div class="modal fade" id="fixedPopup" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center custom-popup">
-            <div class="modal-body">
-                <div class="icon success">
-                    <i class="bi bi-check-circle"></i>
+                            foreach ($tables as $label => $table) {
+                                $sql = "SELECT name FROM $table WHERE assign_to = ?";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bind_param("s", $userName);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $assignedName = ($row = $result->fetch_assoc()) ? $row['name'] : "N/A";
+                                echo "<tr><th class='bg-white text-dark'>$label</th><td>$assignedName</td></tr>";
+                                $stmt->close();
+                            }
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
-                <h5>✅ Thank You for Confirming</h5>
-                <p>don't hesitate to call for support.. </p>
-                <form id="fixedForm" method="post" action="fixed_ticket.php">
-                    <input type="hidden" id="fixedTicketId" name="ticket_id">
-                </form>
             </div>
         </div>
+
     </div>
 </div>
 
-<!-- Cancel Confirmation Popup -->
-<div class="modal fade" id="cancelPopup" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content text-center custom-popup">
-            <div class="modal-body">
-                <div class="icon danger">
-                    <i class="bi bi-exclamation-circle"></i>
-                </div>
-                <h5>❌ Are You Sure?</h5>
-                <p>Do you really want to cancel this ticket?</p>
-                <form id="cancelForm" method="post" action="cancel_ticket.php">
-                    <input type="hidden" id="cancelTicketId" name="ticket_id">
-                    <div class="popup-buttons">
-                        <button type="submit" class="btn btn-danger">Yes, Cancel</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Go Back</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-// Show Fixed Confirmation Popup and Auto-Submit Form
-function showFixedPopup(ticketId) {
-    document.getElementById('fixedTicketId').value = ticketId;
-    var fixedPopup = new bootstrap.Modal(document.getElementById('fixedPopup'));
-    fixedPopup.show();
-    
-    // Auto-submit form after 1 second
-    setTimeout(() => {
-        document.getElementById('fixedForm').submit();
-    }, 1000);
-}
-
-// Show Cancel Confirmation Popup
-function showCancelPopup(ticketId) {
-    document.getElementById('cancelTicketId').value = ticketId;
-    var cancelPopup = new bootstrap.Modal(document.getElementById('cancelPopup'));
-    cancelPopup.show();
-}
-</script>
-
-</table>
-
-        <!-- Pagination Controls -->
-        <ul class="pagination" id="paginationControls">
-            <li class="page-item disabled"><a class="page-link" href="#" id="prevPage">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#" id="nextPage">Next</a></li>
-        </ul>
-            </div>
-            </div>
-            </div>
-   
-    <script>
-      // Fixed Confirmation Popup with Auto-Submit
-function showFixedPopup(ticketId) {
-    document.getElementById('fixedTicketId').value = ticketId;
-    var fixedPopup = new bootstrap.Modal(document.getElementById('fixedPopup'));
-    fixedPopup.show();
-
-    setTimeout(() => {
-        fixedPopup.hide();
-        document.getElementById('fixedForm').submit();
-    }, 1000);
-}
-
-// Cancel Confirmation Popup
-function showCancelPopup(ticketId) {
-    document.getElementById('cancelTicketId').value = ticketId;
-    var cancelPopup = new bootstrap.Modal(document.getElementById('cancelPopup'));
-    cancelPopup.show();
-}
-
-// Pagination & Search
-let currentPage = 1;
-const rowsPerPage = 5;
-const tableRows = document.querySelectorAll('#inventoryTable tr');
-
-function showPage(page) {
-    let start = (page - 1) * rowsPerPage;
-    let end = start + rowsPerPage;
-    tableRows.forEach((row, index) => row.style.display = (index >= start && index < end) ? '' : 'none');
-    document.getElementById('prevPage').parentElement.classList.toggle('disabled', page === 1);
-    document.getElementById('nextPage').parentElement.classList.toggle('disabled', page === Math.ceil(tableRows.length / rowsPerPage));
-}
-
-document.getElementById('prevPage').addEventListener('click', function(event) {
-    event.preventDefault();
-    if (currentPage > 1) {
-        currentPage--;
-        showPage(currentPage);
-    }
-});
-
-document.getElementById('nextPage').addEventListener('click', function(event) {
-    event.preventDefault();
-    if (currentPage < Math.ceil(tableRows.length / rowsPerPage)) {
-        currentPage++;
-        showPage(currentPage);
-    }
-});
-
-// Search functionality
-document.getElementById('searchInput').addEventListener('input', function() {
-    let filter = this.value.toLowerCase();
-    tableRows.forEach(row => row.style.display = row.innerText.toLowerCase().includes(filter) ? '' : 'none');
-});
-
-// Initialize
-showPage(currentPage);
-
-</script>
-
-      <!-- Right Section: Assigned Units -->
-<div class="col-md-3">
-    <div class="card">
-        <div class="card-header bg-white text-dark font-weight-bold">Assigned Unit</div>
-        <div class="card-body">
-            <table class="table table-bordered small-table">
-                <tbody>
-                    <?php 
-                    $tables = [
-                        "Motherboard" => "mboard",
-                        "Keyboard" => "keyboard",
-                        "Mouse" => "mouse",
-                        "Monitor" => "monitor",
-                        "Monitor2" => "monitor2",
-                        "Webcam" => "webcam",
-                        "Headset" => "headset",
-                        "Processor" => "processor",
-                        "RAM" => "ram",
-                        "Laptop" => "laptop"
-                    ];
-
-                    foreach ($tables as $label => $table) {
-                        $sql = "SELECT name FROM $table WHERE assign_to = ?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bind_param("s", $userName);
-                        $stmt->execute();
-                        $result = $stmt->get_result();
-                        $assignedName = ($row = $result->fetch_assoc()) ? $row['name'] : "N/A";
-                        echo "<tr><th class='bg-white text-dark'>$label</th><td>$assignedName</td></tr>";
-                        $stmt->close();
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Centered Modal for Adding Tickets -->
+<!-- Add Ticket Modal -->
 <div class="modal fade" id="addTicketModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -367,7 +218,7 @@ showPage(currentPage);
                 <h5 class="modal-title">Create New Ticket</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form id="ticketForm" method="POST" enctype="multipart/form-data" onsubmit="showSuccessMessage(event)">
+            <form id="ticketForm" method="POST" enctype="multipart/form-data">
                 <div class="modal-body">
                     <label class="form-label">Ticket Subject</label>
                     <input type="text" name="subject" class="form-control" placeholder="Enter ticket subject" required>
@@ -387,16 +238,8 @@ showPage(currentPage);
                         <option value="Network">Network</option>
                     </select>
 
-                    <!-- Modern Drag-and-Drop File Upload -->
                     <label class="form-label mt-2">Attachments (Optional)</label>
-                    <div id="drop-area" class="upload-box">
-                        <input type="file" id="fileInput" name="image" accept="image/*" hidden>
-                        <div class="upload-content" onclick="document.getElementById('fileInput').click();">
-                            <i class="bi bi-upload"></i>
-                            <p>Drag & drop files or <span class="browse">browse</span></p>
-                            <p class="file-info">Upload screenshots or relevant files (max 5MB each)</p>
-                        </div>
-                    </div>
+                    <input type="file" name="image" accept="image/*" class="form-control">
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -406,83 +249,7 @@ showPage(currentPage);
     </div>
 </div>
 
-<!-- Centered Success Popup -->
-<div id="successPopup" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <p>Submit successfully, please wait for the support...</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-function showSuccessMessage(event) {
-    event.preventDefault(); // Prevent form submission
-
-    // Close the Add Ticket Modal
-    var addTicketModal = bootstrap.Modal.getInstance(document.getElementById('addTicketModal'));
-    if (addTicketModal) {
-        addTicketModal.hide();
-    }
-
-    // Show the success popup
-    var successModal = new bootstrap.Modal(document.getElementById('successPopup'));
-    successModal.show();
-
-    // Wait for 3 seconds, then submit the form
-    setTimeout(function() {
-        document.getElementById("ticketForm").submit();
-    }, 1000);
-}
-</script>
-
-<style>/* Center the modal */
-.modal-dialog {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-
-/* Success Popup Box */
-#successPopup .modal-content {
-    text-align: center;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-#successPopup .modal-header {
-    background-color: #28a745;
-    color: white;
-    border-radius: 10px 10px 0 0;
-}
-
-#successPopup .modal-body {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-/* Fade-in animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-</style>
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="../ui_employee/script.js"></script>
 
 </body>
 </html>

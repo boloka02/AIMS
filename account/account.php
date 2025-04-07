@@ -164,7 +164,7 @@ document.getElementById('inventoryTable').addEventListener('change', function(ev
         xhr.onload = function() {
             if (xhr.status === 200) {
                 // Show success modal
-                showModal('Role updated successfully oak');
+                showModal('Role updated successfully');
             } else {
                 // Show error modal
                 showModal('Error updating role');

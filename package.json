@@ -1,0 +1,28 @@
+{
+  "name": "aims",
+  "version": "1.0.0",
+  "description": "INVENTORY SYSTEM AIMS",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boloka02/AIMS.git"
+  },
+  "keywords": [
+    "AIMS"
+  ],
+  "author": "ELTON REY C  YBANEZ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/boloka02/AIMS/issues"
+  },
+  "homepage": "https://github.com/boloka02/AIMS#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "mysql": "^2.18.1"
+  }
+}

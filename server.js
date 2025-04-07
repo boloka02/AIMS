@@ -11,11 +11,12 @@ app.use(cors());
 
 // Database connection
 const db = mysql.createConnection({
-  host: '10.184.0.2',  // Ensure this IP matches the server IP
+  host: '10.184.0.2',
   user: 'root',
-  password: 'T0pSecret@2025!',  // Replace with your MySQL password
-  database: 'db_ams',  // Replace with the correct database name
-  port: 3306
+  password: 'T0pSecret@2025!',
+  database: 'db_ams',
+  port: 3306,
+  connectTimeout: 10000  // Set to 10 seconds
 });
 
 

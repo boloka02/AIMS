@@ -5,7 +5,8 @@ if (!isset($_SESSION['name'])) {
     exit();
 }
 
-include 'db_connection.php';
+include('../includes/db_connection.php');
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subject = mysqli_real_escape_string($conn, $_POST['subject']);

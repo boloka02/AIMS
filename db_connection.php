@@ -1,8 +1,8 @@
 <?php
-$host = "192.168.4.55";
-$username = "root";
-$password = "T0pSecret@2025!";
-$database = "db_ams";
+$host = "34.101.76.100";  // MySQL server IP
+$username = "root";       // MySQL username
+$password = "T0pSecret@2025!";  // MySQL password
+$database = "db_ams";     // The database you're using
 
 // Create connection
 $conn = new mysqli($host, $username, $password, $database);

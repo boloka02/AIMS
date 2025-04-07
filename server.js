@@ -31,8 +31,10 @@ db.connect((err) => {
 
 // Set up a basic route
 app.get('/', (req, res) => {
+  console.log('Received request at /');
   res.send('AIMS Application is running');
 });
+
 
 // Start the server on port 3000
 app.listen(3000, () => {

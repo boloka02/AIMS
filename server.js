@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
+const fs = require('fs');  // Add this line to include fs module
 
 // Initialize the app
 const app = express();
@@ -10,15 +11,17 @@ app.use(cors());
 
 // Database connection
 const connection = mysql.createConnection({
-    host: '34.101.76.100',   // IP of your MySQL server
-    user: 'root',
-    password: 'T0pSecret@2025!',
-    database: 'db_ams',  // Name of your MySQL database
-    connectTimeout: 10000, // 10 seconds timeout for initial connection
-    timeout: 60000,       // 60 seconds timeout for query execution
-  });
-  
-  
+  host: '34.101.76.100',
+  user: 'root',
+  password: 'T0pSecret@2025!',
+  database: 'db_ams',
+  ssl: {
+    ca: fs.readFileSync('/path/to/ca-cert.pem'),        // Replace with your actual file path
+    key: fs.readFileSync('/path/to/client-key.pem'),   // Replace with your actual file path
+    cert: fs.readFileSync('/path/to/client-cert.pem')  // Replace with your actual file path
+  }
+});
+
 // Connect to MySQL
 connection.connect(err => {
   if (err) {

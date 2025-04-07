@@ -9,13 +9,13 @@ const app = express();
 app.use(cors());
 
 // Database connection
-const db = mysql.createConnection({
-  host: '34.101.76.100',  // The IP address of your MySQL server
-  user: 'root',
-  password: 'T0pSecret@2025!',  // Update this with your actual password
-  database: 'db_ams'
-});
-
+const connection = mysql.createConnection({
+    host: '34.101.76.100',   // IP of your MySQL server
+    user: 'root',
+    password: 'T0pSecret@2025!',
+    database: 'db_ams'  // Name of your MySQL database
+  });
+  
 // Connect to MySQL
 db.connect(err => {
   if (err) {

@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     mysqli_close($conn);
-    echo "<script>alert('Asset added successfully!'); window.location.href = '/mis-v6.1/inventory/inventory.php';</script>";
+    echo "<script>alert('Asset added successfully!'); window.location.href = '../inventory/inventory.php';</script>";
 }
 ?>
 

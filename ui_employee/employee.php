@@ -5,7 +5,11 @@ if (!isset($_SESSION['name'])) {
     exit();
 }
 
-include 'db_connection.php';
+$userName = $_SESSION['name'];
+$conn = new mysqli("34.101.76.100", "root", "T0pSecret@2025!", "db_ams");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subject = mysqli_real_escape_string($conn, $_POST['subject']);

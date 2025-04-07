@@ -5,11 +5,7 @@ if (!isset($_SESSION['name'])) {
     exit();
 }
 
-$userName = $_SESSION['name'];
-$conn = new mysqli("34.101.76.100", "root", "T0pSecret@2025!", "db_ams");
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'db_connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $subject = mysqli_real_escape_string($conn, $_POST['subject']);
@@ -126,30 +122,40 @@ $result = $stmt->get_result();
         </tr>
     </thead>
     <tbody id="inventoryTable">
-    <?php while ($ticket = $result->fetch_assoc()) { 
-        $statusClass = match ($ticket['status']) {
-            "Pending" => "bg-primary text-white",
-            "In Progress" => "bg-warning text-dark",
-            "Close" => "bg-light text-dark",
-            "Resolved" => "bg-success text-white",
-            "On Hold" => "bg-purple text-white",
-            default => "",
-        };
+    <?php
+// Updated logic for $statusClass, $priorityClass, and $processClass
+$statusClass = '';
+if ($ticket['status'] == "Pending") {
+    $statusClass = "bg-primary text-white";
+} elseif ($ticket['status'] == "In Progress") {
+    $statusClass = "bg-warning text-dark";
+} elseif ($ticket['status'] == "Close") {
+    $statusClass = "bg-light text-dark";
+} elseif ($ticket['status'] == "Resolved") {
+    $statusClass = "bg-success text-white";
+} elseif ($ticket['status'] == "On Hold") {
+    $statusClass = "bg-purple text-white";
+}
 
-        $priorityClass = match ($ticket['priority']) {
-            "High" => "bg-danger text-white",
-            "Medium" => "bg-warning text-dark",
-            "Low" => "bg-light text-dark",
-            default => "",
-        };
+$priorityClass = '';
+if ($ticket['priority'] == "High") {
+    $priorityClass = "bg-danger text-white";
+} elseif ($ticket['priority'] == "Medium") {
+    $priorityClass = "bg-warning text-dark";
+} elseif ($ticket['priority'] == "Low") {
+    $priorityClass = "bg-light text-dark";
+}
 
-        $processClass = match ($ticket['process']) {
-            "Accepted" => "bg-primary text-white",
-            "Fixed" => "bg-success text-white",
-            "Waiting" => "bg-purple text-white",
-            default => "",
-        };
-    ?>
+$processClass = '';
+if ($ticket['process'] == "Accepted") {
+    $processClass = "bg-primary text-white";
+} elseif ($ticket['process'] == "Fixed") {
+    $processClass = "bg-success text-white";
+} elseif ($ticket['process'] == "Waiting") {
+    $processClass = "bg-purple text-white";
+}
+?>
+
     <tr>
         <td><?= htmlspecialchars($ticket['ticket_number']) ?></td>
         <td><?= htmlspecialchars($ticket['subject']) ?></td>

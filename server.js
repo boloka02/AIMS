@@ -13,8 +13,11 @@ const connection = mysql.createConnection({
     host: '34.101.76.100',   // IP of your MySQL server
     user: 'root',
     password: 'T0pSecret@2025!',
-    database: 'db_ams'  // Name of your MySQL database
-});
+    database: 'db_ams',  // Name of your MySQL database
+    connectTimeout: 10000, // 10 seconds timeout for initial connection
+    timeout: 60000,       // 60 seconds timeout for query execution
+  });
+  
   
 // Connect to MySQL
 connection.connect(err => {

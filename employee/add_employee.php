@@ -1,14 +1,14 @@
 <?php
-include(__DIR__ . '/../db_connection.php'); // Ensure this file contains the database connection
+include '../db_connection.php'; // Ensure this file contains the database connection
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form values
-    $idnumber = $_POST['idnumber'];
-    $name = $_POST['name'];
-    $position = $_POST['position'];
-    $department = $_POST['department'];
-    $status = $_POST['status'];
-    $date_hired = $_POST['date_hired'];
+    $idnumber = mysqli_real_escape_string($conn, $_POST['idnumber']);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $position = mysqli_real_escape_string($conn, $_POST['position']);
+    $department = mysqli_real_escape_string($conn, $_POST['department']);
+    $status = mysqli_real_escape_string($conn, $_POST['status']);
+    $date_hired = mysqli_real_escape_string($conn, $_POST['date_hired']);
 
     // Prepared statement to prevent SQL injection
     $sql = "INSERT INTO employee (idnumber, name, position, department, status, date_hired) 
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Close the statement
         mysqli_stmt_close($stmt);
     } else {
-        echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
+        echo "<script>alert('Error preparing statement: " . mysqli_error($conn) . "');</script>";
     }
 }
 

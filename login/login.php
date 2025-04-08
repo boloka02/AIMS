@@ -1,6 +1,3 @@
-<?php
-// login.php - Login and Register Page
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,6 +78,16 @@
             width: 90px;
             height: 90px;
         }
+        .password-container {
+            position: relative;
+        }
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -109,8 +116,9 @@
                     <div class="mb-3">
                         <input type="email" class="form-control" name="email" placeholder="Email" required>
                     </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    <div class="mb-3 password-container">
+                        <input type="password" class="form-control" name="password" id="login-password" placeholder="Password" required>
+                        <span class="eye-icon" id="toggle-login-password"><i class="fa fa-eye"></i></span>
                     </div>
                     <button type="submit" class="btn btn-custom">Login</button>
                 </form>
@@ -122,15 +130,16 @@
                     <div class="mb-3">
                         <input type="email" class="form-control" name="email" placeholder="Email" required>
                     </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    <div class="mb-3 password-container">
+                        <input type="password" class="form-control" name="password" id="register-password" placeholder="Password" required>
+                        <span class="eye-icon" id="toggle-register-password"><i class="fa fa-eye"></i></span>
                     </div>
                     <button type="submit" class="btn btn-custom">Register</button>
                 </form>
             </div>
         </div>
     </div>
-    
+
     <script>
         $(document).ready(function() {
             $('#show-login').click(function() {
@@ -145,9 +154,26 @@
                 $('#show-register').addClass('active');
                 $('#show-login').removeClass('active');
             });
+
+            // Toggle password visibility for login
+            $('#toggle-login-password').click(function() {
+                var passwordField = $('#login-password');
+                var type = passwordField.attr('type') === 'password' ? 'text' : 'password';
+                passwordField.attr('type', type);
+                $(this).toggleClass('fa-eye fa-eye-slash');
+            });
+
+            // Toggle password visibility for register
+            $('#toggle-register-password').click(function() {
+                var passwordField = $('#register-password');
+                var type = passwordField.attr('type') === 'password' ? 'text' : 'password';
+                passwordField.attr('type', type);
+                $(this).toggleClass('fa-eye fa-eye-slash');
+            });
         });
     </script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 </body>
 </html>

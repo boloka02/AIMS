@@ -1,5 +1,6 @@
 <?php
-include '../db_connection.php';
+include('../db_connection.php');
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ensure all POST variables are being received correctly

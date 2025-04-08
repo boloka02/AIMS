@@ -21,7 +21,7 @@ if (!isset($_SESSION['user_id'])) {
     <title>ADON PH</title>
    
 </head>
-<body>
+<body>  
 <?php include "../sidebar/sidebar.php"; ?>
 
 <div class="container mt-3">
@@ -29,7 +29,7 @@ if (!isset($_SESSION['user_id'])) {
         <h3>Inventory</h3>
         <div class="d-flex">
             <input type="text" id="searchInput" class="form-control search-box me-2" placeholder="Search...">
-            <a href="/mis-v6.1/inventory/add_item.php" class="btn btn-primary"><i class="fas fa-plus"></i> Add Item</a>
+            <a href="/AIMS/inventory/add_item.php" class="btn btn-primary"><i class="fas fa-plus"></i> Add Item</a>
         </div>
     </div>
     

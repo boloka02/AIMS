@@ -89,25 +89,21 @@ if (!isset($_SESSION['user_id'])) {
 
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
-                // Handle the image display
-                if (!empty($row['image'])) {
-                    $imagePath = "../ui_employee/" . $row['image'];
-                    $imageTag = "<img src='$imagePath' class='img-thumbnail' 
-                    style='width: 50px; cursor: pointer;' 
-                    onerror=\"this.src='../ui_employee/uploads/placeholder.jpg'\" 
-                    onclick='showImageModal(\"$imagePath\")'>"; 
-                } else {
-                    $imageTag = "<span class='text-muted'>No Image</span>"; 
-                }
+              // Handle the image display
+            if (!empty($row['image']) && file_exists("../ui_employee/" . $row['image'])) {
+                // If the image exists, show it
+                $imagePath = "../ui_employee/" . $row['image'];
+                $imageTag = "<img src='$imagePath' class='img-thumbnail' 
+                style='width: 50px; cursor: pointer;' 
+                onerror=\"this.src='../ui_employee/uploads/placeholder.jpg'\" 
+                onclick='showImageModal(\"$imagePath\")'>";
+            } else {
+                // Show the placeholder if the image doesn't exist or is empty
+                $imageTag = "<img src='../ui_employee/uploads/placeholder.jpg' class='img-thumbnail' 
+                style='width: 50px; cursor: pointer;' 
+                onclick='showImageModal(\"../ui_employee/uploads/placeholder.jpg\")'>";
+            }
 
-                // Determine priority color
-                switch (strtolower($row['priority'])) {
-                    case 'high':      $priorityColor = "text-danger"; break; 
-                    case 'medium':    $priorityColor = "text-warning"; break; 
-                    case 'low':       $priorityColor = "text-dark"; break; 
-                    case 'critical':  $priorityColor = "text-purple"; break; 
-                    default:          $priorityColor = "text-secondary"; break; 
-                }
 
               
                             // Action buttons

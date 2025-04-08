@@ -1,5 +1,5 @@
 <?php
-include '../db_connection.php'; // Ensure this file contains the database connection
+include(__DIR__ . '/../db_connection.php'); // Ensure this file contains the database connection
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form values

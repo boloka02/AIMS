@@ -1,23 +1,21 @@
 <?php
 include(__DIR__ . '/../db_connection.php');
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validate and sanitize POST inputs
-    $type = htmlspecialchars($_POST['type']);
-    $category = htmlspecialchars($_POST['category']);
-    $quantity = filter_var($_POST['quantity'], FILTER_VALIDATE_INT);
-    $total_value = filter_var($_POST['total_value'], FILTER_VALIDATE_FLOAT);
-    $available_stock = filter_var($_POST['available_stock'], FILTER_VALIDATE_INT);
+    $type = $_POST['type'];
+    $category = $_POST['category'];
+    $quantity = intval($_POST['quantity']);
+    $total_value = floatval($_POST['total_value']);
+    $available_stock = intval($_POST['available_stock']);
     $purchasedate = !empty($_POST['purchasedate']) ? $_POST['purchasedate'] : date('Y-m-d');
-    $warranty = htmlspecialchars($_POST['warranty']);
-    $location = htmlspecialchars($_POST['location']);
-    
-    // Specific fields for certain items
-    $size = $type == "Monitor" || $type == "2nd Monitor" ? $_POST['size'] : ''; // Monitor Size
-    $capacity = $type == "RAM" ? $_POST['capacity'] : ''; // RAM Capacity
-    $price = isset($_POST['laptop_price']) ? filter_var($_POST['laptop_price'], FILTER_VALIDATE_FLOAT) : 0;
-    $supplier = isset($_POST['laptop_supplier']) ? htmlspecialchars($_POST['laptop_supplier']) : '';
-    $model = $type == "Laptop" || $type == "Processor" ? $_POST['laptop_model'] : ''; // Laptop and Processor Model
+    $warranty = $_POST['warranty'];
+    $location = $_POST['location'];
+    $size = $_POST['size'] ?? ''; // Monitor Size
+    $capacity = $_POST['capacity'] ?? ''; // RAM Capacity
+    $price = isset($_POST['laptop_price']) ? floatval($_POST['laptop_price']) : 0;
+    $supplier = isset($_POST['laptop_supplier']) ? $_POST['laptop_supplier'] : '';
+    $model = $_POST['laptop_model'] ?? ''; // Laptop and Processor Model
 
     // Auto-calculate stock status
     $percentage = ($available_stock / max($quantity, 1)) * 100;
@@ -32,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $status = "Available";
     }
 
-    // Table and prefix mapping
+    // Table mapping
     $tableMapping = [
         "Laptop" => "laptop", "Headset" => "headset", "Keyboard" => "keyboard", "Mboard" => "mboard",
         "Monitor" => "monitor", "2nd Monitor" => "monitor2", "Mouse" => "mouse", "Processor" => "processor",
@@ -41,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "CCTV" => "cctv", "UPS" => "ups", "Modem" => "modem"
     ];
 
+    // Prefix mapping
     $prefixMapping = [
         "Mboard" => "MB", "Monitor" => "MT", "2nd Monitor" => "MTnd", "RAM" => "RM", "Processor" => "PR",
         "AVR" => "AVR", "Adaptor" => "AP", "Biometric" => "BIO", "Patch Cord" => "PTC", "Printer" => "PRNT",
@@ -54,11 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Fetch last inserted asset ID
         $queryLast = "SELECT name FROM $tableName WHERE name LIKE '$prefix-%' ORDER BY name DESC LIMIT 1";
         $resultLast = mysqli_query($conn, $queryLast);
-        if (!$resultLast) {
-            die("Error fetching last record: " . mysqli_error($conn));
-        }
-
         $lastNumber = 0;
+
         if ($row = mysqli_fetch_assoc($resultLast)) {
             preg_match("/^$prefix-(\d+)$/", $row['name'], $matches);
             if ($matches) {
@@ -66,44 +62,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        // Insert assets
+        // Insert multiple assets with unique names
         for ($i = 1; $i <= $quantity; $i++) {
             $generated_name = sprintf("$prefix-%05d", $lastNumber + $i);
 
-            // Insert query based on item type
-            if ($type == "Laptop" || $type == "Processor") {
-                $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty) 
-                                VALUES (?, ?, ?, ?, ?, ?)";
+            if ($type === "Monitor" || $type === "2nd Monitor") {
+                $queryInsert = "INSERT INTO $tableName (name, size, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                mysqli_stmt_bind_param($stmtInsert, "ssdsds", $generated_name, $model, $price, $supplier, $purchasedate, $warranty);
-            } elseif ($type == "Monitor" || $type == "2nd Monitor") {
-                $queryInsert = "INSERT INTO $tableName (name, size, price, supplier, purchase_date, warranty) 
-                                VALUES (?, ?, ?, ?, ?, ?)";
+                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $size, $price, $supplier, $purchasedate, $warranty);
+            } elseif ($type === "Laptop" || $type === "Processor") {
+                $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                mysqli_stmt_bind_param($stmtInsert, "ssdsds", $generated_name, $size, $price, $supplier, $purchasedate, $warranty);
-            } elseif ($type == "RAM") {
-                $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty) 
-                                VALUES (?, ?, ?, ?, ?, ?)";
+                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $model, $price, $supplier, $purchasedate, $warranty);
+            } elseif ($type === "RAM") {
+                $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                mysqli_stmt_bind_param($stmtInsert, "ssdsds", $generated_name, $capacity, $price, $supplier, $purchasedate, $warranty);
+                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $capacity, $price, $supplier, $purchasedate, $warranty);
             } else {
-                $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) 
-                                VALUES (?, ?, ?, ?, ?)";
+                $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                mysqli_stmt_bind_param($stmtInsert, "ssdsd", $generated_name, $price, $supplier, $purchasedate, $warranty);
+                mysqli_stmt_bind_param($stmtInsert, "sdsss", $generated_name, $price, $supplier, $purchasedate, $warranty);
             }
-
-            if (!$stmtInsert) {
-                die("Error preparing query: " . mysqli_error($conn));
-            }
-
-            if (!mysqli_stmt_execute($stmtInsert)) {
-                die("Error executing query: " . mysqli_stmt_error($stmtInsert));
-            }
+            mysqli_stmt_execute($stmtInsert);
             mysqli_stmt_close($stmtInsert);
         }
 
-        // Update or insert into inventory
+        // Inventory handling
         $queryCheck = "SELECT id, quantity, total_value, available_stock FROM inventory WHERE type = ?";
         $stmtCheck = mysqli_prepare($conn, $queryCheck);
         mysqli_stmt_bind_param($stmtCheck, "s", $type);
@@ -118,24 +102,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $queryUpdate = "UPDATE inventory SET quantity = ?, total_value = ?, available_stock = ?, stock = ?, status = ? WHERE id = ?";
             $stmtUpdate = mysqli_prepare($conn, $queryUpdate);
             mysqli_stmt_bind_param($stmtUpdate, "iidssi", $new_quantity, $new_total_value, $new_available_stock, $stock, $status, $row['id']);
-            if (!mysqli_stmt_execute($stmtUpdate)) {
-                die("Error updating inventory: " . mysqli_stmt_error($stmtUpdate));
-            }
+            mysqli_stmt_execute($stmtUpdate);
             mysqli_stmt_close($stmtUpdate);
         } else {
-            $queryInsertInventory = "INSERT INTO inventory (type, category, quantity, total_value, stock, available_stock, status, purchasedate, warranty, location) 
-                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmtInventory = mysqli_prepare($conn, $queryInsertInventory);
+            // Insert new inventory record
+            $queryInventory = "INSERT INTO inventory (type, category, quantity, total_value, stock, available_stock, status, purchasedate, warranty, location) 
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmtInventory = mysqli_prepare($conn, $queryInventory);
             mysqli_stmt_bind_param($stmtInventory, "ssidsissss", $type, $category, $quantity, $total_value, $stock, $available_stock, $status, $purchasedate, $warranty, $location);
-            if (!mysqli_stmt_execute($stmtInventory)) {
-                die("Error inserting inventory: " . mysqli_stmt_error($stmtInventory));
-            }
+            mysqli_stmt_execute($stmtInventory);
             mysqli_stmt_close($stmtInventory);
         }
 
         mysqli_stmt_close($stmtCheck);
     }
-
+    
     mysqli_close($conn);
     echo "<script>alert('Asset added successfully!'); window.location.href = '/AIMS/inventory/inventory.php';</script>";
 }
@@ -143,13 +124,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Item</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="icon" type="image/jpeg" href="https://adongroup.com.au/wp-content/uploads/2020/12/aog-favicon-192px.svg">
-    <title>ADON PH</title>
 
 
     <style>
@@ -331,14 +309,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     var priceField = document.querySelector("input[name='laptop_price']");
     var supplierField = document.querySelector("input[name='laptop_supplier']");
     
-    // Fields for specific items
+    // Additional fields for specific items
     var sizeField = document.getElementById("sizeField"); // For Monitors
     var capacityField = document.getElementById("capacityField"); // For RAM
 
     var itemsWithDetails = [
         "Laptop", "Headset", "Mouse", "Keyboard", "Mboard", "Webcam", "Monitor", "2nd Monitor", "RAM", 
         "Processor", "AVR", "Adaptor", "Biometric", "Patch Cord", "Printer", "Router", "Switch",
-        "CCTV", "UPS", "Modem"
+        "CCTV", "UPS", "Modem" // Added new items
     ];
 
     if (itemsWithDetails.includes(this.value)) {
@@ -348,9 +326,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         supplierField.parentElement.style.display = 'block';
 
         let prefixMapping = {
-            "Laptop": "LP", "Monitor": "MT", "2nd Monitor": "MTnd", "RAM": "RM", "Processor": "PR",
-            "Mboard": "MB", "AVR": "AVR", "Adaptor": "AP", "Biometric": "BIO", "Patch Cord": "PTC",
-            "Printer": "PRNT", "Router": "RT", "Switch": "SWT", "CCTV": "CCTV", "UPS": "UPS", "Modem": "MDM"
+            "Laptop": "LP",
+            "Monitor": "MT",
+            "2nd Monitor": "MTnd",
+            "RAM": "RM",
+            "Processor": "PR",
+            "Mboard": "MB",
+            "AVR": "AVR",
+            "Adaptor": "AP",
+            "Biometric": "BIO",
+            "Patch Cord": "PTC",
+            "Printer": "PRNT",
+            "Router": "RT",
+            "Switch": "SWT",
+            "CCTV": "CCTV",  // New Prefix
+            "UPS": "UPS",    // New Prefix
+            "Modem": "MDM"   // New Prefix
         };
 
         let prefix = prefixMapping[this.value] || this.value.substring(0, 2).toUpperCase();
@@ -367,13 +358,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             capacityField.style.display = 'none';
         } else if (this.value === "RAM") {
             capacityField.style.display = 'block';
-            sizeField.style.display = 'none';
             modelField.parentElement.style.display = 'none';
+            sizeField.style.display = 'none';
         } else {
+            modelField.parentElement.style.display = 'none';
             sizeField.style.display = 'none';
             capacityField.style.display = 'none';
-            modelField.parentElement.style.display = 'none';
         }
+    } else {
+        additionalDetails.style.display = 'none';
     }
 });
 
@@ -406,4 +399,3 @@ document.getElementById("totalValueInput").addEventListener("input", calculatePr
         </div>
     </form>
 </div>
-

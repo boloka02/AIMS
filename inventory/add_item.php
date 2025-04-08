@@ -130,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $queryUpdate = "UPDATE inventory SET quantity = ?, total_value = ?, available_stock = ?, stock = ?, status = ? WHERE id = ?";
             $stmtUpdate = mysqli_prepare($conn, $queryUpdate);
-            mysqli_stmt_bind_param($stmtUpdate, "iidssi", $new_quantity, $new_total_value, $new_available_stock, $stock, $status, $row['id']);
+            mysqli_stmt_bind_param($stmtUpdate, "iidssi", $new_quantity, $new_total_value, $new_available_stock, $stock, 'Available', $row['id']);
             if (!mysqli_stmt_execute($stmtUpdate)) {
                 echo "Error executing inventory update: " . mysqli_error($conn);
                 exit;
@@ -139,19 +139,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Insert new inventory record
             $queryInventory = "INSERT INTO inventory (type, category, quantity, total_value, stock, available_stock, status, purchasedate, warranty, location) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtInventory = mysqli_prepare($conn, $queryInventory);
             if (!$stmtInventory) {
-            echo "Error preparing inventory query: " . mysqli_error($conn);
-            exit;
+                echo "Error preparing inventory query: " . mysqli_error($conn);
+                exit;
             }
-            mysqli_stmt_bind_param($stmtInventory, "ssidsissss", $type, $category, $quantity, $total_value, $stock, $available_stock, $status, $purchasedate, $warranty, $location);
+            mysqli_stmt_bind_param($stmtInventory, "ssidsissss", $type, $category, $quantity, $total_value, $stock, $available_stock, 'Available', $purchasedate, $warranty, $location);
             if (!mysqli_stmt_execute($stmtInventory)) {
-            echo "Error executing inventory insert: " . mysqli_error($conn);
-            exit;
+                echo "Error executing inventory insert: " . mysqli_error($conn);
+                exit;
             }
             mysqli_stmt_close($stmtInventory);
-
         }
 
         mysqli_stmt_close($stmtCheck);
@@ -161,6 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<script>alert('Asset added successfully!'); window.location.href = '/AIMS/inventory/inventory.php';</script>";
 }
 ?>
+
 
 
 

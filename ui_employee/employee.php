@@ -86,6 +86,26 @@ $result = $stmt->get_result();
 </head>
 
 <body>
+<audio id="notification-sound" src="../ui_employee/pseat.mp3" preload="auto"></audio>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const notificationBell = document.getElementById('notification-bell');
+            const notificationSound = document.getElementById('notification-sound');
+            const newTickets = <?= $new_tickets ?>;
+
+            console.log("New tickets: " + newTickets); // Debugging log to check the ticket count
+
+            // If there are new tickets, add the shake animation and play the sound
+            if (newTickets > 0) {
+                notificationBell.classList.add('shake');
+                notificationSound.play(); // Play the bell sound automatically
+                console.log("Sound should play now."); // Debugging log to confirm sound should play
+            } else {
+                console.log("No new tickets, no sound."); // Debugging log if no tickets
+            }
+        });
+    </script>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
     <a class="navbar-brand fw-bold" href="#"><img src="https://adongroup.com.au/wp-content/uploads/2019/12/AdOn-Logo-v4.gif" alt="AdonPH Logo" style="height: 40px;"></a>

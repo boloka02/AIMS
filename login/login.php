@@ -102,7 +102,7 @@
     <div class="container">
         <div class="image-container">
             <img src="https://adongroup.com.au/wp-content/uploads/2019/12/AdOn-Logo-v4.gif" alt="Company Logo">
-            <p>ADON MANAGEMENT SYSTEM</p>
+            <p>ADON INFORMATION MANAGEMENT SYSTEM</p>
         </div>
         <div class="form-container">
             <div class="container-box">

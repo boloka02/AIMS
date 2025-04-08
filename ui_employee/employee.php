@@ -148,7 +148,8 @@ $result = $stmt->get_result();
         
 
                     <table class="table mt-3">
-    <thead class="table-dark">
+                    <thead style="background-color: #6c757d; color: white;">
+
         <tr>
             <th>Ticket No.</th>
             <th>Subject</th>

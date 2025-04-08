@@ -11,11 +11,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $purchasedate = !empty($_POST['purchasedate']) ? $_POST['purchasedate'] : date('Y-m-d');
     $warranty = htmlspecialchars($_POST['warranty']);
     $location = htmlspecialchars($_POST['location']);
-    $size = $_POST['size'] ?? ''; // Monitor Size
-    $capacity = $_POST['capacity'] ?? ''; // RAM Capacity
+    
+    // Specific fields for certain items
+    $size = $type == "Monitor" || $type == "2nd Monitor" ? $_POST['size'] : ''; // Monitor Size
+    $capacity = $type == "RAM" ? $_POST['capacity'] : ''; // RAM Capacity
     $price = isset($_POST['laptop_price']) ? filter_var($_POST['laptop_price'], FILTER_VALIDATE_FLOAT) : 0;
     $supplier = isset($_POST['laptop_supplier']) ? htmlspecialchars($_POST['laptop_supplier']) : '';
-    $model = $_POST['laptop_model'] ?? ''; // Laptop and Processor Model
+    $model = $type == "Laptop" || $type == "Processor" ? $_POST['laptop_model'] : ''; // Laptop and Processor Model
 
     // Auto-calculate stock status
     $percentage = ($available_stock / max($quantity, 1)) * 100;
@@ -68,14 +70,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         for ($i = 1; $i <= $quantity; $i++) {
             $generated_name = sprintf("$prefix-%05d", $lastNumber + $i);
 
-            $queryInsert = "INSERT INTO $tableName (name, model, size, capacity, price, supplier, purchase_date, warranty) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmtInsert = mysqli_prepare($conn, $queryInsert);
+            // Insert query based on item type
+            if ($type == "Laptop" || $type == "Processor") {
+                $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty) 
+                                VALUES (?, ?, ?, ?, ?, ?)";
+                $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                mysqli_stmt_bind_param($stmtInsert, "ssdsds", $generated_name, $model, $price, $supplier, $purchasedate, $warranty);
+            } elseif ($type == "Monitor" || $type == "2nd Monitor") {
+                $queryInsert = "INSERT INTO $tableName (name, size, price, supplier, purchase_date, warranty) 
+                                VALUES (?, ?, ?, ?, ?, ?)";
+                $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                mysqli_stmt_bind_param($stmtInsert, "ssdsds", $generated_name, $size, $price, $supplier, $purchasedate, $warranty);
+            } elseif ($type == "RAM") {
+                $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty) 
+                                VALUES (?, ?, ?, ?, ?, ?)";
+                $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                mysqli_stmt_bind_param($stmtInsert, "ssdsds", $generated_name, $capacity, $price, $supplier, $purchasedate, $warranty);
+            } else {
+                $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) 
+                                VALUES (?, ?, ?, ?, ?)";
+                $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                mysqli_stmt_bind_param($stmtInsert, "ssdsd", $generated_name, $price, $supplier, $purchasedate, $warranty);
+            }
+
             if (!$stmtInsert) {
                 die("Error preparing query: " . mysqli_error($conn));
             }
 
-            mysqli_stmt_bind_param($stmtInsert, "sssdssss", $generated_name, $model, $size, $capacity, $price, $supplier, $purchasedate, $warranty);
             if (!mysqli_stmt_execute($stmtInsert)) {
                 die("Error executing query: " . mysqli_stmt_error($stmtInsert));
             }
@@ -119,8 +140,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<script>alert('Asset added successfully!'); window.location.href = '/AIMS/inventory/inventory.php';</script>";
 }
 ?>
-
-
 
 
 

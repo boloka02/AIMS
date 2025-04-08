@@ -45,9 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "Router" => "RT", "Switch" => "SWT", "CCTV" => "CCTV", "UPS" => "UPS", "Modem" => "MDM"
     ];
 
+    // Check if the type is valid
     if (array_key_exists($type, $tableMapping)) {
-        $tableName = $tableMapping[$type];
+        $tableName = $tableMapping[$type];  // Correct table
         $prefix = $prefixMapping[$type] ?? strtoupper(substr($type, 0, 2));
+
+        // Debugging: Display selected table name
+        echo "Inserting into table: $tableName<br>";
 
         // Fetch last inserted asset ID
         $queryLast = "SELECT name FROM $tableName WHERE name LIKE '$prefix-%' ORDER BY name DESC LIMIT 1";
@@ -63,7 +67,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         for ($i = 1; $i <= $quantity; $i++) {
             $generated_name = sprintf("$prefix-%05d", $lastNumber + $i);
-        
+            
+            // Query for insertion
             switch ($type) {
                 case "Monitor":
                 case "2nd Monitor":
@@ -92,22 +97,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     break;
             }
         
+            // Debugging: Ensure the query was prepared
             if (!$stmtInsert) {
                 echo "Prepare failed: " . mysqli_error($conn) . "<br>";
                 continue;
             }
         
+            // Execute the insert query
             if (!mysqli_stmt_execute($stmtInsert)) {
                 echo "Execute failed: " . mysqli_stmt_error($stmtInsert) . "<br>";
             } else {
-                echo "Inserted: $generated_name<br>";
+                echo "Inserted: $generated_name into $tableName<br>";
             }
         
             mysqli_stmt_close($stmtInsert);
         }
         
-        
-        // Inventory handling
+        // Inventory handling (this part seems to be working fine)
         $queryCheck = "SELECT id, quantity, total_value, available_stock FROM inventory WHERE type = ?";
         $stmtCheck = mysqli_prepare($conn, $queryCheck);
         mysqli_stmt_bind_param($stmtCheck, "s", $type);
@@ -135,8 +141,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         mysqli_stmt_close($stmtCheck);
+    } else {
+        echo "Invalid type selected!";
     }
-    
+
     mysqli_close($conn);
     echo "<script>alert('Asset added successfully!'); window.location.href = '/AIMS/inventory/inventory.php';</script>";
 }

@@ -139,18 +139,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Insert new inventory record
             $queryInventory = "INSERT INTO inventory (type, category, quantity, total_value, stock, available_stock, status, purchasedate, warranty, location) 
-                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtInventory = mysqli_prepare($conn, $queryInventory);
             if (!$stmtInventory) {
-                echo "Error preparing inventory query: " . mysqli_error($conn);
-                exit;
+            echo "Error preparing inventory query: " . mysqli_error($conn);
+            exit;
             }
             mysqli_stmt_bind_param($stmtInventory, "ssidsissss", $type, $category, $quantity, $total_value, $stock, $available_stock, $status, $purchasedate, $warranty, $location);
             if (!mysqli_stmt_execute($stmtInventory)) {
-                echo "Error executing inventory insert: " . mysqli_error($conn);
-                exit;
+            echo "Error executing inventory insert: " . mysqli_error($conn);
+            exit;
             }
             mysqli_stmt_close($stmtInventory);
+
         }
 
         mysqli_stmt_close($stmtCheck);

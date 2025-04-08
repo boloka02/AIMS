@@ -46,9 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["ticket_id"])) {
         $stmt->close();
 
         // Insert into history table with accept time
-        $insertHistoryQuery = "INSERT INTO history (ticket_number, accept, date_accept, accept_time) VALUES (?, ?, ?, ?)";
+        $insertHistoryQuery = "INSERT INTO history (ticket_number, accept, date_accept, accept_time, date_fixed, fix_time, cancel_date, cancel_time)
+        VALUES (?,?,?,?, CURDATE(), CURTIME(), CURDATE(), CURTIME())";
+
         $stmt = $conn->prepare($insertHistoryQuery);
-        $stmt->bind_param("ssss", $ticketNumber, $acceptedBy, $acceptTime, $acceptTime);
+        $stmt->bind_param("ssss", $ticketNumber, $acceptedBy, $acceptTime, $acceptTime); // Bind correct params
         if (!$stmt->execute()) {
             throw new Exception("Error inserting into history.");
         }
@@ -69,3 +71,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["ticket_id"])) {
     echo json_encode(["success" => false, "message" => "Invalid request."]);
 }
 ?>
+

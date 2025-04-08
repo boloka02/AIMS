@@ -34,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ticket_number = "TCK-" . str_pad($row['count'] + 1, 4, "0", STR_PAD_LEFT);
 
     // Insert Ticket with Category
-    $insertQuery = "INSERT INTO ticket (ticket_number, subject, priority, category, image, status, date_created, created_by) 
-                    VALUES (?, ?, ?, ?, ?, 'Pending', ?, ?)";
+    $insertQuery = "INSERT INTO ticket (ticket_number, subject, priority, category, image, status, date_created, created_by,accept,process,assign_to,time_created) 
+                    VALUES (?,?,?,?,'none', 'Pending',,,'none','none','none',?)";
     $stmt = $conn->prepare($insertQuery);
     $stmt->bind_param("sssssss", $ticket_number, $subject, $priority, $category, $image_path, $date_created, $userName);
     $stmt->execute();

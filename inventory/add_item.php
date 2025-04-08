@@ -1,7 +1,6 @@
 <?php
 include(__DIR__ . '/../db_connection.php');
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $type = $_POST['type'];
     $category = $_POST['category'];
@@ -62,31 +61,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        // Insert multiple assets with unique names
         for ($i = 1; $i <= $quantity; $i++) {
             $generated_name = sprintf("$prefix-%05d", $lastNumber + $i);
-
-            if ($type === "Monitor" || $type === "2nd Monitor") {
-                $queryInsert = "INSERT INTO $tableName (name, size, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $size, $price, $supplier, $purchasedate, $warranty);
-            } elseif ($type === "Laptop" || $type === "Processor") {
-                $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $model, $price, $supplier, $purchasedate, $warranty);
-            } elseif ($type === "RAM") {
-                $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $capacity, $price, $supplier, $purchasedate, $warranty);
-            } else {
-                $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?)";
-                $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                mysqli_stmt_bind_param($stmtInsert, "sdsss", $generated_name, $price, $supplier, $purchasedate, $warranty);
+        
+            switch ($type) {
+                case "Monitor":
+                case "2nd Monitor":
+                    $queryInsert = "INSERT INTO $tableName (name, size, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
+                    $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                    mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $size, $price, $supplier, $purchasedate, $warranty);
+                    break;
+        
+                case "Laptop":
+                case "Processor":
+                    $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
+                    $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                    mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $model, $price, $supplier, $purchasedate, $warranty);
+                    break;
+        
+                case "RAM":
+                    $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
+                    $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                    mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $capacity, $price, $supplier, $purchasedate, $warranty);
+                    break;
+        
+                default:
+                    // Use generic fallback - but make sure your table structure supports these fields
+                    $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?)";
+                    $stmtInsert = mysqli_prepare($conn, $queryInsert);
+                    mysqli_stmt_bind_param($stmtInsert, "sdsss", $generated_name, $price, $supplier, $purchasedate, $warranty);
+                    break;
             }
+        
             mysqli_stmt_execute($stmtInsert);
             mysqli_stmt_close($stmtInsert);
         }
-
+        
         // Inventory handling
         $queryCheck = "SELECT id, quantity, total_value, available_stock FROM inventory WHERE type = ?";
         $stmtCheck = mysqli_prepare($conn, $queryCheck);

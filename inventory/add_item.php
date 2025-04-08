@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     mysqli_close($conn);
-    echo "<script>alert('Asset added successfully!'); window.location.href = '../inventory/inventory.php';</script>";
+    echo "<script>alert('Asset added successfully!'); window.location.href = '/AIMS/inventory/inventory.php';</script>";
 }
 ?>
 
@@ -436,7 +436,7 @@ document.getElementById("totalValueInput").addEventListener("input", calculatePr
         <!-- Submit & Cancel Buttons -->
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-primary">Add Item</button>
-            <a href="/mis-v6.1/inventory/inventory.php" class="btn btn-secondary">Cancel</a>
+            <a href="/AIMS/inventory/inventory.php" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

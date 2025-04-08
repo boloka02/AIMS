@@ -16,7 +16,7 @@ if (isset($_GET['id'])) {
                 $asset_name = $row[$field];
 
                 // **Update asset status to "Available" and remove assign_to**
-                $update_query = "UPDATE `$field` SET status = 'Available', assign_to = NULL WHERE name = '$asset_name'";
+                $update_query = "UPDATE `$field` SET status = 'Available', assign_to = 'none' WHERE name = '$asset_name'";
                 if (!mysqli_query($conn, $update_query)) {
                     die("Error updating asset status in $field: " . mysqli_error($conn));
                 }

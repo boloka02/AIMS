@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
         $updateEmployeeQuery = "UPDATE employee SET adonwork_no = '$adonwork_no' WHERE id = '$newEmployeeId'";
         if (mysqli_query($conn, $updateEmployeeQuery)) {
             // Redirect back to the inventory page after successful transfer
-            header('Location: /mis-v6.1/assets/asset.php');
+            header('Location: /AIMS/assets/asset.php');
             exit();
         } else {
             echo "Error updating new employee with adonwork_no: " . mysqli_error($conn);

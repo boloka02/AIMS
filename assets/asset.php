@@ -39,7 +39,7 @@ if (!isset($_SESSION['user_id'])) {
             <h3>Inventory</h3>
             <div class="d-flex">
                 <input type="text" id="searchInput" class="form-control search-box me-2" placeholder="Search...">
-                <a href="/mis-v6.1/assets/add_assign.php" class="btn btn-primary"><i class="fas fa-plus"></i> Assign Asset</a>
+                <a href="/AIMS/assets/add_assign.php" class="btn btn-primary"><i class="fas fa-plus"></i> Assign Asset</a>
             </div>
         </div>
 
@@ -91,7 +91,7 @@ if (mysqli_num_rows($result) > 0) {
                         <li><a class='dropdown-item' href='../assets/transfer.php?id=" . htmlspecialchars($row['id']) . "'><i class='bi bi-arrow-right'></i> Transfer</a></li>
                         <li><a class='dropdown-item' href='#'><i class='bi bi-clock-history'></i> View History</a></li>
                         <li><hr class='dropdown-divider'></li>
-                        <li><a class='dropdown-item' href='/mis-v6.1/assets/Unassignment.php?id=" . htmlspecialchars($row['id']) . "'><i class='bi bi-pencil-square'></i> Unassign</a></li>
+                        <li><a class='dropdown-item' href='/AIMS/assets/Unassignment.php?id=" . htmlspecialchars($row['id']) . "'><i class='bi bi-pencil-square'></i> Unassign</a></li>
                     </ul>
                 </div>
             </td>";

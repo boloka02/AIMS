@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // 8. Success message
         echo "<script>
                 alert('Assigned Successfully! Total Price: $$total_price');
-                window.location.href='/mis-v6.1/assets/asset.php';
+                window.location.href='/AIMS/assets/asset.php';
               </script>";
         exit();
     } else {
@@ -324,7 +324,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Submit & Cancel Buttons -->
     <div class="text-center mt-4">
         <button type="submit" class="btn btn-primary">Add Item</button>
-        <a href="/mis-v6.1/assets/asset.php" class="btn btn-secondary">Cancel</a>
+        <a href="/AIMS/assets/asset.php" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
 

@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_stmt_execute($stmt)) {
             echo "<script>
                 alert('Asset updated successfully!');
-                window.location.replace('/mis-v6.1/inventory/inventory.php?type=$type');
+                window.location.replace('/AIMS/inventory/inventory.php?type=$type');
             </script>";
             exit;
         } else {

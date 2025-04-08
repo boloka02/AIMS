@@ -11,8 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date_hired = mysqli_real_escape_string($conn, $_POST['date_hired']);
 
     // Prepared statement to prevent SQL injection
-    $sql = "INSERT INTO employee (idnumber, name, position, department, status, date_hired) 
-            VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO employee (idnumber, name, position, department, status, date_hired,adonwork_no) 
+            VALUES (?, ?, ?, ?, ?, ?,'none')";
     
     if ($stmt = mysqli_prepare($conn, $sql)) {
         // Bind parameters

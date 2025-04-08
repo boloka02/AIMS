@@ -87,10 +87,10 @@ if (!isset($_SESSION['user_id'])) {
                             </button>
                             <ul class='dropdown-menu' aria-labelledby='dropdownMenu{$row['id']}'>
                                 <li><h6 class='dropdown-header'>Actions</h6></li>
-                            <li><a class='dropdown-item' href='/mis-v6.1/inventory/edit.php?id={$row['id']}'><i class='bi bi-pencil-square'></i> Edit</a></li>
-                             <li><a class='dropdown-item view-details' href='/mis-v6.1/inventory/view.php?type={$row['type']}'><i class='bi bi-clock-history'></i> View Details</a></li>
+                            <li><a class='dropdown-item' href='/AIMS/inventory/edit.php?id={$row['id']}'><i class='bi bi-pencil-square'></i> Edit</a></li>
+                             <li><a class='dropdown-item view-details' href='/AIMS/inventory/view.php?type={$row['type']}'><i class='bi bi-clock-history'></i> View Details</a></li>
                             <li><hr class='dropdown-divider'></li>
-                             <li><a class='dropdown-item' href='/mis-v6.1/inventory/delete.php?id={$row['id']}'><i class='bi bi-trash'></i>Delete</a></li></ul>
+                             <li><a class='dropdown-item' href='/AIMS/inventory/delete.php?id={$row['id']}'><i class='bi bi-trash'></i>Delete</a></li></ul>
                         </div>
                     </td>
                 </tr>";

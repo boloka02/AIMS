@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_stmt_execute($stmt)) {
         echo "<script>
         alert('Inventory updated successfully!');
-        window.location.href = '/mis-v6.1/inventory/inventory.php?page=inventory';
+        window.location.href = '/AIMS/inventory/inventory.php?page=inventory';
         </script>";
         exit();
     } else {
@@ -245,7 +245,7 @@ mysqli_close($conn);
         </div>
 
         <button type="submit" class="btn btn-primary">Update</button>
-        <a href="/mis-v6.1/inventory/inventory.php" class="btn btn-secondary">Cancel</a>
+        <a href="/AIMS/inventory/inventory.php" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
 

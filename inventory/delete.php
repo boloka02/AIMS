@@ -56,7 +56,7 @@ if (isset($_GET['id'])) {
         }
 
         mysqli_close($conn);
-        echo "<script>alert('Asset Deleted Successfully'); window.location.href='/mis-v6.1/inventory/inventory.php';</script>";
+        echo "<script>alert('Asset Deleted Successfully'); window.location.href='/AIMS/inventory/inventory.php';</script>";
         exit();
     } else {
         die("❌ ERROR: Asset ID `$asset_id` not found in inventory.");

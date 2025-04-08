@@ -79,19 +79,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
                 case "Laptop":
                 case "Processor":
-                    $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
+                    $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty,status) VALUES (?, ?, ?, ?, ?, ?,Available)";
                     $stmtInsert = mysqli_prepare($conn, $queryInsert);
                     mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $model, $price, $supplier, $purchasedate, $warranty);
                     break;
         
                 case "RAM":
-                    $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
+                    $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty,status) VALUES (?, ?, ?, ?, ?, ?,Available)";
                     $stmtInsert = mysqli_prepare($conn, $queryInsert);
                     mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $capacity, $price, $supplier, $purchasedate, $warranty);
                     break;
         
                 default:
-                    $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?)";
+                    $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty,status) VALUES (?, ?, ?, ?, ?,Available)";
                     $stmtInsert = mysqli_prepare($conn, $queryInsert);
                     mysqli_stmt_bind_param($stmtInsert, "sdsss", $generated_name, $price, $supplier, $purchasedate, $warranty);
                     break;
@@ -398,8 +398,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // Price Calculation Function
 function calculatePrice() {
-    var quantity = document.getElementById("quantityInput").value;
-    var totalValue = document.getElementById("totalValueInput").value;
+    var quantity = parseFloat(document.getElementById("quantityInput").value);
+    var totalValue = parseFloat(document.getElementById("totalValueInput").value);
     var priceField = document.getElementById("priceInput");
     var warningMessage = document.getElementById("priceWarning");
 
@@ -411,6 +411,7 @@ function calculatePrice() {
         if (warningMessage) warningMessage.style.display = 'block';
     }
 }
+
 
 document.getElementById("quantityInput").addEventListener("input", calculatePrice);
 document.getElementById("totalValueInput").addEventListener("input", calculatePrice);

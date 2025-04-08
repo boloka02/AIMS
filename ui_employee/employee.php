@@ -1,67 +1,56 @@
 <?php
 session_start();
+if (!isset($_SESSION['name'])) {
+    header("Location: ../login/login.php");
+    exit();
+}
+
 include '../db_connection.php';
 
+$userName = $_SESSION['name']; // ✅ Fix: Define $userName
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if user is logged in
-    if (!isset($_SESSION['name'])) {
-        die("User not logged in.");
-    }
-
-    $userName = $_SESSION['name'];
-
-    // Generate unique ticket number
-    $ticket_number = "TKT" . time() . rand(1000, 9999);
-
-    // Get form values
-    $subject = $_POST['subject'];
-    $priority = $_POST['priority'];
-    $category = $_POST['category'];
-    $status = "Pending";
+    $subject = mysqli_real_escape_string($conn, $_POST['subject']);
+    $priority = mysqli_real_escape_string($conn, $_POST['priority']);
+    $category = mysqli_real_escape_string($conn, $_POST['category']);
+    $accept = mysqli_real_escape_string($conn, $_POST['accept']);
+    $process = mysqli_real_escape_string($conn, $_POST['process']);
+    $assign_to = mysqli_real_escape_string($conn, $_POST['assign_to']);
+    $time_created = mysqli_real_escape_string($conn, $_POST['time_created']);
     $date_created = date("Y-m-d");
-    $time_created = date("H:i:s");
 
-    $accept = "none";
-    $process = "none";
-    $assign_to = "none";
-
-    // Handle image upload
+    // Handle File Upload
     $image_path = "";
-
     if (!empty($_FILES['image']['name'])) {
         $target_dir = "uploads/";
-        $target_file = $target_dir . basename($_FILES["image"]["name"]);
-
-        // Validate file type and size
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        $maxSize = 5 * 1024 * 1024; // 5MB
-
-        if (!in_array($_FILES['image']['type'], $allowedTypes) || $_FILES['image']['size'] > $maxSize) {
-            die("Invalid file type or file size too large.");
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0777, true);
         }
 
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-            $image_path = $target_file;
-        } else {
-            die("Error uploading file.");
-        }
+        $image_name = basename($_FILES['image']['name']);
+        $image_path = $target_dir . $image_name;
+        move_uploaded_file($_FILES['image']['tmp_name'], $image_path);
     }
 
-    // Insert ticket into the database
-    $stmt = $conn->prepare("INSERT INTO tickets (ticket_number, subject, priority, category, image_path, status, date_created, created_by, accept, process, assign_to, time_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    // Generate Ticket Number
+    $query = "SELECT COUNT(*) AS count FROM ticket";
+    $result = $conn->query($query);
+    $row = $result->fetch_assoc();
+    $ticket_number = "TCK-" . str_pad($row['count'] + 1, 4, "0", STR_PAD_LEFT);
 
-    if (!$stmt) {
-        die("Prepare failed: " . $conn->error);
-    }
+    // Insert Ticket
+    $insertQuery = "INSERT INTO ticket 
+        (ticket_number, subject, priority, category, image, status, date_created, created_by, accept, process, assign_to, time_created) 
+        VALUES (?, ?, ?, ?, ?, 'Pending', ?, ?, ?, ?, ?, ?)";
 
+    $stmt = $conn->prepare($insertQuery);
     $stmt->bind_param(
-        "ssssssssssss",
+        "sssssssssss",
         $ticket_number,
         $subject,
         $priority,
         $category,
         $image_path,
-        $status,
         $date_created,
         $userName,
         $accept,
@@ -69,19 +58,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $assign_to,
         $time_created
     );
-
-    if ($stmt->execute()) {
-        // Redirect to ticket list or confirmation
-        header("Location: ticket_list.php?success=1");
-        exit();
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
+    $stmt->execute();
     $stmt->close();
-}
-?>
 
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}
+
+// Fetch Tickets
+$query = "SELECT * FROM ticket WHERE created_by = ? ORDER BY FIELD(status, 'Pending', 'In Progress', 'Waiting', 'Resolved', 'Close')";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("s", $userName);
+$stmt->execute();
+$result = $stmt->get_result();
+?>
 
 <!DOCTYPE html>
 <html lang="en">

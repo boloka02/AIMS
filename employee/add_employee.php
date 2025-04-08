@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             VALUES ('$idnumber', '$name', '$position', '$department', '$status', '$date_hired')";
 
     if (mysqli_query($conn, $sql)) {
-        echo "<script>alert('Employee added successfully!'); window.location.href='/mis-v6.1/employee/employee.php';</script>";
+        echo "<script>alert('Employee added successfully!'); window.location.href='/AIMS/employee/employee.php';</script>";
     } else {
         echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
     }
@@ -94,7 +94,7 @@ mysqli_close($conn);
             <!-- Submit & Cancel Buttons -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary">Submit</button>
-                <a href="/mis-v6.1/employee/employee.php" class="btn btn-secondary">Cancel</a>
+                <a href="/AIMS/employee/employee.php" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>

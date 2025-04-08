@@ -35,7 +35,6 @@ if (!isset($_SESSION['user_id'])) {
             <h3>Employee</h3>
             <div class="d-flex">
                 <input type="text" id="searchInput" class="form-control search-box me-2" placeholder="Search...">
-                <a href="/mis-v6.1/employee/add_employee.php" class="btn btn-primary"><i class="fas fa-plus"></i> Add Employee</a>
             </div>
         </div>
 

@@ -1,26 +1,20 @@
 <?php
 include('/path/to/db_connection.php');
 
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Ensure all POST variables are being received correctly
-    // You can uncomment this to debug
-    // var_dump($_POST);
-
     // Validate and sanitize POST inputs
-    $type = $_POST['type'];
-    $category = $_POST['category'];
-    $quantity = intval($_POST['quantity']);
-    $total_value = floatval($_POST['total_value']);
-    $available_stock = intval($_POST['available_stock']);
+    $type = htmlspecialchars($_POST['type']);
+    $category = htmlspecialchars($_POST['category']);
+    $quantity = filter_var($_POST['quantity'], FILTER_VALIDATE_INT);
+    $total_value = filter_var($_POST['total_value'], FILTER_VALIDATE_FLOAT);
+    $available_stock = filter_var($_POST['available_stock'], FILTER_VALIDATE_INT);
     $purchasedate = !empty($_POST['purchasedate']) ? $_POST['purchasedate'] : date('Y-m-d');
-    $warranty = $_POST['warranty'];
-    $location = $_POST['location'];
+    $warranty = htmlspecialchars($_POST['warranty']);
+    $location = htmlspecialchars($_POST['location']);
     $size = $_POST['size'] ?? ''; // Monitor Size
     $capacity = $_POST['capacity'] ?? ''; // RAM Capacity
-    $price = isset($_POST['laptop_price']) ? floatval($_POST['laptop_price']) : 0;
-    $supplier = isset($_POST['laptop_supplier']) ? $_POST['laptop_supplier'] : '';
+    $price = isset($_POST['laptop_price']) ? filter_var($_POST['laptop_price'], FILTER_VALIDATE_FLOAT) : 0;
+    $supplier = isset($_POST['laptop_supplier']) ? htmlspecialchars($_POST['laptop_supplier']) : '';
     $model = $_POST['laptop_model'] ?? ''; // Laptop and Processor Model
 
     // Auto-calculate stock status
@@ -36,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $status = "Available";
     }
 
-    // Table mapping
+    // Table and prefix mapping
     $tableMapping = [
         "Laptop" => "laptop", "Headset" => "headset", "Keyboard" => "keyboard", "Mboard" => "mboard",
         "Monitor" => "monitor", "2nd Monitor" => "monitor2", "Mouse" => "mouse", "Processor" => "processor",
@@ -45,13 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "CCTV" => "cctv", "UPS" => "ups", "Modem" => "modem"
     ];
 
-    // Prefix mapping
     $prefixMapping = [
         "Mboard" => "MB", "Monitor" => "MT", "2nd Monitor" => "MTnd", "RAM" => "RM", "Processor" => "PR",
         "AVR" => "AVR", "Adaptor" => "AP", "Biometric" => "BIO", "Patch Cord" => "PTC", "Printer" => "PRNT",
         "Router" => "RT", "Switch" => "SWT", "CCTV" => "CCTV", "UPS" => "UPS", "Modem" => "MDM"
     ];
 
+    // Ensure valid type
     if (array_key_exists($type, $tableMapping)) {
         $tableName = $tableMapping[$type];
         $prefix = $prefixMapping[$type] ?? strtoupper(substr($type, 0, 2));
@@ -60,8 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $queryLast = "SELECT name FROM $tableName WHERE name LIKE '$prefix-%' ORDER BY name DESC LIMIT 1";
         $resultLast = mysqli_query($conn, $queryLast);
         if (!$resultLast) {
-            echo "Error fetching last record: " . mysqli_error($conn);
-            exit;
+            die("Error fetching last record: " . mysqli_error($conn));
         }
 
         $lastNumber = 0;
@@ -77,48 +70,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         for ($i = 1; $i <= $quantity; $i++) {
             $generated_name = sprintf("$prefix-%05d", $lastNumber + $i);
 
-            // Prepare the query based on item type
-            if ($type === "Monitor" || $type === "2nd Monitor") {
-                $queryInsert = "INSERT INTO $tableName (name, size, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                if (!$stmtInsert) {
-                    echo "Error preparing query: " . mysqli_error($conn);
-                    exit;
-                }
-                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $size, $price, $supplier, $purchasedate, $warranty);
-            } elseif ($type === "Laptop" || $type === "Processor") {
-                $queryInsert = "INSERT INTO $tableName (name, model, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                if (!$stmtInsert) {
-                    echo "Error preparing query: " . mysqli_error($conn);
-                    exit;
-                }
-                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $model, $price, $supplier, $purchasedate, $warranty);
-            } elseif ($type === "RAM") {
-                $queryInsert = "INSERT INTO $tableName (name, capacity, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                if (!$stmtInsert) {
-                    echo "Error preparing query: " . mysqli_error($conn);
-                    exit;
-                }
-                mysqli_stmt_bind_param($stmtInsert, "ssdsss", $generated_name, $capacity, $price, $supplier, $purchasedate, $warranty);
-            } else {
-                $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?)";
-                $stmtInsert = mysqli_prepare($conn, $queryInsert);
-                if (!$stmtInsert) {
-                    echo "Error preparing query: " . mysqli_error($conn);
-                    exit;
-                }
-                mysqli_stmt_bind_param($stmtInsert, "sdsss", $generated_name, $price, $supplier, $purchasedate, $warranty);
+            // Prepare query for item type
+            $queryInsert = "INSERT INTO $tableName (name, model, size, capacity, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmtInsert = mysqli_prepare($conn, $queryInsert);
+            if (!$stmtInsert) {
+                die("Error preparing query: " . mysqli_error($conn));
             }
+
+            mysqli_stmt_bind_param($stmtInsert, "sssdssss", $generated_name, $model, $size, $capacity, $price, $supplier, $purchasedate, $warranty);
             if (!mysqli_stmt_execute($stmtInsert)) {
-                echo "Error executing query: " . mysqli_error($conn);
-                exit;
+                die("Error executing query: " . mysqli_error($conn));
             }
+
             mysqli_stmt_close($stmtInsert);
         }
 
-        // Inventory handling
+        // Update or insert into inventory
         $queryCheck = "SELECT id, quantity, total_value, available_stock FROM inventory WHERE type = ?";
         $stmtCheck = mysqli_prepare($conn, $queryCheck);
         mysqli_stmt_bind_param($stmtCheck, "s", $type);
@@ -134,23 +101,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmtUpdate = mysqli_prepare($conn, $queryUpdate);
             mysqli_stmt_bind_param($stmtUpdate, "iidssi", $new_quantity, $new_total_value, $new_available_stock, $stock, 'Available', $row['id']);
             if (!mysqli_stmt_execute($stmtUpdate)) {
-                echo "Error executing inventory update: " . mysqli_error($conn);
-                exit;
+                die("Error executing inventory update: " . mysqli_error($conn));
             }
             mysqli_stmt_close($stmtUpdate);
         } else {
-            // Insert new inventory record
             $queryInventory = "INSERT INTO inventory (type, category, quantity, total_value, stock, available_stock, status, purchasedate, warranty, location) 
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtInventory = mysqli_prepare($conn, $queryInventory);
             if (!$stmtInventory) {
-                echo "Error preparing inventory query: " . mysqli_error($conn);
-                exit;
+                die("Error preparing inventory query: " . mysqli_error($conn));
             }
             mysqli_stmt_bind_param($stmtInventory, "ssidsissss", $type, $category, $quantity, $total_value, $stock, $available_stock, 'Available', $purchasedate, $warranty, $location);
             if (!mysqli_stmt_execute($stmtInventory)) {
-                echo "Error executing inventory insert: " . mysqli_error($conn);
-                exit;
+                die("Error executing inventory insert: " . mysqli_error($conn));
             }
             mysqli_stmt_close($stmtInventory);
         }
@@ -162,6 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<script>alert('Asset added successfully!'); window.location.href = '/AIMS/inventory/inventory.php';</script>";
 }
 ?>
+
 
 
 
@@ -353,14 +317,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     var priceField = document.querySelector("input[name='laptop_price']");
     var supplierField = document.querySelector("input[name='laptop_supplier']");
     
-    // Additional fields for specific items
+    // Fields for specific items
     var sizeField = document.getElementById("sizeField"); // For Monitors
     var capacityField = document.getElementById("capacityField"); // For RAM
 
     var itemsWithDetails = [
         "Laptop", "Headset", "Mouse", "Keyboard", "Mboard", "Webcam", "Monitor", "2nd Monitor", "RAM", 
         "Processor", "AVR", "Adaptor", "Biometric", "Patch Cord", "Printer", "Router", "Switch",
-        "CCTV", "UPS", "Modem" // Added new items
+        "CCTV", "UPS", "Modem"
     ];
 
     if (itemsWithDetails.includes(this.value)) {
@@ -370,22 +334,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         supplierField.parentElement.style.display = 'block';
 
         let prefixMapping = {
-            "Laptop": "LP",
-            "Monitor": "MT",
-            "2nd Monitor": "MTnd",
-            "RAM": "RM",
-            "Processor": "PR",
-            "Mboard": "MB",
-            "AVR": "AVR",
-            "Adaptor": "AP",
-            "Biometric": "BIO",
-            "Patch Cord": "PTC",
-            "Printer": "PRNT",
-            "Router": "RT",
-            "Switch": "SWT",
-            "CCTV": "CCTV",  // New Prefix
-            "UPS": "UPS",    // New Prefix
-            "Modem": "MDM"   // New Prefix
+            "Laptop": "LP", "Monitor": "MT", "2nd Monitor": "MTnd", "RAM": "RM", "Processor": "PR",
+            "Mboard": "MB", "AVR": "AVR", "Adaptor": "AP", "Biometric": "BIO", "Patch Cord": "PTC",
+            "Printer": "PRNT", "Router": "RT", "Switch": "SWT", "CCTV": "CCTV", "UPS": "UPS", "Modem": "MDM"
         };
 
         let prefix = prefixMapping[this.value] || this.value.substring(0, 2).toUpperCase();
@@ -402,15 +353,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             capacityField.style.display = 'none';
         } else if (this.value === "RAM") {
             capacityField.style.display = 'block';
-            modelField.parentElement.style.display = 'none';
             sizeField.style.display = 'none';
-        } else {
             modelField.parentElement.style.display = 'none';
+        } else {
             sizeField.style.display = 'none';
             capacityField.style.display = 'none';
+            modelField.parentElement.style.display = 'none';
         }
-    } else {
-        additionalDetails.style.display = 'none';
     }
 });
 

@@ -482,46 +482,7 @@ function showSuccessMessage(event) {
 }
 </script>
 
-<style>/* Center the modal */
-.modal-dialog {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
 
-/* Success Popup Box */
-#successPopup .modal-content {
-    text-align: center;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-#successPopup .modal-header {
-    background-color: #28a745;
-    color: white;
-    border-radius: 10px 10px 0 0;
-}
-
-#successPopup .modal-body {
-    font-size: 16px;
-    font-weight: bold;
-}
-
-/* Fade-in animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-</style>
 
 
 

@@ -329,14 +329,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     var priceField = document.querySelector("input[name='laptop_price']");
     var supplierField = document.querySelector("input[name='laptop_supplier']");
     
-    // Additional fields for specific items
     var sizeField = document.getElementById("sizeField"); // For Monitors
     var capacityField = document.getElementById("capacityField"); // For RAM
 
     var itemsWithDetails = [
         "Laptop", "Headset", "Mouse", "Keyboard", "Mboard", "Webcam", "Monitor", "2nd Monitor", "RAM", 
         "Processor", "AVR", "Adaptor", "Biometric", "Patch Cord", "Printer", "Router", "Switch",
-        "CCTV", "UPS", "Modem" // Added new items
+        "CCTV", "UPS", "Modem"
     ];
 
     if (itemsWithDetails.includes(this.value)) {
@@ -359,15 +358,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "Printer": "PRNT",
             "Router": "RT",
             "Switch": "SWT",
-            "CCTV": "CCTV",  // New Prefix
-            "UPS": "UPS",    // New Prefix
-            "Modem": "MDM"   // New Prefix
+            "CCTV": "CCTV",
+            "UPS": "UPS",
+            "Modem": "MDM"
         };
 
         let prefix = prefixMapping[this.value] || this.value.substring(0, 2).toUpperCase();
         nameField.value = prefix + "-0000"; // Assign default ID
 
-        // Show or hide specific fields based on item type
         if (this.value === "Laptop" || this.value === "Processor") {
             modelField.parentElement.style.display = 'block';
             sizeField.style.display = 'none';
@@ -395,17 +393,19 @@ function calculatePrice() {
     var quantity = document.getElementById("quantityInput").value;
     var totalValue = document.getElementById("totalValueInput").value;
     var priceField = document.getElementById("priceInput");
+    var warningMessage = document.getElementById("priceWarning");
 
     if (quantity > 0 && totalValue > 0) {
         priceField.value = (totalValue / quantity).toFixed(2);
+        if (warningMessage) warningMessage.style.display = 'none';
     } else {
         priceField.value = "";
+        if (warningMessage) warningMessage.style.display = 'block';
     }
 }
 
 document.getElementById("quantityInput").addEventListener("input", calculatePrice);
 document.getElementById("totalValueInput").addEventListener("input", calculatePrice);
-
 
 </script>
 

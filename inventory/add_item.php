@@ -1,5 +1,5 @@
 <?php
-include '../db_connection.php';
+include(__DIR__ . '/../db_connection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate and sanitize POST inputs
@@ -45,7 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "Router" => "RT", "Switch" => "SWT", "CCTV" => "CCTV", "UPS" => "UPS", "Modem" => "MDM"
     ];
 
-    // Ensure valid type
     if (array_key_exists($type, $tableMapping)) {
         $tableName = $tableMapping[$type];
         $prefix = $prefixMapping[$type] ?? strtoupper(substr($type, 0, 2));
@@ -58,7 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $lastNumber = 0;
-
         if ($row = mysqli_fetch_assoc($resultLast)) {
             preg_match("/^$prefix-(\d+)$/", $row['name'], $matches);
             if ($matches) {
@@ -66,12 +64,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        // Insert multiple assets with unique names
+        // Insert assets
         for ($i = 1; $i <= $quantity; $i++) {
             $generated_name = sprintf("$prefix-%05d", $lastNumber + $i);
 
-            // Prepare query for item type
-            $queryInsert = "INSERT INTO $tableName (name, model, size, capacity, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $queryInsert = "INSERT INTO $tableName (name, model, size, capacity, price, supplier, purchase_date, warranty) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtInsert = mysqli_prepare($conn, $queryInsert);
             if (!$stmtInsert) {
                 die("Error preparing query: " . mysqli_error($conn));
@@ -79,9 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             mysqli_stmt_bind_param($stmtInsert, "sssdssss", $generated_name, $model, $size, $capacity, $price, $supplier, $purchasedate, $warranty);
             if (!mysqli_stmt_execute($stmtInsert)) {
-                die("Error executing query: " . mysqli_error($conn));
+                die("Error executing query: " . mysqli_stmt_error($stmtInsert));
             }
-
             mysqli_stmt_close($stmtInsert);
         }
 
@@ -99,21 +96,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $queryUpdate = "UPDATE inventory SET quantity = ?, total_value = ?, available_stock = ?, stock = ?, status = ? WHERE id = ?";
             $stmtUpdate = mysqli_prepare($conn, $queryUpdate);
-            mysqli_stmt_bind_param($stmtUpdate, "iidssi", $new_quantity, $new_total_value, $new_available_stock, $stock, 'Available', $row['id']);
+            mysqli_stmt_bind_param($stmtUpdate, "iidssi", $new_quantity, $new_total_value, $new_available_stock, $stock, $status, $row['id']);
             if (!mysqli_stmt_execute($stmtUpdate)) {
-                die("Error executing inventory update: " . mysqli_error($conn));
+                die("Error updating inventory: " . mysqli_stmt_error($stmtUpdate));
             }
             mysqli_stmt_close($stmtUpdate);
         } else {
-            $queryInventory = "INSERT INTO inventory (type, category, quantity, total_value, stock, available_stock, status, purchasedate, warranty, location) 
-                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmtInventory = mysqli_prepare($conn, $queryInventory);
-            if (!$stmtInventory) {
-                die("Error preparing inventory query: " . mysqli_error($conn));
-            }
-            mysqli_stmt_bind_param($stmtInventory, "ssidsissss", $type, $category, $quantity, $total_value, $stock, $available_stock, 'Available', $purchasedate, $warranty, $location);
+            $queryInsertInventory = "INSERT INTO inventory (type, category, quantity, total_value, stock, available_stock, status, purchasedate, warranty, location) 
+                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmtInventory = mysqli_prepare($conn, $queryInsertInventory);
+            mysqli_stmt_bind_param($stmtInventory, "ssidsissss", $type, $category, $quantity, $total_value, $stock, $available_stock, $status, $purchasedate, $warranty, $location);
             if (!mysqli_stmt_execute($stmtInventory)) {
-                die("Error executing inventory insert: " . mysqli_error($conn));
+                die("Error inserting inventory: " . mysqli_stmt_error($stmtInventory));
             }
             mysqli_stmt_close($stmtInventory);
         }
@@ -125,6 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "<script>alert('Asset added successfully!'); window.location.href = '/AIMS/inventory/inventory.php';</script>";
 }
 ?>
+
 
 
 

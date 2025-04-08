@@ -86,16 +86,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     break;
         
                 default:
-                    // Use generic fallback - but make sure your table structure supports these fields
                     $queryInsert = "INSERT INTO $tableName (name, price, supplier, purchase_date, warranty) VALUES (?, ?, ?, ?, ?)";
                     $stmtInsert = mysqli_prepare($conn, $queryInsert);
                     mysqli_stmt_bind_param($stmtInsert, "sdsss", $generated_name, $price, $supplier, $purchasedate, $warranty);
                     break;
             }
         
-            mysqli_stmt_execute($stmtInsert);
+            if (!$stmtInsert) {
+                echo "Prepare failed: " . mysqli_error($conn) . "<br>";
+                continue;
+            }
+        
+            if (!mysqli_stmt_execute($stmtInsert)) {
+                echo "Execute failed: " . mysqli_stmt_error($stmtInsert) . "<br>";
+            } else {
+                echo "Inserted: $generated_name<br>";
+            }
+        
             mysqli_stmt_close($stmtInsert);
         }
+        
         
         // Inventory handling
         $queryCheck = "SELECT id, quantity, total_value, available_stock FROM inventory WHERE type = ?";

@@ -92,62 +92,7 @@ if (!isset($_SESSION['user_id'])) {
                 ?>
             </tbody>
         </table>
-        <script>
-// Delete functionality with event delegation
-document.getElementById('inventoryTable').addEventListener('click', function(event) {
-    if (event.target && event.target.classList.contains('delete-btn')) {
-        event.preventDefault();
         
-        const employeeId = event.target.getAttribute('data-id');
-        
-        // Show the custom delete confirmation modal
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        deleteModal.show();
-
-        // Handle the confirm delete action
-        document.getElementById('confirmDelete').addEventListener('click', function() {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `delete_employee.php?id=${employeeId}`, true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    alert('Employee deleted successfully!');
-                    const row = event.target.closest('tr');
-                    row.remove();
-                } else {
-                    alert('Error deleting employee');
-                }
-            };
-            xhr.send();
-            deleteModal.hide(); // Close the modal after confirming deletion
-        });
-
-        // Handle the cancel delete action
-        document.getElementById('cancelDelete').addEventListener('click', function() {
-            deleteModal.hide(); // Close the modal if canceled
-        });
-    }
-});
-</script>
-
-<!-- Custom Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Delete Employee</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center py-4">
-                <p>Are you sure you want to delete this employee?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancelDelete" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 
         <!-- Pagination Controls -->
         <ul class="pagination" id="paginationControls">

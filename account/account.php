@@ -190,31 +190,56 @@ function showModal(message) {
     }, 1000); // 1000 milliseconds = 1 second
 }
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 15px;">
+      <div class="modal-body text-center py-4">
+        <p style="font-size: 1.1rem; color: #333;">Are you sure you want to delete this employee?</p>
+        <div class="mt-3 d-flex justify-content-center gap-2">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+let employeeIdToDelete = null;
+let rowToDelete = null;
 
-
-        // Delete functionality with event delegation
 document.getElementById('inventoryTable').addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('delete-btn')) {
         event.preventDefault();
+        employeeIdToDelete = event.target.getAttribute('data-id');
+        rowToDelete = event.target.closest('tr');
         
-        const employeeId = event.target.getAttribute('data-id');
-        
-        if (confirm('Are you sure you want to delete this employee?')) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `delete_employee.php?id=${employeeId}`, true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    // Show success modal instead of alert
-                    showModal('Employee deleted successfully!');
-                    const row = event.target.closest('tr');
-                    row.remove();
-                } else {
-                    // Show error modal instead of alert
-                    showModal('Error deleting employee');
-                }
-            };
-            xhr.send();
-        }
+        const confirmModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        confirmModal.show();
+    }
+});
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    if (employeeIdToDelete) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `delete_employee.php?id=${employeeIdToDelete}`, true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                showModal('Employee deleted successfully!');
+                rowToDelete.remove();
+            } else {
+                showModal('Error deleting employee');
+            }
+        };
+        xhr.send();
+
+        // Hide confirmation modal after clicking delete
+        const confirmModalEl = document.getElementById('confirmDeleteModal');
+        const confirmModal = bootstrap.Modal.getInstance(confirmModalEl);
+        confirmModal.hide();
+
+        // Reset variables
+        employeeIdToDelete = null;
+        rowToDelete = null;
     }
 });
 

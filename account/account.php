@@ -118,6 +118,26 @@ if (!isset($_SESSION['user_id'])) {
   </div>
 </div>
 
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 15px;">
+            <div class="modal-body text-center py-4">
+                <div id="modalMessage" style="font-size: 1.1rem; color: #333;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showModal(message) {
+    document.getElementById('modalMessage').innerHTML = message;
+    const modal = new bootstrap.Modal(document.getElementById('messageModal'));
+    modal.show();
+
+    setTimeout(() => modal.hide(), 1500); // Auto close after 1.5s
+}
+
+</script>
+
 
     <script>
         // Pagination logic
@@ -212,6 +232,7 @@ function showModal(message) {
 
 let deleteTargetId = null;
 
+// Trigger the confirmation modal
 document.getElementById('inventoryTable').addEventListener('click', function(event) {
     if (event.target && event.target.classList.contains('delete-btn')) {
         event.preventDefault();
@@ -221,23 +242,26 @@ document.getElementById('inventoryTable').addEventListener('click', function(eve
     }
 });
 
+// When user confirms deletion
 document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
     if (deleteTargetId) {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', `delete_employee.php?id=${deleteTargetId}`, true);
         xhr.onload = function() {
-            if (xhr.status === 200) {
-                showModal('Employee deleted successfully!');
-                document.querySelector(`tr[data-id="${deleteTargetId}"]`).remove();
+            const message = xhr.responseText;
+            if (xhr.status === 200 && message.includes("successfully")) {
+                showModal('✅ ' + message); // Success popup
+                const row = document.querySelector(`tr[data-id="${deleteTargetId}"]`);
+                if (row) row.remove();
             } else {
-                showModal('Error deleting employee');
+                showModal('❌ ' + message); // Error popup
             }
+
+            // Hide confirmation modal
+            const confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+            confirmModal.hide();
         };
         xhr.send();
-
-        // Hide the confirmation modal
-        const confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
-        confirmModal.hide();
     }
 });
 

@@ -32,7 +32,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <div class="container mt-3">
         <div class="d-flex justify-content-between align-items-center">
-            <h3>Employee</h3>
+            <h3>Account</h3>
             <div class="d-flex">
                 <input type="text" id="searchInput" class="form-control search-box me-2" placeholder="Search...">
             </div>

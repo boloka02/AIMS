@@ -36,7 +36,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <div class="container mt-3">
         <div class="d-flex justify-content-between align-items-center">
-            <h3>Inventory</h3>
+            <h3>Asset</h3>
             <div class="d-flex">
                 <input type="text" id="searchInput" class="form-control search-box me-2" placeholder="Search...">
                 <a href="/AIMS/assets/add_assign.php" class="btn btn-primary"><i class="fas fa-plus"></i> Assign Asset</a>

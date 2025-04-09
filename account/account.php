@@ -193,28 +193,31 @@ function showModal(message) {
 
 
         // Delete functionality with event delegation
-        document.getElementById('inventoryTable').addEventListener('click', function(event) {
-            if (event.target && event.target.classList.contains('delete-btn')) {
-                event.preventDefault();
-                
-                const employeeId = event.target.getAttribute('data-id');
-                
-                if (confirm('Are you sure you want to delete this employee?')) {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('GET', `delete_employee.php?id=${employeeId}`, true);
-                    xhr.onload = function() {
-                        if (xhr.status === 200) {
-                            alert('Employee deleted successfully!');
-                            const row = event.target.closest('tr');
-                            row.remove();
-                        } else {
-                            alert('Error deleting employee');
-                        }
-                    };
-                    xhr.send();
+document.getElementById('inventoryTable').addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('delete-btn')) {
+        event.preventDefault();
+        
+        const employeeId = event.target.getAttribute('data-id');
+        
+        if (confirm('Are you sure you want to delete this employee?')) {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `delete_employee.php?id=${employeeId}`, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Show success modal instead of alert
+                    showModal('Employee deleted successfully!');
+                    const row = event.target.closest('tr');
+                    row.remove();
+                } else {
+                    // Show error modal instead of alert
+                    showModal('Error deleting employee');
                 }
-            }
-        });
+            };
+            xhr.send();
+        }
+    }
+});
+
     </script>
 
 <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">

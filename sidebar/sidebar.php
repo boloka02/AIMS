@@ -20,8 +20,9 @@ if (session_status() === PHP_SESSION_NONE) {
     <audio id="notification-sound" src="../sidebar/notif.mp3" preload="auto"></audio>
 
     <button class="hamburger-button">
-        <i class="bi bi-list"></i>
+    <i class="bi bi-list"></i>
     </button>
+
 
     <div class="sidebar">
         <div class="sidebar-header"><img src="https://adongroup.com.au/wp-content/uploads/2019/12/AdOn-Logo-v4.gif" alt="AdonPH Logo" style="height: 50px; width: 150px;"></div>

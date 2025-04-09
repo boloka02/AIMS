@@ -167,6 +167,11 @@ body {
         cursor: pointer;
         border-radius: 4px;
         display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        left: -9999px !important;
     }
 
     .content {

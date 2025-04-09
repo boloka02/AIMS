@@ -108,7 +108,7 @@ if (!isset($_SESSION['user_id'])) {
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content" style="border-radius: 15px;">
       <div class="modal-body text-center py-4">
-        <p style="font-size: 1.1rem; color: #333;">Are you sure you want to delete this employee?</p>
+        <p style="font-size: 1.1rem; color: #333;">Are you sure you want to delete this User?</p>
         <div class="mt-3 d-flex justify-content-center gap-2">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>

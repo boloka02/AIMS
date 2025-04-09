@@ -12,6 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    // Validate email format (must be example@adongroup.com.au or this@adongroup.com.au)
+    if (!preg_match('/^[a-zA-Z0-9._%+-]+@adongroup\.com\.au$/', $email)) {
+        echo "<script>alert('Email must be in the format: example@adongroup.com.au'); window.location='../login/login.php';</script>";
+        exit();
+    }
+
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
     // Check if the ID number exists in the employee table and fetch name

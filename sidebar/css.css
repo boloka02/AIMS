@@ -1,8 +1,9 @@
- /* Your existing CSS styling */
- body {
+/* Your existing CSS styling */
+body {
     display: flex;
     min-height: 100vh;
     background-color: #f0f2f5;
+    margin: 0;
 }
 
 .sidebar {
@@ -49,6 +50,8 @@
 .content {
     flex-grow: 1;
     padding: 30px;
+    margin-left: 260px; /* Initially offset by sidebar width */
+    transition: margin-left 0.3s ease;
 }
 
 .sidebar-header {
@@ -76,7 +79,6 @@
     text-decoration: none;
 }
 
-/* Bell Icon Styling - Making Icon Bigger */
 .notification-bell i {
     font-size: 20px;
     display: flex;
@@ -88,7 +90,6 @@
     color: rgb(0, 0, 0);
 }
 
-/* Badge Styling - Positioned at the Edge */
 .badge {
     position: absolute;
     top: -1px;
@@ -102,7 +103,6 @@
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-    /* Vibrate (Shaking) animation for the bell (shake for 5 seconds, stop for 3 seconds) */
 @keyframes vibrate {
     0% { transform: translateX(0) rotate(0deg); }
     25% { transform: translateX(-4px) rotate(-5deg); }
@@ -111,24 +111,19 @@
     100% { transform: translateX(0) rotate(0deg); }
 }
 
-/* Apply shake animation to the notification bell */
 .notification-bell.shake {
     animation: vibrate 5s ease-in-out infinite, stop-shake 3s ease-in-out infinite 5s;
 }
 
-/* Keyframes for stopping the shake after 5 seconds */
 @keyframes stop-shake {
     0% { transform: translateX(0) rotate(0deg); }
     100% { transform: translateX(0) rotate(0deg); }
 }
 
-
-/* Apply vibrate animation when there are pending tickets */
 .notification-bell.shake {
     animation: vibrate 0.2s linear infinite;
 }
 
-/* Responsive Styling for Smaller Screens */
 @media (max-width: 768px) {
     .notification-bell {
         top: 15px;
@@ -142,6 +137,48 @@
         right: -6px;
         font-size: 12px;
         padding: 4px 6px;
+    }
+
+    .sidebar {
+        width: 80%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        height: 100vh;
+        transform: translateX(-100%);
+        box-shadow: none;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .hamburger-button {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1001;
+        background-color: #4299e1;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .content {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .sidebar-header {
+        font-size: 1.1em;
+    }
+
+    .sidebar a {
+        font-size: 14px;
     }
 }
 
@@ -162,48 +199,3 @@
 .bottom-section .attribution {
     padding: 5px;
 }
-
-/* Hamburger Button Styling for Mobile */
-.hamburger-button {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        width: 80%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-        height: 100vh;
-        transform: translateX(-100%);
-    }
-
-    .sidebar.active {
-        transform: translateX(0);
-    }
-
-    .hamburger-button {
-        display: block;
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        z-index: 1001;
-        background-color: #4299e1;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        cursor: pointer;
-        border-radius: 4px;
-    }
-}
-
-
-
-
-
-
-
-
-
-

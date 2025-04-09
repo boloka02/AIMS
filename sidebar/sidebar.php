@@ -81,16 +81,26 @@ if (session_status() === PHP_SESSION_NONE) {
             const notificationSound = document.getElementById('notification-sound');
             const newTickets = <?= $new_tickets ?>;
 
-            console.log("New tickets: " + newTickets); // Debugging log to check the ticket count
+            console.log("New tickets: " + newTickets);
 
             // If there are new tickets, add the shake animation and play the sound
             if (newTickets > 0) {
                 notificationBell.classList.add('shake');
-                notificationSound.play(); // Play the bell sound automatically
-                console.log("Sound should play now."); // Debugging log to confirm sound should play
+                notificationSound.play(); 
+                console.log("Sound should play now.");
             } else {
-                console.log("No new tickets, no sound."); // Debugging log if no tickets
+                console.log("No new tickets, no sound.");
             }
+
+            // Toggle sidebar on hamburger button click
+            const hamburgerButton = document.querySelector('.hamburger-button');
+            const sidebar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content');
+
+            hamburgerButton.addEventListener('click', function () {
+                sidebar.classList.toggle('active');
+                content.classList.toggle('active');
+            });
         });
     </script>
 

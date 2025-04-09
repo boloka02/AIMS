@@ -76,7 +76,7 @@ mysqli_close($conn);
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="icon" type="image/jpeg" href="https://adongroup.com.au/wp-content/uploads/2020/12/aog-favicon-192px.svg">
 <title>ADON PH</title>
-<h3>DASHBOARD</h3>
+
 <?php include "../sidebar/sidebar.php"; ?>
 
 <div class="container mt-3">

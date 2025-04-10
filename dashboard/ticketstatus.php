@@ -33,6 +33,9 @@
             width: 100%; /* Make it span the content width */
             padding-right: 15px;
             font-size: 0.9em;
+            border: 1px solid #ccc; /* Add a border */
+            padding: 10px; /* Add some padding inside the border */
+            border-radius: 5px; /* Optional: Add rounded corners */
         }
 
         .filter-container label,

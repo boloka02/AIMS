@@ -35,7 +35,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 
     <div class="sidebar">
-        <div class="sidebar-header"><img src="https://adongroup.com.au/wp-content/uploads/2019/12/AdOn-Logo-v4.gif" alt="AdonPH Logo" style="height: 50px; width: 150px;"></div>
+        <div class="sidebar-header"><img src="../logo.png" alt="AdonPH Logo" style="height: 50px; width: 150px;"></div>
 
         <a href="../dashboard/dashboard.php" class="sidebar-link">
             <i class="bi bi-speedometer2"></i><span class="sidebar-text">Dashboard</span>
@@ -62,7 +62,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <!-- Bottom Section -->
         <div class="bottom-section">
             <div class="user">User: <?php echo htmlspecialchars($_SESSION['name']); ?></div>
-            <div class="attribution">@Ad0nPH2025</div>
+            <div class="attribution">@AD ON GROUP,2025</div>
         </div>
     </div>
 

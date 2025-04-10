@@ -73,23 +73,8 @@
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h1>AD ON GROUP</h1>
-        <ul>
-            <li><a href="#"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-            <li><a href="#"><i class="fas fa-box"></i> Inventory</a></li>
-            <li><a href="#"><i class="fas fa-cubes"></i> Assets</a></li>
-            <li><a href="#"><i class="fas fa-users"></i> Employee</a></li>
-            <li><a href="#"><i class="fas fa-ticket-alt"></i> Tickets</a></li>
-            <li><a href="#"><i class="fas fa-coins"></i> Accounts</a></li>
-            <li><a href="#"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
-        </ul>
-        <div class="user-info">
-            User: Admin Shop Name2
-            <br>
-            © AD ON GROUP 2025
-        </div>
-    </div>
+   
+<?php include "../sidebar/sidebar.php"; ?>
 
     <div class="content">
         <div class="card">

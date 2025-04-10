@@ -27,7 +27,7 @@
 
         #statusChart {
             width: 1200px !important;
-            height: 800px !important;
+            height: 500px !important;
         }
 
         .card-title {

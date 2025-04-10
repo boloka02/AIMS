@@ -124,9 +124,21 @@ mysqli_close($conn);
         </div>
     </div>
 
-    <div class="col-lg-6">
-        <div class="row">
-            <div class="col-lg-6 mb-1">
+    <div class="col-lg-6 d-flex">
+        <div class="flex-grow-1">
+            <div class="card shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <h5 class="card-title">Ticket Status</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px;">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column ms-2">
+            <div class="mb-1">
                 <select id="monthSelect" class="form-select">
                     <option value="">Select Month</option>
                     <option value="January">January</option>
@@ -143,7 +155,7 @@ mysqli_close($conn);
                     <option value="December">December</option>
                 </select>
             </div>
-            <div class="col-lg-6 mb-1">
+            <div>
                 <select id="yearSelect" class="form-select">
                     <option value="">Select Year</option>
                     <option value="2024">2024</option>
@@ -151,18 +163,6 @@ mysqli_close($conn);
                     <option value="2026" selected>2026</option>
                     <option value="2027">2027</option>
                 </select>
-            </div>
-            <div class="col-lg-12">
-                <div class="card shadow-sm">
-                    <div class="card-body d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">Ticket Status</h5>
-                    </div>
-                    <div class="card-body">
-                        <div style="height: 300px;">
-                            <canvas id="statusChart"></canvas>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

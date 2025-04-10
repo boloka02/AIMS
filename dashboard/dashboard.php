@@ -115,8 +115,8 @@ mysqli_close($conn);
         <div class="col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                <button>View Category</button>
                 <button class="btn btn-primary">View Category</button>
+                    <h5 class="card-title">Ticket Categories</h5>
                     <div style="height: 300px;">
                         <canvas id="categoryChart"></canvas>
                     </div>
@@ -128,7 +128,6 @@ mysqli_close($conn);
         <div class="col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <button>View Status</button>
                     <button class="btn btn-primary">View Status</button>
                     <h5 class="card-title">Ticket Status</h5>
                     <div style="height: 300px;">

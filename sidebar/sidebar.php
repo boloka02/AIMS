@@ -72,7 +72,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <!-- Bottom Section -->
         <div class="bottom-section">
             <div class="user">User: <?php echo htmlspecialchars($_SESSION['name']); ?></div>
-            <div class="attribution">@AD ON GROUP,2025</div>
+            <div class="attribution"> Copyright © 2025 ADONPH</div>
         </div>
     </div>
 

@@ -49,5 +49,16 @@ body {
     margin-bottom: 15px;
 }
 
+/* Flexbox for button and title alignment */
+.card-body.d-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-body .btn {
+    margin-right: 10px;
+}
+
 /* Chart.js Customization */
 /* You will add these options to your Chart.js configurations in the JavaScript */

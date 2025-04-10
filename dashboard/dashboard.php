@@ -109,33 +109,33 @@ mysqli_close($conn);
         }
         ?>
     </div>
-
+    
     <div class="row mt-4">
-        <!-- Ticket Categories (Bar Chart) -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Ticket Categories</h5>
-                    <div style="height: 300px;">
-                        <canvas id="categoryChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ticket Status (Pie Chart) -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <button>View Status</button>
-                    <h5 class="card-title">Ticket Status</h5>
-                    <div style="height: 300px;">
-                        <canvas id="statusChart"></canvas>
-                    </div>
+    <!-- Ticket Categories (Bar Chart) -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <button class="btn btn-primary">View Category</button>
+                <h5 class="card-title">Ticket Categories</h5>
+                <div style="height: 300px;">
+                    <canvas id="categoryChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Ticket Status (Pie Chart) -->
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <button class="btn btn-primary">View Status</button>
+                <h5 class="card-title mb-0">Ticket Status</h5>
+                <!-- The button and title are now horizontally aligned using Flexbox -->
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
     <div class="row mt-4">

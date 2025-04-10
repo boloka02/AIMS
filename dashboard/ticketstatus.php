@@ -4,112 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ticket Status</title>
-    <style>
-        body {
-            display: flex; /* Use flexbox for overall layout */
-        }
-
-        .sidebar {
-            /* Styles for your sidebar (assuming it's fixed width) */
-            width: 200px; /* Adjust as needed */
-            background-color: #f0f0f0; /* Example background */
-            padding: 20px;
-        }
-
-        .content {
-            flex-grow: 1; /* Allow content to take remaining space */
-            padding: 20px;
-            display: flex; /* Use flexbox for centering content */
-            flex-direction: column; /* Stack title, filter, and chart */
-            align-items: center; /* Center items horizontally */
-        }
-
-        .filter-container {
-            margin-top: 15px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            justify-content: flex-end; /* Push to the right within its container */
-            width: 100%; /* Make it span the content width */
-            padding-right: 15px;
-            font-size: 0.9em;
-            border: 1px solid #ccc; /* Add a border */
-            padding: 10px; /* Add some padding inside the border */
-            border-radius: 5px; /* Optional: Add rounded corners */
-            background-color: white; /* Add a white background */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
-        }
-
-        .filter-container label,
-        .filter-container select,
-        .filter-container button {
-            font-size: 0.9em;
-            padding: 5px 8px;
-        }
-
-        .filter-container select {
-            width: 80px;
-        }
-
-        .filter-container button {
-            padding: 6px 10px;
-        }
-
-        #statusChartContainer {
-            width: 80%; /* Adjust chart container width */
-            max-width: 600px; /* Optional max width */
-            margin-top: 20px; /* Space between filter and chart */
-        }
-
-        #statusChart {
-            width: 100%;
-            height: auto; /* Maintain aspect ratio */
-        }
-    </style>
+ 
 </head>
 <body>
     <div class="sidebar">
         <?php include "../sidebar/sidebar.php"; ?>
     </div>
 
-    <div class="content">
-        <h5 class="card-title">Ticket Status</h5>
+    <h5 class="card-title">Ticket Status</h5>
 
-        <div class="filter-container">
-            <label for="month">Month:</label>
-            <select id="month">
-                <option value="">All</option>
-                <option value="01">Jan</option>
-                <option value="02">Feb</option>
-                <option value="03">Mar</option>
-                <option value="04">Apr</option>
-                <option value="05">May</option>
-                <option value="06">Jun</option>
-                <option value="07">Jul</option>
-                <option value="08">Aug</option>
-                <option value="09">Sep</option>
-                <option value="10">Oct</option>
-                <option value="11">Nov</option>
-                <option value="12">Dec</option>
-            </select>
+    <div class="filter-container">
+        <label for="month">Month:</label>
+        <select id="month">
+            <option value="">All</option>
+            <option value="01">Jan</option>
+            <option value="02">Feb</option>
+            <option value="03">Mar</option>
+            <option value="04">Apr</option>
+            <option value="05">May</option>
+            <option value="06">Jun</option>
+            <option value="07">Jul</option>
+            <option value="08">Aug</option>
+            <option value="09">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
+        </select>
 
-            <label for="year">Year:</label>
-            <select id="year">
-                <?php
-                    $currentYear = date("Y");
-                    for ($i = $currentYear; $i >= 2020; $i--) {
-                        echo "<option value='$i'>$i</option>";
-                    }
-                ?>
-                <option value="">All</option>
-            </select>
+        <label for="year">Year:</label>
+        <select id="year">
+            <?php
+                $currentYear = date("Y");
+                for ($i = $currentYear; $i >= 2020; $i--) {
+                    echo "<option value='$i'>$i</option>";
+                }
+            ?>
+            <option value="">All</option>
+        </select>
 
-            <button id="filterBtn">Filter</button>
-        </div>
+        <button id="filterBtn">Filter</button>
+    </div>
 
-        <div id="statusChartContainer">
-            <canvas id="statusChart"></canvas>
-        </div>
+    <div id="statusChartContainer">
+        <canvas id="statusChart"></canvas>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -171,5 +108,55 @@
             });
         });
     </script>
-</body>
+
+    <style>
+        .filter-container {
+            margin-top: 15px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: flex-end; /* Push to the right */
+            width: 100%; /* Span the container width */
+            padding-right: 15px;
+            font-size: 0.9em;
+            border: 1px solid #ccc; /* Add a border */
+            padding: 10px; /* Add padding inside the border */
+            border-radius: 5px; /* Optional: Rounded corners */
+            background-color: white; /* Optional: White background */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow */
+        }
+
+        .filter-container label,
+        .filter-container select,
+        .filter-container button {
+            font-size: 0.9em;
+            padding: 5px 8px;
+        }
+
+        .filter-container select {
+            width: 80px;
+        }
+
+        .filter-container button {
+            padding: 6px 10px;
+        }
+
+        #statusChartContainer {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically (if container height allows) */
+            width: 100%;
+            height: 400px; /* Adjust height as needed for vertical centering */
+            margin-top: 20px; /* Space between filter and chart */
+        }
+
+        #statusChart {
+            width: 80%; /* Adjust chart width */
+            max-width: 600px; /* Optional max width */
+            height: auto; /* Maintain aspect ratio */
+        }
+    </style>
+
+        
+    </body>
 </html>

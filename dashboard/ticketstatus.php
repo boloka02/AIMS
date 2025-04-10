@@ -28,7 +28,6 @@ echo json_encode($data);
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     // Fetch the data from the server

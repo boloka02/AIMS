@@ -48,7 +48,7 @@ foreach ($assets as $type => $table) {
     // Check if the table exists
     $checkTableQuery = "SHOW TABLES LIKE '$table'";
     $checkResult = mysqli_query($conn, $checkTableQuery);
-    
+
     if (mysqli_num_rows($checkResult) > 0) {
         // If table exists, count available or empty status items
         $query = "SELECT COUNT(*) AS count FROM $table WHERE status = 'Available' OR status IS NULL OR status = ''";
@@ -81,7 +81,6 @@ mysqli_close($conn);
 
 <div class="container mt-1">
     <div class="row g-3">
-        <!-- Cards -->
         <?php
         $cards = [
             ["icon" => "fas fa-tools", "title" => "Equipment", "value" => "50 Units"],
@@ -93,7 +92,7 @@ mysqli_close($conn);
             ["icon" => "fas fa-box-open", "title" => "Available", "value" => "$total_available Units"], // Updated dynamically
             ["icon" => "fas fa-wrench", "title" => "Maintenance", "value" => "10 In Progress"]
         ];
-        
+
         foreach ($cards as $card) {
             echo "<div class='col-lg-3 col-md-4 col-sm-6'>
                     <div class='card shadow-sm p-3'>
@@ -112,238 +111,219 @@ mysqli_close($conn);
 
 
     <div class="row mt-1">
-    <div class="col-lg-6">
-        <div class="card shadow-sm">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Ticket Categories</h5>
-            </div>
-            <div class="card-body">
-                <div style="height: 300px;">
-                    <canvas id="categoryChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <div class="flex-grow-1">
+        <div class="col-lg-6">
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Ticket Status</h5>
+                    <h5 class="card-title">Ticket Categories</h5>
                 </div>
                 <div class="card-body">
                     <div style="height: 300px;">
-                        <canvas id="statusChart"></canvas>
+                        <canvas id="categoryChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Dropdowns side by side -->
-        <div class="ms-2 vertical-dropdowns">
-            <div class="dropdown-item">
-                <select id="monthSelect" class="form-select">
-                    <option value="">Select Month</option>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April" selected>April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                </select>
+        <div class="col-lg-6 d-flex">
+            <div class="flex-grow-1">
+                <div class="card shadow-sm">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Ticket Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 300px;">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="dropdown-item">
-                <select id="yearSelect" class="form-select">
-                    <option value="">Select Year</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026" selected>2026</option>
-                    <option value="2027">2027</option>
-                </select>
+
+            <div class="ms-2 d-flex flex-column">
+                <div class="mb-1">
+                    <select id="monthSelect" class="form-select">
+                        <option value="">Select Month</option>
+                        <option value="January">January</option>
+                        <option value="February">February</option>
+                        <option value="March">March</option>
+                        <option value="April" selected>April</option>
+                        <option value="May">May</option>
+                        <option value="June">June</option>
+                        <option value="July">July</option>
+                        <option value="August">August</option>
+                        <option value="September">September</option>
+                        <option value="October">October</option>
+                        <option value="November">November</option>
+                        <option value="December">December</option>
+                    </select>
+                </div>
+                <div>
+                    <select id="yearSelect" class="form-select">
+                        <option value="">Select Year</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026" selected>2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<!-- Custom CSS -->
-<style>
-    .vertical-dropdowns {
-        display: flex; /* Arrange items horizontally */
-        gap: 1rem; /* Space between the dropdowns */
-    }
-
-    .vertical-dropdowns .form-select {
-        width: 100%; /* Make dropdowns take up full width */
-        max-width: 200px; /* Optional: Set a max width for dropdowns */
-    }
-</style>
-
-
-
 
     <div class="row mt-1">
-    <!-- Recent Activity (Smaller Box, Left Side) -->
-    <div class="col-lg-6"> <!-- Reduced width from col-lg-6 to col-lg-4 -->
-        <div class="card shadow-sm h-95" style="max-height: 2300px;"> <!-- Reduced height -->
-            <div class="card-body">
-                <h5 class="card-title text-left">Recent Activity</h5>
-                <div style="height: 250px; overflow-y: auto; border: 1px solid #ddd; padding-right: 5px; text-align: left;"> 
-                    <!-- Smaller height for scrollbar -->
-                    <ul class="list-group list-group-flush">
-                    <?php
-                    // Include database connection
-                    include '../db_connection.php';
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-95" style="max-height: 300px;">
+                <div class="card-body">
+                    <h5 class="card-title text-left">Recent Activity</h5>
+                    <div style="height: 250px; overflow-y: auto; border: 1px solid #ddd; padding-right: 5px; text-align: left;">
+                        <ul class="list-group list-group-flush">
+                            <?php
+                            // Include database connection
+                            include '../db_connection.php';
 
-                    // Fetch history data sorted by most recent action first
-                    $query = "SELECT ticket_number, accept, date_accept, accept_time, date_fixed, fix_time 
-                            FROM history 
-                            ORDER BY 
-                            -- Order by the most recent Fix or Accept time
-                            GREATEST(
-                                IFNULL(STR_TO_DATE(CONCAT(date_fixed, ' ', fix_time), '%Y-%m-%d %H:%i:%s'), '0000-00-00 00:00:00'), 
-                                IFNULL(STR_TO_DATE(CONCAT(date_accept, ' ', accept_time), '%Y-%m-%d %H:%i:%s'), '0000-00-00 00:00:00')
-                            ) DESC, 
-                            -- Ensure Fix is prioritized when times are the same
-                            date_fixed DESC, fix_time DESC, 
-                            date_accept DESC, accept_time DESC";
+                            // Fetch history data sorted by most recent action first
+                            $query = "SELECT ticket_number, accept, date_accept, accept_time, date_fixed, fix_time
+                                    FROM history
+                                    ORDER BY
+                                    -- Order by the most recent Fix or Accept time
+                                    GREATEST(
+                                        IFNULL(STR_TO_DATE(CONCAT(date_fixed, ' ', fix_time), '%Y-%m-%d %H:%i:%s'), '0000-00-00 00:00:00'),
+                                        IFNULL(STR_TO_DATE(CONCAT(date_accept, ' ', accept_time), '%Y-%m-%d %H:%i:%s'), '0000-00-00 00:00:00')
+                                    ) DESC,
+                                    -- Ensure Fix is prioritized when times are the same
+                                    date_fixed DESC, fix_time DESC,
+                                    date_accept DESC, accept_time DESC";
 
-                    $historyResult = mysqli_query($conn, $query);
+                            $historyResult = mysqli_query($conn, $query);
 
-                    // Check if there are results
-                    if (mysqli_num_rows($historyResult) > 0) {
-                        echo "<ul class='list-group'>";
+                            // Check if there are results
+                            if (mysqli_num_rows($historyResult) > 0) {
+                                echo "<ul class='list-group'>";
 
-                        while ($row = mysqli_fetch_assoc($historyResult)) {
-                            $hasFix = !empty($row['fix_time']) && $row['date_fixed'] !== "0000-00-00" && $row['fix_time'] !== "00:00:00";
-                            $hasAccept = !empty($row['accept']) && !empty($row['date_accept']) && !empty($row['accept_time']);
+                                while ($row = mysqli_fetch_assoc($historyResult)) {
+                                    $hasFix = !empty($row['fix_time']) && $row['date_fixed'] !== "0000-00-00" && $row['fix_time'] !== "00:00:00";
+                                    $hasAccept = !empty($row['accept']) && !empty($row['date_accept']) && !empty($row['accept_time']);
 
-                            // Display each Fix action as a separate entry
-                            if ($hasFix) {
-                                echo "<li class='list-group-item'>";
-                                echo "Ticket #{$row['ticket_number']} <span class='text-success'>Fixed</span> on {$row['date_fixed']} at {$row['fix_time']}";
-                                echo "</li>";
+                                    // Display each Fix action as a separate entry
+                                    if ($hasFix) {
+                                        echo "<li class='list-group-item'>";
+                                        echo "Ticket #{$row['ticket_number']} <span class='text-success'>Fixed</span> on {$row['date_fixed']} at {$row['fix_time']}";
+                                        echo "</li>";
+                                    }
+
+                                    // Display each Accept action as a separate entry
+                                    if ($hasAccept) {
+                                        echo "<li class='list-group-item'>";
+                                        echo "Ticket #{$row['ticket_number']} <span class='text-primary'>Accepted</span> by {$row['accept']} on {$row['date_accept']} at {$row['accept_time']}";
+                                        echo "</li>";
+                                    }
+                                }
+
+                                echo "</ul>";
+                            } else {
+                                echo "<ul class='list-group'><li class='list-group-item'>No recent activity.</li></ul>";
                             }
 
-                            // Display each Accept action as a separate entry
-                            if ($hasAccept) {
-                                echo "<li class='list-group-item'>";
-                                echo "Ticket #{$row['ticket_number']} <span class='text-primary'>Accepted</span> by {$row['accept']} on {$row['date_accept']} at {$row['accept_time']}";
-                                echo "</li>";
+                            // Close database connection
+                            mysqli_close($conn);
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-95">
+                <div class="card-body">
+                    <h5 class="card-title mb-2">Asset Distribution</h5>
+                    <h6 class="card-subtitle mb-3 text-muted small">Breakdown by category</h6>
+                    <?php
+                    include '../db_connection.php';
+
+                    // Function to fetch total and assigned count for a given table
+                    function getAssignedPercentage($conn, $table) {
+                        $query = "SELECT status FROM $table";
+                        $result = $conn->query($query);
+
+                        if ($result === false) {
+                            die("Error fetching data from $table: " . $conn->error);
+                        }
+
+                        $total = 0;
+                        $assigned = 0;
+
+                        while ($row = $result->fetch_assoc()) {
+                            $total++;
+                            if ($row['status'] === 'Assigned') {
+                                $assigned++;
                             }
                         }
 
-                        echo "</ul>";
-                    } else {
-                        echo "<ul class='list-group'><li class='list-group-item'>No recent activity.</li></ul>";
+                        return ($total === 0) ? 0 : ($assigned / $total) * 100;
                     }
 
-                    // Close database connection
-                    mysqli_close($conn);
+                    // Fetch assigned percentages for all devices
+                    $percentages = [
+                        "Monitor" => getAssignedPercentage($conn, "monitor"),
+                        "Keyboard" => getAssignedPercentage($conn, "keyboard"),
+                        "Laptop" => getAssignedPercentage($conn, "laptop"),
+                        "Mouse" => getAssignedPercentage($conn, "mouse"),
+                        "Webcam" => getAssignedPercentage($conn, "webcam"),
+                        "Headset" => getAssignedPercentage($conn, "headset")
+                    ];
+
+                    // Close connection
+                    $conn->close();
                     ?>
 
-                    </ul>
+                    <div>
+                        <?php foreach ($percentages as $device => $percentage) : ?>
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <span class="small"><?= htmlspecialchars($device) ?></span>
+                                    </div>
+                                    <span class="small"><?= (int)$percentage ?>%</span> </div>
+                                <div class="progress" style="height: 6px;">
+                                    <div class="progress-bar" role="progressbar"
+                                         style="width: <?= (int)$percentage ?>%; background-color: <?= getColor($device) ?>;"
+                                         aria-valuenow="<?= (int)$percentage ?>" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+
+
+                    <?php
+                    // Function to get color based on device type
+                    function getColor($device) {
+                        $colors = [
+                            "Monitor" => "rgb(176, 238, 5)",
+                            "Keyboard" => "#3498db",
+                            "Laptop" => "#2ecc71",
+                            "Mouse" => "#9b59b6",
+                            "Webcam" => "rgb(21, 168, 179)",
+                            "Headset" => "rgb(190, 20, 63)"
+                        ];
+                        return $colors[$device] ?? "#ccc"; // Default color if not found
+                    }
+                    ?>
+
+                    <style>
+                        .progress {
+                            background-color: #e9ecef;
+                            border-radius: 0.2rem; /* Slightly smaller border-radius */
+                        }
+
+                        .progress-bar {
+                            border-radius: 0.2rem; /* Slightly smaller border-radius */
+                        }
+                    </style>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="col-lg-6">
-    <div class="card shadow-sm h-95">
-        <div class="card-body">
-            <h5 class="card-title mb-2">Asset Distribution</h5>
-            <h6 class="card-subtitle mb-3 text-muted small">Breakdown by category</h6>
-            <?php
-include '../db_connection.php';
-
-// Function to fetch total and assigned count for a given table
-function getAssignedPercentage($conn, $table) {
-    $query = "SELECT status FROM $table";
-    $result = $conn->query($query);
-
-    if ($result === false) {
-        die("Error fetching data from $table: " . $conn->error);
-    }
-
-    $total = 0;
-    $assigned = 0;
-
-    while ($row = $result->fetch_assoc()) {
-        $total++;
-        if ($row['status'] === 'Assigned') {
-            $assigned++;
-        }
-    }
-
-    return ($total === 0) ? 0 : ($assigned / $total) * 100;
-}
-
-// Fetch assigned percentages for all devices
-$percentages = [
-    "Monitor" => getAssignedPercentage($conn, "monitor"),
-    "Keyboard" => getAssignedPercentage($conn, "keyboard"),
-    "Laptop" => getAssignedPercentage($conn, "laptop"),
-    "Mouse" => getAssignedPercentage($conn, "mouse"),
-    "Webcam" => getAssignedPercentage($conn, "webcam"),
-    "Headset" => getAssignedPercentage($conn, "headset")
-];
-
-// Close connection
-$conn->close();
-?>
-
-<div>
-    <?php foreach ($percentages as $device => $percentage) : ?>
-        <div class="mb-2">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                    <span class="small"><?= htmlspecialchars($device) ?></span>
-                </div>
-                <span class="small"><?= (int)$percentage ?>%</span> <!-- Removed decimal places -->
-            </div>
-            <div class="progress" style="height: 6px;">
-                <div class="progress-bar" role="progressbar" 
-                    style="width: <?= (int)$percentage ?>%; background-color: <?= getColor($device) ?>;" 
-                    aria-valuenow="<?= (int)$percentage ?>" aria-valuemin="0" aria-valuemax="100">
-                </div>
-            </div>
-        </div>
-    <?php endforeach; ?>
 </div>
 
-
-<?php
-// Function to get color based on device type
-function getColor($device) {
-    $colors = [
-        "Monitor" => "rgb(176, 238, 5)",
-        "Keyboard" => "#3498db",
-        "Laptop" => "#2ecc71",
-        "Mouse" => "#9b59b6",
-        "Webcam" => "rgb(21, 168, 179)",
-        "Headset" => "rgb(190, 20, 63)"
-    ];
-    return $colors[$device] ?? "#ccc"; // Default color if not found
-}
-?>
-
-<style>
-.progress {
-    background-color: #e9ecef;
-    border-radius: 0.2rem; /* Slightly smaller border-radius */
-}
-
-.progress-bar {
-    border-radius: 0.2rem; /* Slightly smaller border-radius */
-}
-</style>
-
-
 <script src="pi.js"></script>
-
-

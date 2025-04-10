@@ -111,13 +111,31 @@ mysqli_close($conn);
     </div>
 
     <div class="row mt-2">
+    <!-- Dropdown for month selection -->
+    <div class="col-lg-12 mb-4">
+        <label for="monthSelect">Select Month</label>
+        <select id="monthSelect" class="form-select">
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+        </select>
+    </div>
 
+    <!-- Ticket Categories Chart -->
     <div class="col-lg-6">
         <div class="card shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <h5 class="card-title">Ticket Categories</h5>
-            <input type="date" id="filterDate" class="form-control w-auto">
-        </div>
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Ticket Categories</h5>
+            </div>
             <div class="card-body">
                 <div style="height: 300px;">
                     <canvas id="categoryChart"></canvas>
@@ -125,13 +143,13 @@ mysqli_close($conn);
             </div>
         </div>
     </div>
-    
+
+    <!-- Ticket Status Chart -->
     <div class="col-lg-6">
         <div class="card shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <h5 class="card-title">Ticket Status</h5>
-            <input type="date" id="filterDate" class="form-control w-auto">
-        </div>
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Ticket Status</h5>
+            </div>
             <div class="card-body">
                 <div style="height: 300px;">
                     <canvas id="statusChart"></canvas>

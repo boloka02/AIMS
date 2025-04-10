@@ -26,7 +26,7 @@
         }
 
         #statusChart {
-            width: 4000px !important;
+            width: 800px !important;
             height: 400px !important;
         }
 

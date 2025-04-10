@@ -176,7 +176,7 @@ mysqli_close($conn);
     <div class="row mt-1">
     <!-- Recent Activity (Smaller Box, Left Side) -->
     <div class="col-lg-6"> <!-- Reduced width from col-lg-6 to col-lg-4 -->
-        <div class="card shadow-sm h-95" style="max-height: 2500px;"> <!-- Reduced height -->
+        <div class="card shadow-sm h-95" style="max-height: 2300px;"> <!-- Reduced height -->
             <div class="card-body">
                 <h5 class="card-title text-left">Recent Activity</h5>
                 <div style="height: 250px; overflow-y: auto; border: 1px solid #ddd; padding-right: 5px; text-align: left;"> 

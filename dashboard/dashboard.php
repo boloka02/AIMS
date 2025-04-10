@@ -111,15 +111,13 @@ mysqli_close($conn);
     </div>
 
     <div class="row mt-1">
-    <!-- Dropdowns for month and year selection -->
     <div class="col-lg-6 mb-1">
-        <!-- Month Selection -->
         <select id="monthSelect" class="form-select">
             <option value="">Select Month</option>
             <option value="January">January</option>
             <option value="February">February</option>
             <option value="March">March</option>
-            <option value="April">April</option>
+            <option value="April" selected>April</option>
             <option value="May">May</option>
             <option value="June">June</option>
             <option value="July">July</option>
@@ -132,17 +130,15 @@ mysqli_close($conn);
     </div>
 
     <div class="col-lg-6 mb-1">
-        <!-- Year Selection -->
         <select id="yearSelect" class="form-select">
             <option value="">Select Year</option>
             <option value="2024">2024</option>
-            <option value="2025">2025</option>
+            <option value="2025" selected>2025</option>
             <option value="2026">2026</option>
             <option value="2027">2027</option>
         </select>
     </div>
 
-    <!-- Ticket Categories Chart -->
     <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">
@@ -156,7 +152,6 @@ mysqli_close($conn);
         </div>
     </div>
 
-    <!-- Ticket Status Chart -->
     <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">

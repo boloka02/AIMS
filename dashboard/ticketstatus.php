@@ -58,14 +58,32 @@
     </div>
 
     <div class="sidebar">
-        <h4>Filter by Date</h4>
+        <h4>Filter by Month and Year</h4>
         <div class="filter-container">
-            <label for="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate">
+            <label for="month">Month:</label>
+            <select id="month" name="month">
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+            </select>
         </div>
         <div class="filter-container">
-            <label for="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate">
+            <label for="year">Year:</label>
+            <select id="year" name="year">
+                <option value="2025">2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <!-- Add more years as needed -->
+            </select>
         </div>
         <button id="filterBtn" style="margin-top: 15px;">Apply Filter</button>
     </div>
@@ -103,14 +121,14 @@
 
             // Date filter functionality
             document.getElementById('filterBtn').addEventListener('click', function() {
-                const startDate = document.getElementById('startDate').value;
-                const endDate = document.getElementById('endDate').value;
+                const month = document.getElementById('month').value;
+                const year = document.getElementById('year').value;
 
-                // You can send these date values to the server or adjust the chart data based on the filter
-                console.log('Filter applied:', { startDate, endDate });
+                // You can send these month and year values to the server or adjust the chart data based on the filter
+                console.log('Filter applied:', { month, year });
 
                 // Add logic to fetch data with filters applied
-                // For now, it just logs the selected date range
+                // For now, it just logs the selected month and year
             });
         });
     </script>

@@ -17,6 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $process = mysqli_real_escape_string($conn, $_POST['process']);
     $assign_to = mysqli_real_escape_string($conn, $_POST['assign_to']);
     $time_created = mysqli_real_escape_string($conn, $_POST['time_created']);
+    $description = mysqli_real_escape_string($conn, $_POST['description']);
+
     $date_created = date("Y-m-d");
 
     // Handle File Upload
@@ -40,12 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Insert Ticket
     $insertQuery = "INSERT INTO ticket 
-        (ticket_number, subject, priority, category, image, status, date_created, created_by, accept, process, assign_to, time_created) 
-        VALUES (?, ?, ?, ?, ?, 'Pending', ?, ?, ?, ?, ?, ?)";
+    (ticket_number, subject, priority, category, image, status, date_created, created_by, accept, process, assign_to, time_created, description) 
+    VALUES (?, ?, ?, ?, ?, 'Pending', ?, ?, ?, ?, ?, ?, ?)";
+
 
     $stmt = $conn->prepare($insertQuery);
     $stmt->bind_param(
-        "sssssssssss",
+        "ssssssssssss",
         $ticket_number,
         $subject,
         $priority,
@@ -56,8 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $accept,
         $process,
         $assign_to,
-        $time_created
+        $time_created,
+        $description
     );
+    
+ 
     $stmt->execute();
     $stmt->close();
 
@@ -431,6 +437,10 @@ showPage(currentPage);
                         <option value="Access">Access</option>
                         <option value="Network">Network</option>
                     </select>
+
+                    <label class="form-label">Description</label>
+                    <input type="text" name="description" class="form-control" placeholder="Enter Description" required>
+
 
                     <!-- Modern Drag-and-Drop File Upload -->
                     <label class="form-label mt-2">Attachments (Optional)</label>

@@ -126,7 +126,7 @@ mysqli_close($conn);
 
     <div class="col-lg-6">
         <div class="row">
-            <div class="col-lg-12 mb-1">
+            <div class="col-lg-6 mb-1">
                 <select id="monthSelect" class="form-select">
                     <option value="">Select Month</option>
                     <option value="January">January</option>
@@ -143,7 +143,7 @@ mysqli_close($conn);
                     <option value="December">December</option>
                 </select>
             </div>
-            <div class="col-lg-12 mb-1">
+            <div class="col-lg-6 mb-1">
                 <select id="yearSelect" class="form-select">
                     <option value="">Select Year</option>
                     <option value="2024">2024</option>

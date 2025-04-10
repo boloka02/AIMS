@@ -56,16 +56,12 @@
 <body>
     <?php include "../sidebar/sidebar.php"; ?>
 
-    <div class="content">
-        <div class="card">
-            <div class="card-body">
+    
                 <h5 class="card-title">Ticket Status</h5>
                 <div>
                     <canvas id="statusChart"></canvas>
                 </div>
-            </div>
-        </div>
-    </div>
+
 
     <div class="sidebar">
         <h4>Filter by Date</h4>

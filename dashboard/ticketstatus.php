@@ -10,48 +10,7 @@
             display: flex;
         }
 
-        .sidebar {
-            background-color: #2c3e50;
-            color: #fff;
-            width: 200px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .sidebar h1 {
-            margin-bottom: 20px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-        }
-
-        .sidebar ul li {
-            padding: 10px 0;
-            border-bottom: 1px solid #34495e;
-            width: 100%;
-        }
-
-        .sidebar ul li:last-child {
-            border-bottom: none;
-        }
-
-        .sidebar ul li a {
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-
-        .sidebar ul li a i {
-            margin-right: 10px;
-        }
-
+      
         .content {
             flex-grow: 1;
             padding: 20px;

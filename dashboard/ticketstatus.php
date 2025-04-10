@@ -58,7 +58,7 @@
                 .then(data => {
                     const ctx = document.getElementById('statusChart').getContext('2d');
                     new Chart(ctx, {
-                        type: 'pie',
+                        type: 'pie', // Ensure the type is 'pie' for a round chart
                         data: {
                             labels: Object.keys(data),
                             datasets: [{

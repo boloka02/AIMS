@@ -36,6 +36,8 @@
             border: 1px solid #ccc; /* Add a border */
             padding: 10px; /* Add some padding inside the border */
             border-radius: 5px; /* Optional: Add rounded corners */
+            background-color: white; /* Add a white background */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
         }
 
         .filter-container label,

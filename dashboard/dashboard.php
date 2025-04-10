@@ -110,7 +110,7 @@ mysqli_close($conn);
         ?>
     </div>
 
-    <div class="row mt-4">
+    <div class="row mt-2">
     <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">

@@ -3,17 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ticket Status Chart</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 500px;
+            margin-top: 40px;
+        }
+
+        #statusChart {
+            width: 400px !important;
+            height: 400px !important;
+        }
+
+        .card-title {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <?php include "../sidebar/sidebar.php"; ?>
 
-    
-                <h5 class="card-title">Ticket Status</h5>
-                <div>
-                    <canvas id="statusChart"></canvas>
-                </div>
-
+    <div class="container">
+        <h5 class="card-title">Ticket Status</h5>
+        <div class="chart-container">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -27,7 +60,7 @@
                     new Chart(ctx, {
                         type: 'pie',
                         data: {
-                            labels: Object.keys(data), // Ticket Status
+                            labels: Object.keys(data),
                             datasets: [{
                                 data: Object.values(data),
                                 backgroundColor: ['green', 'orange', '#0095fd', 'indigo'],
@@ -39,24 +72,15 @@
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: {
-                                legend: { display: true, position: 'top' }
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+                                }
                             }
                         }
                     });
                 })
                 .catch(error => console.error("Error fetching status data:", error));
-
-            // Date filter functionality
-            document.getElementById('filterBtn').addEventListener('click', function() {
-                const month = document.getElementById('month').value;
-                const year = document.getElementById('year').value;
-
-                // You can send these month and year values to the server or adjust the chart data based on the filter
-                console.log('Filter applied:', { month, year });
-
-                // Add logic to fetch data with filters applied
-                // For now, it just logs the selected month and year
-            });
         });
     </script>
 </body>

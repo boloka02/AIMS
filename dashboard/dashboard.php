@@ -112,7 +112,7 @@ mysqli_close($conn);
 
     <div class="row mt-1">
     <!-- Dropdowns for month and year selection -->
-    <div class="col-lg-6 mb-2">
+    <div class="col-lg-6 mb-1">
         <!-- Month Selection -->
         <select id="monthSelect" class="form-select">
             <option value="">Select Month</option>
@@ -131,7 +131,7 @@ mysqli_close($conn);
         </select>
     </div>
 
-    <div class="col-lg-6 mb-2">
+    <div class="col-lg-6 mb-1">
         <!-- Year Selection -->
         <select id="yearSelect" class="form-select">
             <option value="">Select Year</option>

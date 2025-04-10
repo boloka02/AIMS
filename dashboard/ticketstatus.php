@@ -3,95 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticket Status</title>
-    <style>
-
-
-        .content {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center; /* Center text within the content */
-        }
-
-        .card-title {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        #statusChart {
-            width: 300px; /* Adjust as needed */
-            height: 300px; /* Adjust as needed */
-            margin: 20px auto; /* Center the chart */
-        }
-
-        .filter-container {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column; /* Stack filter elements */
-            align-items: center; /* Center filter elements horizontally */
-            gap: 10px;
-        }
-
-        .filter-container label {
-            color: #555;
-        }
-
-        .filter-container select,
-        .filter-container button {
-            padding: 10px 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1em;
-        }
-
-        .filter-container button {
-            background-color: #007bff;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .filter-container button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <title>Document</title>
 </head>
 <body>
+    <?php include "../sidebar/sidebar.php"; ?>
 
-    <div class="content">
-        <h5 class="card-title">Ticket Status</h5>
-        <div class="filter-container">
-            <label for="month">Month:</label>
-            <select id="month">
-                <option value="">All Months</option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
-            </select>
-            <label for="year">Year:</label>
-            <select id="year">
-                <option value="">All Years</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-            </select>
-            <button id="filterBtn">Filter</button>
-        </div>
-        <div>
-            <canvas id="statusChart"></canvas>
-        </div>
-    </div>
+    
+                <h5 class="card-title">Ticket Status</h5>
+                <div>
+                    <canvas id="statusChart"></canvas>
+                </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -117,7 +39,7 @@
                             responsive: true,
                             maintainAspectRatio: false,
                             plugins: {
-                                legend: { display: true, position: 'bottom' } /* Moved legend to the bottom */
+                                legend: { display: true, position: 'top' }
                             }
                         }
                     });
@@ -129,31 +51,11 @@
                 const month = document.getElementById('month').value;
                 const year = document.getElementById('year').value;
 
-                let url = 'get_ticket_status.php';
-                const params = [];
-                if (month) {
-                    params.push(`month=${month}`);
-                }
-                if (year) {
-                    params.push(`year=${year}`);
-                }
-                if (params.length > 0) {
-                    url += '?' + params.join('&');
-                }
+                // You can send these month and year values to the server or adjust the chart data based on the filter
+                console.log('Filter applied:', { month, year });
 
-                fetch(url)
-                    .then(response => response.json())
-                    .then(filteredData => {
-                        const chart = Chart.getChart('statusChart'); // Get the existing chart instance
-                        if (chart) {
-                            chart.data.labels = Object.keys(filteredData);
-                            chart.data.datasets[0].data = Object.values(filteredData);
-                            chart.update();
-                        } else {
-                            console.error("Chart instance not found.");
-                        }
-                    })
-                    .catch(error => console.error("Error fetching filtered data:", error));
+                // Add logic to fetch data with filters applied
+                // For now, it just logs the selected month and year
             });
         });
     </script>

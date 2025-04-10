@@ -79,7 +79,7 @@ mysqli_close($conn);
 
 <?php include "../sidebar/sidebar.php"; ?>
 
-<div class="container mt-1">
+<div class="container mt-3">
     <div class="row g-3">
         <!-- Cards -->
         <?php
@@ -110,12 +110,13 @@ mysqli_close($conn);
         ?>
     </div>
 
-    <div class="row mt-1">
+    <div class="row mt-2">
+
     <div class="col-lg-6">
         <div class="card shadow-sm">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Ticket Categories</h5>
-            </div>
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Ticket Categories</h5>
+        </div>
             <div class="card-body">
                 <div style="height: 300px;">
                     <canvas id="categoryChart"></canvas>
@@ -123,47 +124,16 @@ mysqli_close($conn);
             </div>
         </div>
     </div>
-
-    <div class="col-lg-6 d-flex">
-        <div class="flex-grow-1">
-            <div class="card shadow-sm">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Ticket Status</h5>
-                </div>
-                <div class="card-body">
-                    <div style="height: 300px;">
-                        <canvas id="statusChart"></canvas>
-                    </div>
-                </div>
-            </div>
+    
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Ticket Status</h5>
         </div>
-
-         <div class="ms-2 vertical-dropdowns">
-            <div class="mb-1">
-                <select id="monthSelect" class="form-select">
-                    <option value="">Select Month</option>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April" selected>April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
-                </select>
-            </div>
-            <div>
-                <select id="yearSelect" class="form-select">
-                    <option value="">Select Year</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026" selected>2026</option>
-                    <option value="2027">2027</option>
-                </select>
+            <div class="card-body">
+                <div style="height: 300px;">
+                    <canvas id="statusChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -171,10 +141,10 @@ mysqli_close($conn);
 
 
 
-    <div class="row mt-1">
+    <div class="row mt-2">
     <!-- Recent Activity (Smaller Box, Left Side) -->
     <div class="col-lg-6"> <!-- Reduced width from col-lg-6 to col-lg-4 -->
-        <div class="card shadow-sm h-95" style="max-height: 2300px;"> <!-- Reduced height -->
+        <div class="card shadow-sm h-100" style="max-height: 2500px;"> <!-- Reduced height -->
             <div class="card-body">
                 <h5 class="card-title text-left">Recent Activity</h5>
                 <div style="height: 250px; overflow-y: auto; border: 1px solid #ddd; padding-right: 5px; text-align: left;"> 
@@ -238,7 +208,7 @@ mysqli_close($conn);
     </div>
 
     <div class="col-lg-6">
-    <div class="card shadow-sm h-95">
+    <div class="card shadow-sm h-100">
         <div class="card-body">
             <h5 class="card-title mb-2">Asset Distribution</h5>
             <h6 class="card-subtitle mb-3 text-muted small">Breakdown by category</h6>

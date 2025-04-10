@@ -113,10 +113,12 @@ mysqli_close($conn);
     <div class="row mt-2">
     <div class="col-lg-6">
         <div class="card shadow-sm">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Ticket Categories</h5>
-                <input type="date" class="form-control w-auto">
-            </div>
+
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Ticket Categories</h5>
+            <input type="date" id="filterDate" class="form-control w-auto">
+        </div>
+
             <div class="card-body">
                 <div style="height: 300px;">
                     <canvas id="categoryChart"></canvas>
@@ -127,10 +129,12 @@ mysqli_close($conn);
 
     <div class="col-lg-6">
         <div class="card shadow-sm">
-            <div class="card-body d-flex justify-content-between align-items-center">
-                <h5 class="card-title">Ticket Status</h5>
-                <input type="date" class="form-control w-auto">
-            </div>
+
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <h5 class="card-title">Ticket Status</h5>
+            <input type="date" id="filterDate" class="form-control w-auto">
+        </div>
+
             <div class="card-body">
                 <div style="height: 300px;">
                     <canvas id="statusChart"></canvas>

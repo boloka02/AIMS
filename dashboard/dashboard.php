@@ -110,6 +110,7 @@ mysqli_close($conn);
         ?>
     </div>
 
+
     <div class="row mt-1">
     <div class="col-lg-6">
         <div class="card shadow-sm">
@@ -124,7 +125,7 @@ mysqli_close($conn);
         </div>
     </div>
 
-    <div class="col-lg-6 d-flex">
+    <div class="col-lg-6">
         <div class="flex-grow-1">
             <div class="card shadow-sm">
                 <div class="card-body d-flex justify-content-between align-items-center">
@@ -137,20 +138,10 @@ mysqli_close($conn);
                 </div>
             </div>
         </div>
-        <style>
-    .vertical-dropdowns {
-      display: flex;
-      flex-direction: column; /* Arrange items vertically */
-      align-items: flex-start; /* Align items to the start (left) */
-    }
 
-    .vertical-dropdowns .form-select {
-      margin-bottom: 0.5rem; /* Add some space between the dropdowns */
-      width: 100%; /* Make the dropdowns take full width of their container */
-    }
-  </style>
-         <div class="ms-2 vertical-dropdowns">
-            <div class="mb-1">
+        <!-- Dropdowns side by side -->
+        <div class="ms-2 vertical-dropdowns">
+            <div class="dropdown-item">
                 <select id="monthSelect" class="form-select">
                     <option value="">Select Month</option>
                     <option value="January">January</option>
@@ -167,7 +158,7 @@ mysqli_close($conn);
                     <option value="December">December</option>
                 </select>
             </div>
-            <div>
+            <div class="dropdown-item">
                 <select id="yearSelect" class="form-select">
                     <option value="">Select Year</option>
                     <option value="2024">2024</option>
@@ -179,6 +170,20 @@ mysqli_close($conn);
         </div>
     </div>
 </div>
+
+<!-- Custom CSS -->
+<style>
+    .vertical-dropdowns {
+        display: flex; /* Arrange items horizontally */
+        gap: 1rem; /* Space between the dropdowns */
+    }
+
+    .vertical-dropdowns .form-select {
+        width: 100%; /* Make dropdowns take up full width */
+        max-width: 200px; /* Optional: Set a max width for dropdowns */
+    }
+</style>
+
 
 
 

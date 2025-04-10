@@ -79,7 +79,7 @@ mysqli_close($conn);
 
 <?php include "../sidebar/sidebar.php"; ?>
 
-<div class="container mt-3">
+<div class="container mt-2">
     <div class="row g-3">
         <!-- Cards -->
         <?php

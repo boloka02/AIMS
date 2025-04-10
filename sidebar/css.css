@@ -154,15 +154,6 @@ body {
         transform: translateX(0);
     }
 
-    .hamburger-button {
-        display: none !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-        position: absolute !important;
-        left: -9999px !important;
-    }
-
     .content {
         margin-left: 0;
         padding: 20px;

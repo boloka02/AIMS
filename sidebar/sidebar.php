@@ -19,9 +19,19 @@ if (session_status() === PHP_SESSION_NONE) {
     <!-- Audio element for the notification sound -->
     <audio id="notification-sound" src="../sidebar/notif.mp3" preload="auto"></audio>
 
-    <button class="hamburger-button">
-    <i class="bi bi-list"></i>
-    </button>
+    <button class="hamburger-button">☰</button>
+<style>
+    button.hamburger-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    left: -9999px !important;
+    z-index: -9999 !important;
+}
+
+</style>
 
 
     <div class="sidebar">

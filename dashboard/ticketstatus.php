@@ -4,16 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .chart-container {
+            width: 80%; /* Adjust width as needed */
+            max-width: 800px; /* Max width for the chart container */
+        }
+
+        #statusChart {
+            width: 100%; /* Full width of its container */
+            height: 400px; /* Adjust height as needed */
+        }
+    </style>
 </head>
 <body>
     <?php include "../sidebar/sidebar.php"; ?>
 
-    
-                <h5 class="card-title">Ticket Status</h5>
-                <div>
-                    <canvas id="statusChart"></canvas>
-                </div>
-
+    <div class="chart-container">
+        <h5 class="card-title">Ticket Status</h5>
+        <div>
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

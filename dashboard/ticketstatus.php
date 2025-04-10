@@ -12,16 +12,26 @@
         }
         /* Sidebar Styles */
         .sidebar {
-            width: 250px;
+            width: 200px; /* Reduced sidebar width */
             background-color: #f4f4f4;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start; /* Align items to the top */
+            align-items: flex-start; /* Align items to the left */
         }
         .filter-container {
-            margin-top: 20px;
+            margin-bottom: 15px; /* Added margin between filter elements */
+            width: 100%; /* Make filter elements take full width of sidebar */
+        }
+        .filter-container label,
+        .filter-container select,
+        .sidebar button {
+            display: block;
+            margin-bottom: 5px;
+            width: 100%;
+            box-sizing: border-box; /* Ensure padding doesn't increase width */
         }
         /* Center Content Styles */
         .content {
@@ -32,20 +42,20 @@
             align-items: center;
         }
         .card {
-            width: 80%;
-            max-width: 600px;
+            width: 90%; /* Increased card width */
+            max-width: 900px; /* Increased max card width */
             margin: 20px;
         }
         /* Chart Styling */
         #statusChart {
             width: 100%;
-            height: 300px;
+            height: 450px; /* Increased chart height */
         }
     </style>
 </head>
 <body>
     <?php include "../sidebar/sidebar.php"; ?>
-    
+
     <div class="content">
         <div class="card">
             <div class="card-body">
@@ -58,7 +68,7 @@
     </div>
 
     <div class="sidebar">
-        <h4>Filter by Month and Year</h4>
+        <h4>Filter by Date</h4>
         <div class="filter-container">
             <label for="month">Month:</label>
             <select id="month" name="month">
@@ -82,8 +92,7 @@
                 <option value="2025">2025</option>
                 <option value="2024">2024</option>
                 <option value="2023">2023</option>
-                <!-- Add more years as needed -->
-            </select>
+                </select>
         </div>
         <button id="filterBtn" style="margin-top: 15px;">Apply Filter</button>
     </div>

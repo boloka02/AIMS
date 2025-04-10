@@ -185,3 +185,12 @@ body {
 .bottom-section .attribution {
     padding: 5px;
 }
+
+
+.sidebar-logo {
+    max-width: 140px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding: 10px 0;
+}

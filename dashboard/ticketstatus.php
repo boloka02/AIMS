@@ -1,10 +1,13 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Ticket Status</h5>
+        <div>
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+</div>
 
- 
-                    <h5 class="card-title">Ticket Status</h5>
-                        <canvas id="statusChart"></canvas>
-           
-
- <script>
+<script>
 document.addEventListener("DOMContentLoaded", function () {
     fetch('get_ticket_status.php') // Fetch status data
     .then(response => response.json())

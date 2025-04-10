@@ -36,7 +36,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <div class="sidebar">
     <div class="sidebar-header text-center py-3">
-    <img src="../sidebar/image.png" alt="AD ON GROUP Logo" style="height: 60px; width: auto; object-fit: contain;">
+    <img src="../alogo.png" alt="AD ON GROUP Logo" style="height: 60px; width: auto; object-fit: contain;">
 </div>
 
 

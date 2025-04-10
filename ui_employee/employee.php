@@ -439,7 +439,8 @@ showPage(currentPage);
                     </select>
 
                     <label class="form-label">Description</label>
-                    <input type="text" name="description" class="form-control" placeholder="Enter Description" required>
+                    <textarea name="description" class="form-control" rows="5" placeholder="Enter Description" required></textarea>
+
 
 
                     <!-- Modern Drag-and-Drop File Upload -->

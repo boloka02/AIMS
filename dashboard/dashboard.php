@@ -111,7 +111,7 @@ mysqli_close($conn);
     </div>
 
     <div class="row mt-4">
-    <div class="col-lg-5">
+    <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Ticket Categories</h5>
@@ -125,7 +125,7 @@ mysqli_close($conn);
         </div>
     </div>
 
-    <div class="col-lg-5">
+    <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Ticket Status</h5>
@@ -141,7 +141,7 @@ mysqli_close($conn);
 </div>
 
 
-    <div class="row mt-4">
+    <div class="row mt-3">
     <!-- Recent Activity (Smaller Box, Left Side) -->
     <div class="col-lg-6"> <!-- Reduced width from col-lg-6 to col-lg-4 -->
         <div class="card shadow-sm h-100" style="max-height: 2500px;"> <!-- Reduced height -->

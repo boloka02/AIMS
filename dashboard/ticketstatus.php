@@ -5,15 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ticket Status</title>
     <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            min-height: 100vh; /* Ensure full viewport height */
-            margin: 0;
-            background-color: #f4f4f4; /* Light background */
-        }
+
 
         .content {
             background-color: #fff;

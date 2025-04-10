@@ -111,32 +111,34 @@ mysqli_close($conn);
     </div>
 
     <div class="row mt-4">
-        <!-- Ticket Categories (Bar Chart) -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Ticket Categories</h5>
                 <button class="btn btn-primary">View Category</button>
-                    <h5 class="card-title">Ticket Categories</h5>
-                    <div style="height: 300px;">
-                        <canvas id="categoryChart"></canvas>
-                    </div>
-                </div>
             </div>
-        </div>
-
-        <!-- Ticket Status (Pie Chart) -->
-        <div class="col-lg-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <button class="btn btn-primary">View Status</button>
-                    <h5 class="card-title">Ticket Status</h5>
-                    <div style="height: 300px;">
-                        <canvas id="statusChart"></canvas>
-                    </div>
+            <div class="card-body">
+                <div style="height: 300px;">
+                    <canvas id="categoryChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Ticket Status</h5>
+                <button class="btn btn-primary">View Status</button>
+            </div>
+            <div class="card-body">
+                <div style="height: 300px;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
     <div class="row mt-4">

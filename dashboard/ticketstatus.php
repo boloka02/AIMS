@@ -18,10 +18,25 @@
             height: auto; /* Maintain aspect ratio */
         }
         .filter-container {
-            margin-top: 20px;
+            margin-top: 15px; /* Slightly reduced top margin */
             display: flex;
-            gap: 10px;
+            gap: 8px; /* Slightly reduced gap between elements */
             align-items: center;
+            justify-content: flex-end; /* Push items to the right */
+            padding-right: 15px; /* Slightly reduced right padding */
+            font-size: 0.9em; /* Slightly smaller font size */
+        }
+        .filter-container label,
+        .filter-container select,
+        .filter-container button {
+            font-size: 0.9em; /* Ensure consistent smaller font size */
+            padding: 5px 8px; /* Adjust padding for smaller size */
+        }
+        .filter-container select {
+            width: 80px; /* Adjust width of select boxes */
+        }
+        .filter-container button {
+            padding: 6px 10px; /* Adjust button padding */
         }
     </style>
 </head>
@@ -34,18 +49,18 @@
         <label for="month">Month:</label>
         <select id="month">
             <option value="">All</option>
-            <option value="01">January</option>
-            <option value="02">February</option>
-            <option value="03">March</option>
-            <option value="04">April</option>
+            <option value="01">Jan</option>
+            <option value="02">Feb</option>
+            <option value="03">Mar</option>
+            <option value="04">Apr</option>
             <option value="05">May</option>
-            <option value="06">June</option>
-            <option value="07">July</option>
-            <option value="08">August</option>
-            <option value="09">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
+            <option value="06">Jun</option>
+            <option value="07">Jul</option>
+            <option value="08">Aug</option>
+            <option value="09">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
         </select>
 
         <label for="year">Year:</label>

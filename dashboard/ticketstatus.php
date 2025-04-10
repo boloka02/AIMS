@@ -8,9 +8,10 @@
         </div>
     </div>
 </div>
-<script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<script>
+    
     
 document.addEventListener("DOMContentLoaded", function () {
     fetch('get_ticket_status.php') // Fetch status data

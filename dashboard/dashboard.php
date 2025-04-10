@@ -111,6 +111,7 @@ mysqli_close($conn);
     </div>
 
     <div class="row mt-1">
+    <!-- Chart Container -->
     <div class="col-lg-6">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">
@@ -122,49 +123,27 @@ mysqli_close($conn);
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col-lg-6 d-flex">
-        <div class="flex-grow-1">
-            <div class="card shadow-sm">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                    <h5 class="card-title">Ticket Status</h5>
-                </div>
-                <div class="card-body">
-                    <div style="height: 300px;">
-                        <canvas id="statusChart"></canvas>
-                    </div>
+        
+        <div class="card shadow-sm mt-2">
+            <div class="card-body">
+                <div style="height: 300px;">
+                    <canvas id="statusChart"></canvas>
                 </div>
             </div>
         </div>
-        <style>
-    .vertical-dropdowns {
-      display: flex;
-      flex-direction: column; /* Arrange items vertically */
-      align-items: flex-start; /* Align items to the start (left) */
-    }
+    </div>
 
-    .vertical-dropdowns .form-select {
-      margin-bottom: 0.5rem; /* Add some space between the dropdowns */
-      width: 100%; /* Make the dropdowns take full width of their container */
-    }
-  </style>
-         <div class="ms-2 vertical-dropdowns">
+    <!-- Dropdown Container -->
+    <div class="col-lg-6 d-flex flex-column align-items-start">
+        <div class="vertical-dropdowns">
             <div class="mb-1">
                 <select id="monthSelect" class="form-select">
                     <option value="">Select Month</option>
                     <option value="January">January</option>
                     <option value="February">February</option>
-                    <option value="March">March</option>
+                    ...
                     <option value="April" selected>April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
+                    ...
                 </select>
             </div>
             <div>
@@ -172,13 +151,27 @@ mysqli_close($conn);
                     <option value="">Select Year</option>
                     <option value="2024">2024</option>
                     <option value="2025">2025</option>
+                    ...
                     <option value="2026" selected>2026</option>
-                    <option value="2027">2027</option>
+                    ...
                 </select>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .vertical-dropdowns {
+      display: flex;
+      flex-direction: column; /* Arrange items vertically */
+      align-items: flex-start; /* Align items to the start (left) */
+    }
+
+    .vertical-dropdowns .form-select {
+      margin-bottom: 0.5rem; /* Space between dropdowns */
+      width: 100%; /* Full width of their container */
+    }
+</style>
 
 
 

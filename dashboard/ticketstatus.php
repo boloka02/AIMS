@@ -26,8 +26,8 @@
         }
 
         #statusChart {
-            width: 800px !important;
-            height: 400px !important;
+            width: 1200px !important;
+            height: 800px !important;
         }
 
         .card-title {

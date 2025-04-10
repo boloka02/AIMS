@@ -111,7 +111,7 @@ mysqli_close($conn);
     </div>
 
     <div class="row mt-4">
-    <div class="col-lg-6">
+    <div class="col-lg-5">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Ticket Categories</h5>
@@ -125,7 +125,7 @@ mysqli_close($conn);
         </div>
     </div>
 
-    <div class="col-lg-6">
+    <div class="col-lg-5">
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Ticket Status</h5>

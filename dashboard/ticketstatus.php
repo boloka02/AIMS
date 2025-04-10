@@ -1,23 +1,4 @@
-<?php
-include '../db_connection.php'; // Ensure correct DB connection
 
-header('Content-Type: application/json');
-
-$query = "SELECT status, COUNT(*) as count FROM ticket GROUP BY status";
-$result = $conn->query($query);
-
-if (!$result) {
-    echo json_encode(["error" => $conn->error]);
-    exit();
-}
-
-$data = [];
-while ($row = $result->fetch_assoc()) {
-    $data[$row['status']] = (int) $row['count']; // Ensure integer values
-}
-
-echo json_encode($data);
-?>
 
 <div class="card">
     <div class="card-body">
@@ -27,12 +8,11 @@ echo json_encode($data);
         </div>
     </div>
 </div>
-
 <script>
+    
 document.addEventListener("DOMContentLoaded", function () {
-    // Fetch the data from the server
-    fetch('path/to/your/php/script.php') // Use the correct URL to your PHP file
-    .then(response => response.json()) // Parse JSON response
+    fetch('get_ticket_status.php') // Fetch status data
+    .then(response => response.json())
     .then(data => {
         const ctx = document.getElementById('statusChart').getContext('2d');
 
@@ -56,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     })
-    .catch(error => console.error("Error fetching status data:", error)); // Handle errors
+    .catch(error => console.error("Error fetching status data:", error));
 });
+
 </script>

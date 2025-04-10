@@ -43,9 +43,9 @@ if (session_status() === PHP_SESSION_NONE) {
 }
         </style>
     <div class="sidebar-header">
-        <img src="../alogo.png" alt="AD ON GROUP Logo" style="width: 100%; height: auto; object-fit: contain;">
+        <img src="../alogo.png" alt="AD ON GROUP,2025 Logo" style="width: 100%; height: auto; object-fit: contain;">
     </div>
-    </div>
+
 
         <a href="../dashboard/dashboard.php" class="sidebar-link">
             <i class="bi bi-speedometer2"></i><span class="sidebar-text">Dashboard</span>

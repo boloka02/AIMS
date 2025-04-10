@@ -110,15 +110,35 @@ mysqli_close($conn);
         ?>
     </div>
 
+    
     <div class="row mt-2">
     <div class="col-lg-6">
         <div class="card shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Ticket Categories</h5>
+                <div class="d-flex gap-2">
+                    <!-- Month Dropdown -->
+                    <select id="monthSelect" class="form-select w-auto">
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
 
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <h5 class="card-title">Ticket Categories</h5>
-            <input type="date" id="filterDate" class="form-control w-auto">
-        </div>
-
+                    <!-- Year Dropdown -->
+                    <select id="yearSelect" class="form-select w-auto">
+                        <!-- Years will be populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
             <div class="card-body">
                 <div style="height: 300px;">
                     <canvas id="categoryChart"></canvas>
@@ -129,12 +149,31 @@ mysqli_close($conn);
 
     <div class="col-lg-6">
         <div class="card shadow-sm">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Ticket Status</h5>
+                <div class="d-flex gap-2">
+                    <!-- Month Dropdown -->
+                    <select id="monthSelectStatus" class="form-select w-auto">
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
 
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <h5 class="card-title">Ticket Status</h5>
-            <input type="date" id="filterDate" class="form-control w-auto">
-        </div>
-
+                    <!-- Year Dropdown -->
+                    <select id="yearSelectStatus" class="form-select w-auto">
+                        <!-- Years will be populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
             <div class="card-body">
                 <div style="height: 300px;">
                     <canvas id="statusChart"></canvas>

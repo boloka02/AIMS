@@ -1,19 +1,26 @@
+
 document.addEventListener("DOMContentLoaded", function () {
-    const monthInput = document.getElementById("filterMonth");
+    const monthSelect = document.getElementById("monthSelect");
+    const yearSelect = document.getElementById("yearSelect");
 
-    // Default to current month
-    const now = new Date();
-    const monthString = now.toISOString().slice(0, 7); // YYYY-MM
-    monthInput.value = monthString;
-    loadCharts(monthString);
+    // Populate year dropdown (from 2020 to current year)
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear; y >= 2020; y--) {
+        const option = document.createElement("option");
+        option.value = y;
+        option.textContent = y;
+        yearSelect.appendChild(option);
+    }
 
-    monthInput.addEventListener("change", function () {
-        loadCharts(this.value);
-    });
+    // Set current month and year
+    monthSelect.value = String(new Date().getMonth() + 1).padStart(2, '0');
+    yearSelect.value = currentYear;
 
-    function loadCharts(monthYear) {
+    const getSelectedMonthYear = () => `${yearSelect.value}-${monthSelect.value}`;
+
+    const loadCharts = (monthYear) => {
         fetch(`get_ticket_category.php?month=${monthYear}`)
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 const ctx = document.getElementById('categoryChart').getContext('2d');
                 if (window.categoryChart) window.categoryChart.destroy();
@@ -33,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            y: { beginAtZero: true, suggestedMax: 50, ticks: { stepSize: 5 } }
+                            y: { beginAtZero: true }
                         },
                         plugins: { legend: { display: true, position: 'top' } }
                     }
@@ -41,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         fetch(`get_ticket_status.php?month=${monthYear}`)
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 const ctx = document.getElementById('statusChart').getContext('2d');
                 if (window.statusChart) window.statusChart.destroy();
@@ -63,5 +70,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 });
             });
-    }
+    };
+
+    // Initial chart load
+    loadCharts(getSelectedMonthYear());
+
+    // Reload charts on dropdown change
+    monthSelect.addEventListener("change", () => loadCharts(getSelectedMonthYear()));
+    yearSelect.addEventListener("change", () => loadCharts(getSelectedMonthYear()));
 });
+

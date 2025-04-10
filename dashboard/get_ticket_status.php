@@ -5,7 +5,6 @@ header('Content-Type: application/json');
 $month = $_GET['month'] ?? null;
 
 if ($month) {
-    // Format is '2025-04' from <input type="month">
     $query = "
         SELECT status, COUNT(*) as count 
         FROM ticket 
@@ -18,11 +17,6 @@ if ($month) {
     $result = $stmt->get_result();
 } else {
     $result = $conn->query("SELECT status, COUNT(*) as count FROM ticket GROUP BY status");
-}
-
-if (!$result) {
-    echo json_encode(["error" => $conn->error]);
-    exit();
 }
 
 $data = [];

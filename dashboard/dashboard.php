@@ -109,8 +109,8 @@ mysqli_close($conn);
         }
         ?>
     </div>
-    
-    <div class="row mt-2">
+
+    <div class="row mt-1">
     <!-- Dropdowns for month and year selection -->
     <div class="col-lg-6 mb-2">
         <!-- Month Selection -->
@@ -173,7 +173,7 @@ mysqli_close($conn);
 
 
 
-    <div class="row mt-2">
+    <div class="row mt-1">
     <!-- Recent Activity (Smaller Box, Left Side) -->
     <div class="col-lg-6"> <!-- Reduced width from col-lg-6 to col-lg-4 -->
         <div class="card shadow-sm h-100" style="max-height: 2500px;"> <!-- Reduced height -->

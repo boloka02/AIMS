@@ -115,7 +115,7 @@ mysqli_close($conn);
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Ticket Categories</h5>
-                <a href="ticketcategory.php" class="btn btn-primary">View Category</a>
+                <input type="date" class="form-control w-auto">
             </div>
             <div class="card-body">
                 <div style="height: 300px;">
@@ -129,7 +129,7 @@ mysqli_close($conn);
         <div class="card shadow-sm">
             <div class="card-body d-flex justify-content-between align-items-center">
                 <h5 class="card-title">Ticket Status</h5>
-                <a href="ticketstatus.php" class="btn btn-primary">View Category</a>
+                <input type="date" class="form-control w-auto">
             </div>
             <div class="card-body">
                 <div style="height: 300px;">
@@ -139,6 +139,7 @@ mysqli_close($conn);
         </div>
     </div>
 </div>
+
 
 
     <div class="row mt-2">

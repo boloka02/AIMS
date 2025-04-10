@@ -2,16 +2,21 @@
 include '../db_connection.php';
 header('Content-Type: application/json');
 
-$date = $_GET['date'] ?? null;
+$month = $_GET['month'] ?? null;
 
-if ($date) {
-    $query = "SELECT status, COUNT(*) as count FROM ticket WHERE DATE(date_created) = ? GROUP BY status";
+if ($month) {
+    // Format is '2025-04' from <input type="month">
+    $query = "
+        SELECT status, COUNT(*) as count 
+        FROM ticket 
+        WHERE DATE_FORMAT(STR_TO_DATE(date_created, '%Y/%c/%e'), '%Y-%m') = ?
+        GROUP BY status
+    ";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $date);
+    $stmt->bind_param("s", $month);
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    // Fallback: return all data if no date is provided
     $result = $conn->query("SELECT status, COUNT(*) as count FROM ticket GROUP BY status");
 }
 

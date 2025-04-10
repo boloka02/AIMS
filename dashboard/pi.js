@@ -1,23 +1,22 @@
-
 document.addEventListener("DOMContentLoaded", function () {
-    const dateInput = document.getElementById("filterDate");
+    const monthInput = document.getElementById("filterMonth");
 
-    // Load charts on page load with today's date
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.value = today;
-    loadCharts(today);
+    // Default to current month
+    const now = new Date();
+    const monthString = now.toISOString().slice(0, 7); // YYYY-MM
+    monthInput.value = monthString;
+    loadCharts(monthString);
 
-    dateInput.addEventListener("change", function () {
+    monthInput.addEventListener("change", function () {
         loadCharts(this.value);
     });
 
-    function loadCharts(selectedDate) {
-        // Load category chart
-        fetch(`get_ticket_category.php?date=${selectedDate}`)
+    function loadCharts(monthYear) {
+        fetch(`get_ticket_category.php?month=${monthYear}`)
             .then(response => response.json())
             .then(data => {
                 const ctx = document.getElementById('categoryChart').getContext('2d');
-                if (window.categoryChart) window.categoryChart.destroy(); // destroy previous chart
+                if (window.categoryChart) window.categoryChart.destroy();
                 window.categoryChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -34,19 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            y: {
-                                beginAtZero: true,
-                                suggestedMax: 50,
-                                ticks: { stepSize: 5 }
-                            }
+                            y: { beginAtZero: true, suggestedMax: 50, ticks: { stepSize: 5 } }
                         },
                         plugins: { legend: { display: true, position: 'top' } }
                     }
                 });
             });
 
-        // Load status chart
-        fetch(`get_ticket_status.php?date=${selectedDate}`)
+        fetch(`get_ticket_status.php?month=${monthYear}`)
             .then(response => response.json())
             .then(data => {
                 const ctx = document.getElementById('statusChart').getContext('2d');
@@ -71,4 +65,3 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 });
-

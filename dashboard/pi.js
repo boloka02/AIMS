@@ -1,22 +1,32 @@
-
 document.addEventListener("DOMContentLoaded", function () {
+    // DOM elements for month and year selects
     const monthSelect = document.getElementById("monthSelect");
     const yearSelect = document.getElementById("yearSelect");
 
-    // Populate year dropdown (from 2020 to current year)
+    const monthSelectStatus = document.getElementById("monthSelectStatus");
+    const yearSelectStatus = document.getElementById("yearSelectStatus");
+
+    // Current year for default selection
     const currentYear = new Date().getFullYear();
+
+    // Populate Year Select with years from 2020 to current year
     for (let y = currentYear; y >= 2020; y--) {
-        const option = document.createElement("option");
-        option.value = y;
-        option.textContent = y;
-        yearSelect.appendChild(option);
+        let opt = document.createElement("option");
+        opt.value = y;
+        opt.textContent = y;
+        yearSelect.appendChild(opt);
+        yearSelectStatus.appendChild(opt.cloneNode(true)); // Same options for status chart
     }
 
-    // Set current month and year
+    // Set default value for month and year
     monthSelect.value = String(new Date().getMonth() + 1).padStart(2, '0');
     yearSelect.value = currentYear;
+    monthSelectStatus.value = String(new Date().getMonth() + 1).padStart(2, '0');
+    yearSelectStatus.value = currentYear;
 
+    // Get selected month and year as a formatted string 'YYYY-MM'
     const getSelectedMonthYear = () => `${yearSelect.value}-${monthSelect.value}`;
+    const getSelectedMonthYearStatus = () => `${yearSelectStatus.value}-${monthSelectStatus.value}`;
 
     const loadCharts = (monthYear) => {
         fetch(`get_ticket_category.php?month=${monthYear}`)
@@ -72,11 +82,13 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     };
 
-    // Initial chart load
+    // Load initial charts
     loadCharts(getSelectedMonthYear());
 
-    // Reload charts on dropdown change
+    // Reload charts on month/year change
     monthSelect.addEventListener("change", () => loadCharts(getSelectedMonthYear()));
     yearSelect.addEventListener("change", () => loadCharts(getSelectedMonthYear()));
+    
+    monthSelectStatus.addEventListener("change", () => loadCharts(getSelectedMonthYearStatus()));
+    yearSelectStatus.addEventListener("change", () => loadCharts(getSelectedMonthYearStatus()));
 });
-

@@ -109,12 +109,13 @@ mysqli_close($conn);
         }
         ?>
     </div>
-
+    
     <div class="row mt-2">
-    <!-- Dropdown for month selection -->
-    <div class="col-lg-12 mb-2">
-        <label for="monthSelect">Select Month</label>
+    <!-- Dropdowns for month and year selection -->
+    <div class="col-lg-6 mb-2">
+        <!-- Month Selection -->
         <select id="monthSelect" class="form-select">
+            <option value="">Select Month</option>
             <option value="January">January</option>
             <option value="February">February</option>
             <option value="March">March</option>
@@ -127,6 +128,17 @@ mysqli_close($conn);
             <option value="October">October</option>
             <option value="November">November</option>
             <option value="December">December</option>
+        </select>
+    </div>
+
+    <div class="col-lg-6 mb-2">
+        <!-- Year Selection -->
+        <select id="yearSelect" class="form-select">
+            <option value="">Select Year</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
         </select>
     </div>
 

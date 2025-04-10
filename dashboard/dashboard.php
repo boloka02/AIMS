@@ -109,7 +109,6 @@ mysqli_close($conn);
         }
         ?>
     </div>
-    
 
     <div class="row mt-1">
     <div class="col-lg-6">

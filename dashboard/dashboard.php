@@ -137,7 +137,19 @@ mysqli_close($conn);
                 </div>
             </div>
         </div>
-        <div class="d-flex flex-column ms-2">
+        <style>
+    .vertical-dropdowns {
+      display: flex;
+      flex-direction: column; /* Arrange items vertically */
+      align-items: flex-start; /* Align items to the start (left) */
+    }
+
+    .vertical-dropdowns .form-select {
+      margin-bottom: 0.5rem; /* Add some space between the dropdowns */
+      width: 100%; /* Make the dropdowns take full width of their container */
+    }
+  </style>
+         <div class="ms-2 vertical-dropdowns">
             <div class="mb-1">
                 <select id="monthSelect" class="form-select">
                     <option value="">Select Month</option>

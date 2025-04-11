@@ -1,179 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/jpeg" href="https://adongroup.com.au/wp-content/uploads/2020/12/aog-favicon-192px.svg">
-    <title>ADON PH</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <style>
         body {
-            background-color: #121f3d;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Roboto', sans-serif;
         }
-        .container {
-            display: flex;
-            width: 80%;
-            max-width: 1200px;
+
+        #authPage {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
         }
-        .image-container {
-            flex: 1.5;
+
+        #authPage.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        #landingPage {
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: scale(1);
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-        }
-        .image-container img {
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-        }
-        .image-container p {
-            margin-top: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-        .form-container {
-            flex: 1;
-            display: flex;
             justify-content: center;
-            align-items: center;
         }
-        .container-box {
-            background-color: #192d52;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-            text-align: center;
-            width: 350px;
+
+        #landingPage.hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+            transform: scale(0.9);
         }
-        .btn-custom {
-            background-color: #6495ed;
-            color: white;
-            width: 100%;
+
+        #landingTitle,
+        #startBtn,
+        .aims-logo {
+            transform: scale(0.8);
+            opacity: 0;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
         }
-        .btn-toggle {
-            width: 50%;
-            color: #bdc3c7;
-            border: none;
-            background: none;
-            padding: 8px 15px;
+
+        #landingTitle.popped,
+        #startBtn.popped,
+        .aims-logo.popped {
+            transform: scale(1);
+            opacity: 1;
         }
-        .btn-toggle.active {
-            color: white !important;
-            border-bottom: 2px solid white;
+
+        .aims-logo {
+            width: auto;
+            height: 200px;
+            margin-bottom: 20px;
+            transform: scale(0.8);
+            opacity: 0;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            margin-top: -50px;
         }
-        .form-control {
-            background-color: #28477a;
-            color: white;
-            border: 1px solid #385f9c;
-        }
-        .logo {
-            border-radius: 50%;
-            width: 90px;
-            height: 90px;
-        }
-        .password-container {
-            position: relative;
-        }
-        .eye-icon {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-        }
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-            }
-            .image-container, .form-container {
-                width: 100%;
-            }
+
+        .aims-logo.popped {
+            transform: scale(1);
+            opacity: 1;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="image-container">
-            <img src="https://adongroup.com.au/wp-content/uploads/2019/12/AdOn-Logo-v4.gif" alt="Company Logo">
-            <p>ADON INFORMATION MANAGEMENT SYSTEM</p>
-        </div>
-        <div class="form-container">
-            <div class="container-box">
-                <h2 class="mt-2">AIMS</h2>
-                <div class="d-flex justify-content-center mb-3">
-                    <button class="btn btn-toggle active" id="show-login">Login</button>
-                    <button class="btn btn-toggle" id="show-register">Register</button>
-                </div>
-                
-                <form id="login-form" action="../login/login_process.php" method="POST">
-                    <div class="mb-3">
-                        <input type="email" class="form-control" name="email" placeholder="Email" required>
-                    </div>
-                    <div class="mb-3 password-container">
-                        <input type="password" class="form-control" name="password" id="login-password" placeholder="Password" required>
-                        <span class="eye-icon" id="toggle-login-password"><i class="fa fa-eye"></i></span>
-                    </div>
-                    <button type="submit" class="btn btn-custom">Login</button>
-                </form>
 
-                <form id="register-form" action="../login/register_process.php" method="POST" style="display: none;">
-                    <div class="mb-3">
-                        <input type="text" class="form-control" name="idnumber" placeholder="ID No." required>
-                    </div>
-                    <div class="mb-3">
-                        <input type="email" class="form-control" name="email" placeholder="Email" required>
-                    </div>
-                    <div class="mb-3 password-container">
-                        <input type="password" class="form-control" name="password" id="register-password" placeholder="Password" required>
-                        <span class="eye-icon" id="toggle-register-password"><i class="fa fa-eye"></i></span>
-                    </div>
-                    <button type="submit" class="btn btn-custom">Register</button>
-                </form>
-            </div>
+</head>
+
+<body
+    class="h-screen w-screen overflow-hidden bg-cover bg-center bg-[url('../image/cp.png')] md:bg-[url('../image/pc.png')]">
+
+    <div id="landingPage"
+        class="h-full w-full flex flex-col items-center justify-center text-white transition-opacity duration-500">
+        <img src="../image/logo.png" alt="AIMS" class="aims-logo" />
+        <div class="text-center">
+            <h1 id="landingTitle" class="text-4xl md:text-6xl font-bold mb-4">ADON INFORMATION MANAGEMENT SYSTEM</h1>
+            <button id="startBtn"
+                class="mt-10 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full text-lg md:text-xl">
+                Get Started</button>
         </div>
     </div>
 
-    <script>
-        $(document).ready(function() {
-            $('#show-login').click(function() {
-                $('#login-form').fadeIn();
-                $('#register-form').hide();
-                $('#show-login').addClass('active');
-                $('#show-register').removeClass('active');
-            });
-            $('#show-register').click(function() {
-                $('#register-form').fadeIn();
-                $('#login-form').hide();
-                $('#show-register').addClass('active');
-                $('#show-login').removeClass('active');
-            });
+    <div id="authPage"
+        class="absolute top-0 left-0 h-full w-full flex flex-col md:flex-row items-center justify-center text-white opacity-0 pointer-events-none px-6">
 
-            // Toggle password visibility for login
-            $('#toggle-login-password').click(function() {
-                var passwordField = $('#login-password');
-                var type = passwordField.attr('type') === 'password' ? 'text' : 'password';
-                passwordField.attr('type', type);
-                $(this).toggleClass('fa-eye fa-eye-slash');
-            });
+        <div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left mb-10 md:mb-0">
+            <h1 id="welcomeText" class="text-4xl md:text-6xl font-bold leading-tight"></h1>
+            <p id="credentialsPrompt" class="text-lg md:text-2xl mt-4"></p>
+        </div>
 
-            // Toggle password visibility for register
-            $('#toggle-register-password').click(function() {
-                var passwordField = $('#register-password');
-                var type = passwordField.attr('type') === 'password' ? 'text' : 'password';
-                passwordField.attr('type', type);
-                $(this).toggleClass('fa-eye fa-eye-slash');
-            });
+        <div class="w-full max-w-md bg-white/20 backdrop-blur-sm p-6 rounded-2xl shadow-lg text-white">
+            <div class="flex justify-center space-x-4 mb-6">
+                <button id="loginBtn"
+                    class="w-1/2 py-2 rounded-full font-semibold bg-white text-black hover:bg-gray-300 transition">
+                    LOGIN</button>
+                <button id="registerBtn"
+                    class="w-1/2 py-2 rounded-full font-semibold bg-transparent border border-white hover:bg-white hover:text-black transition">
+                    REGISTER</button>
+            </div>
+
+            <div id="loginForm" class="space-y-4">
+    <form id="login-form" action="../login/login_process.php" method="POST">
+        <div class="mb-3">
+            <input type="email" class="w-full py-2 px-4 bg-white/30 text-white placeholder-white rounded-full outline-none" name="email" placeholder="Email" required>
+        </div>
+        <div class="mb-3 relative">
+            <input type="password" class="w-full py-2 px-4 bg-white/30 text-white placeholder-white rounded-full outline-none pr-10" name="password" id="login-password" placeholder="Password" required>
+            <span class="absolute top-2.5 right-4 text-white cursor-pointer" id="toggle-login-password"><i class="fa fa-eye"></i></span>
+        </div>
+        <button type="submit" class="w-full py-2 mt-4 rounded-full bg-white text-black font-semibold hover:bg-gray-300 transition">LOGIN</button>
+    </form>
+</div>
+
+<div id="registerForm" class="space-y-4 hidden">
+    <form id="register-form" action="../login/register_process.php" method="POST">
+        <div class="mb-3">
+            <input type="text" class="w-full py-2 px-4 bg-white/30 text-white placeholder-white rounded-full outline-none" name="idnumber" placeholder="ID No." required>
+        </div>
+        <div class="mb-3">
+            <input type="email" class="w-full py-2 px-4 bg-white/30 text-white placeholder-white rounded-full outline-none" name="email" placeholder="Email" required>
+        </div>
+        <div class="mb-3 relative">
+            <input type="password" class="w-full py-2 px-4 bg-white/30 text-white placeholder-white rounded-full outline-none pr-10" name="password" id="register-password" placeholder="Password" required>
+            <span class="absolute top-2.5 right-4 text-white cursor-pointer" id="toggle-register-password"><i class="fa fa-eye"></i></span>
+        </div>
+        <button type="submit" class="w-full py-2 mt-4 rounded-full bg-white text-black font-semibold hover:bg-gray-300 transition">REGISTER</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#toggle-login-password').click(function () {
+            var passwordField = $('#login-password');
+            var type = passwordField.attr('type') === 'password' ? 'text' : 'password';
+            passwordField.attr('type', type);
+            $(this).find('i').toggleClass('fa-eye fa-eye-slash');
         });
-    </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+        $('#toggle-register-password').click(function () {
+            var passwordField = $('#register-password');
+            var type = passwordField.attr('type') === 'password' ? 'text' : 'password';
+            passwordField.attr('type', type);
+            $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+        });
+    });
+</script>
+
+
+        </div>
+    </div>
+
+
+
+    <audio id="welcomeAudio" src="../image/voice.mp3"></audio>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const landingPage = document.getElementById('landingPage');
+        const authPage = document.getElementById('authPage');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const welcomeTextElement = document.getElementById('welcomeText');
+        const credentialsPromptElement = document.getElementById('credentialsPrompt');
+        const landingTitle = document.getElementById('landingTitle');
+        const aimsLogo = document.querySelector('.aims-logo');
+        const welcomeAudio = document.getElementById('welcomeAudio');
+
+        const welcomeText = "Welcome to AIMS";
+        const credentialsText = "Please Enter your Credentials";
+        let charIndexWelcome = 0;
+        let charIndexCredentials = 0;
+        let inactivityTimer;
+
+        function typeWriterWelcome() {
+            if (charIndexWelcome < welcomeText.length) {
+                welcomeTextElement.textContent += welcomeText.charAt(charIndexWelcome);
+                charIndexWelcome++;
+                setTimeout(typeWriterWelcome, 50);
+            } else {
+                typeWriterCredentials();
+            }
+        }
+
+        function typeWriterCredentials() {
+            if (charIndexCredentials < credentialsText.length) {
+                credentialsPromptElement.textContent += credentialsText.charAt(charIndexCredentials);
+                charIndexCredentials++;
+                setTimeout(typeWriterCredentials, 50);
+            } else {
+                startInactivityTimer();
+                //loop
+                setTimeout(() => {
+                    welcomeTextElement.textContent = "";
+                    credentialsPromptElement.textContent = "";
+                    charIndexWelcome = 0;
+                    charIndexCredentials = 0;
+                    typeWriterWelcome();
+                }, 1500);
+            }
+        }
+
+        function startTyping() {
+            welcomeTextElement.textContent = "";
+            credentialsPromptElement.textContent = "";
+            charIndexWelcome = 0;
+            charIndexCredentials = 0;
+            typeWriterWelcome();
+            welcomeAudio.play();
+        }
+
+        function startInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(returnToLanding, 10000); // 10 seconds
+        }
+
+        function returnToLanding() {
+            authPage.style.opacity = '0';
+            setTimeout(() => {
+                authPage.classList.remove('active');
+                landingPage.style.display = 'flex';
+                landingPage.style.opacity = '1';
+                landingPage.classList.remove('hidden');
+                landingPage.style.transform = 'scale(1)';
+                aimsLogo.classList.remove('popped');
+                landingTitle.classList.remove('popped');
+                startBtn.classList.remove('popped');
+                setTimeout(() => {
+                    aimsLogo.classList.add('popped');
+                    landingTitle.classList.add('popped');
+                    startBtn.classList.add('popped');
+                }, 100);
+            }, 500);
+        }
+
+        function resetInactivityTimer() {
+            startInactivityTimer();
+        }
+
+        function authPageClick() {
+            resetInactivityTimer();
+        }
+
+        startBtn.addEventListener('click', () => {
+            landingPage.style.opacity = '0';
+            landingPage.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                landingPage.style.display = 'none';
+                authPage.classList.add('active');
+                startTyping();
+            }, 500);
+        });
+
+        loginBtn.addEventListener('click', () => {
+            loginForm.classList.remove('hidden');
+            registerForm.classList.add('hidden');
+            loginBtn.classList.add('bg-white', 'text-black');
+            registerBtn.classList.remove('bg-white', 'text-black');
+            authPageClick();
+        });
+
+        registerBtn.addEventListener('click', () => {
+            loginForm.classList.add('hidden');
+            registerForm.classList.remove('hidden');
+            registerBtn.classList.add('bg-white', 'text-black');
+            loginBtn.classList.remove('bg-white', 'text-black');
+            authPageClick();
+        });
+
+        authPage.addEventListener('click', resetInactivityTimer);
+        authPage.addEventListener('mousemove', resetInactivityTimer);
+        authPage.addEventListener('keypress', resetInactivityTimer);
+
+        // Initial pop-in animation
+        setTimeout(() => {
+            aimsLogo.classList.add('popped');
+            landingTitle.classList.add('popped');
+            startBtn.classList.add('popped');
+        }, 500);
+    </script>
 </body>
+
 </html>

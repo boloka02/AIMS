@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <style>
-        body {
+         body {
             font-family: 'Roboto', sans-serif;
         }
 
@@ -44,16 +44,14 @@
         }
 
         #landingTitle,
-        #startBtn,
-        .aims-logo {
+        #startBtn {
             transform: scale(0.8);
             opacity: 0;
             transition: transform 0.5s ease-out, opacity 0.5s ease-out;
         }
 
         #landingTitle.popped,
-        #startBtn.popped,
-        .aims-logo.popped {
+        #startBtn.popped {
             transform: scale(1);
             opacity: 1;
         }
@@ -71,6 +69,15 @@
         .aims-logo.popped {
             transform: scale(1);
             opacity: 1;
+        }
+
+        .auth-logo { /* New class for auth page logo */
+            width: auto;
+            height: 80px; /* Even smaller for auth box */
+            margin-bottom: 10px;
+            display: block; /* Ensure it behaves as a block */
+            margin-left: auto; /* Center horizontally */
+            margin-right: auto;
         }
     </style>
 
@@ -99,6 +106,7 @@
         </div>
 
         <div class="w-full max-w-md bg-white/20 backdrop-blur-sm p-6 rounded-2xl shadow-lg text-white">
+        <img src="../image/logo.png" alt="AIMS" class="auth-logo" />
             <div class="flex justify-center space-x-4 mb-6">
                 <button id="loginBtn"
                     class="w-1/2 py-2 rounded-full font-semibold bg-white text-black hover:bg-gray-300 transition">

@@ -229,10 +229,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="attribution"> Copyright © 2025 ADONPH INC..</div>
     </div>
 
-    <div class="content">
-        <h1>Dashboard</h1>
-        <p>This is your main content area.</p>
-    </div>
+
 
     <script>
         function toggleMobileSidebar() {

@@ -318,11 +318,6 @@ if (session_status() === PHP_SESSION_NONE) {
             </ul>
         </div>
 
-        <div class="bottom-section">
-            <div class="user">User: <?php echo htmlspecialchars($_SESSION['name']); ?></div>
-            <div class="attribution"> Copyright © 2025 ADONPH INC..</div>
-        </div>
-    </div>
 
     <div class="user">
                 <i class="fas fa-user-circle"></i>

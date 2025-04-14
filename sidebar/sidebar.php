@@ -50,12 +50,19 @@ if (session_status() === PHP_SESSION_NONE) {
             padding: 20px;
             font-size: 1.3em;
             font-weight: bold;
-            display: flex;
-            align-items: center;
+            display: flex; /* Use Flexbox */
+            align-items: center; /* Center vertically */
         }
 
         .sidebar .logo i {
             font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .sidebar .logo img {
+            width: auto;
+            height: 50px;
+            object-fit: contain;
             margin-right: 10px;
         }
 
@@ -269,6 +276,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <div>
             <div class="logo">
                 <i class="fas fa-circle"></i>
+                <img src="../alogo.png" alt="AD ON GROUP,2025 Logo">
                 <span>ADON</span>
             </div>
 
@@ -318,7 +326,10 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     </div>
 
- 
+    <div class="content">
+        <h1>Dashboard</h1>
+        <p>This is your main content area.</p>
+    </div>
 
     <script>
         function toggleMobileSidebar() {

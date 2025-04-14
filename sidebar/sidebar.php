@@ -318,10 +318,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     </div>
 
-    <div class="content">
-        <h1>Dashboard</h1>
-        <p>This is your main content area.</p>
-    </div>
+ 
 
     <script>
         function toggleMobileSidebar() {

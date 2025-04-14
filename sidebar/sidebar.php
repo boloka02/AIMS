@@ -258,7 +258,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="sidebar" id="sidebar">
         <div>
             <div class="logo">
-                <img src="../alogo.png" alt="AD ON GROUP,2025 Logo">
+                <img src="../logo.png" alt="AD ON GROUP,2025 Logo">
             </div>
 
             <div class="section-title">Main Menu</div>

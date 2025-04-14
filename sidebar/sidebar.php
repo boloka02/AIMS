@@ -275,7 +275,6 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="sidebar" id="sidebar">
         <div>
             <div class="logo">
-                <i class="fas fa-circle"></i>
                 <img src="../image/logo.png" alt="AD ON GROUP,2025 Logo">
             </div>
 

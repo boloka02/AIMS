@@ -317,8 +317,9 @@ if (session_status() === PHP_SESSION_NONE) {
                 </li>
             </ul>
         </div>
-
-        <span class="user-role"> Copyright © 2025 ADONPH INC..</span>
+<div>
+<span class="user-role"> Copyright © 2025 ADONPH INC..</span>
+</div>
     <div class="user">
                 <i class="fas fa-user-circle"></i>
                 <div class="user-details">

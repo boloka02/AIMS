@@ -321,10 +321,9 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <div class="user">
                 <i class="fas fa-user-circle"></i>
+                <span class="user-name"><?php echo htmlspecialchars($_SESSION['name']); ?></span>
                 <div class="user-details">
-                    <span class="user-name"><?php echo htmlspecialchars($_SESSION['name']); ?></span>
-        </div>
-        <div><span class="user-role"> Copyright © 2025 ADONPH INC..</span>
+                    <span class="user-role"> Copyright © 2025 ADONPH INC..</span>
                 </div>
             </div>
         </div>

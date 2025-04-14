@@ -277,7 +277,6 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="logo">
                 <i class="fas fa-circle"></i>
                 <img src="../alogo.png" alt="AD ON GROUP,2025 Logo">
-                <span>ADON</span>
             </div>
 
             <div class="section-title">Main Menu</div>
@@ -324,11 +323,6 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="user">User: <?php echo htmlspecialchars($_SESSION['name']); ?></div>
             <div class="attribution"> Copyright © 2025 ADONPH INC..</div>
         </div>
-    </div>
-
-    <div class="content">
-        <h1>Dashboard</h1>
-        <p>This is your main content area.</p>
     </div>
 
     <script>

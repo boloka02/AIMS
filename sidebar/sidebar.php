@@ -90,7 +90,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
         <ul>
           <li class="group flex items-center justify-center md:justify-start py-3 px-4 hover:text-red-400 cursor-pointer gap-0 md:gap-4">
-            <a href="login/login.php" class="flex items-center">
+            <a href="../login/logout.php" class="flex items-center">
               <i class="fas fa-sign-out-alt w-6 text-center"></i>
               <span class="ml-2 text-sm md:text-base hidden group-hover:inline md:inline">Sign Out</span>
             </a>

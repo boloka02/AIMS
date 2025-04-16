@@ -24,12 +24,11 @@ if (session_status() === PHP_SESSION_NONE) {
   <aside class="w-16 md:w-64 bg-black bg-opacity-50 text-white flex flex-col justify-between h-full transition-all duration-300">
     <div>
 
-        <!-- Branding -->
-    <div class="p-4 flex justify-center md:justify-start items-center">
-    <i class="fas fa-fire text-xl md:hidden mr-2"></i> <!-- Add margin-right to the icon -->
-    <h1 class="text-xl md:text-2xl font-bold hidden md:block">AIMS v3</h1>
-    </div>
-
+      <!-- Branding -->
+      <div class="p-4 flex justify-center md:justify-start items-center">
+        <i class="fas fa-fire text-xl md:hidden mr-2"></i> <!-- Add margin-right to the icon -->
+        <h1 class="text-xl md:text-2xl font-bold hidden md:block">AIMS v3</h1>
+      </div>
 
       <hr class="border-gray-600 mx-4" />
 
@@ -40,7 +39,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <p class="font-semibold"><?php echo htmlspecialchars($_SESSION['name']); ?></p>
             <p class="text-sm text-gray-300">My Account</p>
         </div>
-        </div>
+      </div>
 
       <hr class="border-gray-600 mx-4" />
 
@@ -104,7 +103,9 @@ if (session_status() === PHP_SESSION_NONE) {
       © 2025 ADON PH. All rights reserved.
     </div>
   </aside>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

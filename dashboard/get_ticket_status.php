@@ -1,27 +1,19 @@
 <?php
-include '../db_connection.php';
+include '../db_connection.php'; // Ensure correct DB connection
+
 header('Content-Type: application/json');
 
-$month = $_GET['month'] ?? null;
+$query = "SELECT status, COUNT(*) as count FROM ticket GROUP BY status";
+$result = $conn->query($query);
 
-if ($month) {
-    $query = "
-        SELECT status, COUNT(*) as count 
-        FROM ticket 
-        WHERE DATE_FORMAT(STR_TO_DATE(date_created, '%Y/%c/%e'), '%Y-%m') = ?
-        GROUP BY status
-    ";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $month);
-    $stmt->execute();
-    $result = $stmt->get_result();
-} else {
-    $result = $conn->query("SELECT status, COUNT(*) as count FROM ticket GROUP BY status");
+if (!$result) {
+    echo json_encode(["error" => $conn->error]);
+    exit();
 }
 
 $data = [];
 while ($row = $result->fetch_assoc()) {
-    $data[$row['status']] = (int) $row['count'];
+    $data[$row['status']] = (int) $row['count']; // Ensure integer values
 }
 
 echo json_encode($data);

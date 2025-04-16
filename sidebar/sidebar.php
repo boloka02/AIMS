@@ -21,7 +21,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <body class="h-screen flex bg-cover bg-center" style="background-image: url('../image/pc.png');">
 
   <!-- Sidebar -->
-  <aside class="w-16 md:w-64 bg-black bg-opacity-50 text-white  justify-between h-full transition-all duration-300">
+  <aside class="w-16 md:w-64 bg-black bg-opacity-50 text-white flex flex-col justify-between h-full transition-all ">
 
     
   

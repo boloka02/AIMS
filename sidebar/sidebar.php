@@ -55,14 +55,14 @@ if (session_status() === PHP_SESSION_NONE) {
       <img alt="User profile picture" class="rounded-full" height="40" width="40"
            src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-LmQ09WWGIGwOeeA4ArnRw0x5/user-uJPET5fjNenSso8wCETWVNOp/img-c9l3P2wROn2Hd65Np2jK9HjX.png" />
       <div class="ml-2">
-        <p class="font-semibold">JeniKhan.design</p>
+        <p class="font-semibold"><?php echo htmlspecialchars($_SESSION['name']); ?></p>
         <p class="text-sm">My Account</p>
       </div>
     </div>
     <hr class="border-gray-600 mx-4" />
 
     <div class="p-4">
-      <ul class="mt-2">
+      <ul class="mt-2 space-y-3"> <!-- Added space-y-3 for vertical spacing between items -->
         <!-- Dashboard Link -->
         <li>
           <a href="../dashboard/dashboard.php" class="sidebar-link">
@@ -150,7 +150,7 @@ if (session_status() === PHP_SESSION_NONE) {
 </div>
 
 <!-- Main Content (Adjust the layout accordingly) -->
-<div class="flex-1 ml-64 p-1">
+<div class="flex-1 ml-64 p-4">
   <!-- Your page content here -->
 </div>
 
